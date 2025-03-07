@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyRoad.Host", "MyRoad.Host\MyRoad.Host.csproj", "{6023B8C3-986B-4D3A-B3EB-947A8EBD2D80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyRoad.Domain", "MyRoad.Domain\MyRoad.Domain.csproj", "{ED8B906A-63B0-482F-8831-7193C53E6C0A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6023B8C3-986B-4D3A-B3EB-947A8EBD2D80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6023B8C3-986B-4D3A-B3EB-947A8EBD2D80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6023B8C3-986B-4D3A-B3EB-947A8EBD2D80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6023B8C3-986B-4D3A-B3EB-947A8EBD2D80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED8B906A-63B0-482F-8831-7193C53E6C0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED8B906A-63B0-482F-8831-7193C53E6C0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED8B906A-63B0-482F-8831-7193C53E6C0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED8B906A-63B0-482F-8831-7193C53E6C0A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
