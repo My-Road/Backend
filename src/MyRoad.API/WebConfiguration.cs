@@ -4,7 +4,11 @@ public static class WebConfiguration
 {
     public static IServiceCollection AddWeb(this IServiceCollection services)
     {
-        return services.AddEndpointsApiExplorer()
+        services.AddEndpointsApiExplorer()
             .AddSwaggerGen();
+
+        services.AddControllers();
+
+        return services;
     }
 }
