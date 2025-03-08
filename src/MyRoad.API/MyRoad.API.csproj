@@ -7,13 +7,16 @@
         <OutputType>Library</OutputType>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
-        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
-    </ItemGroup>
+
+        <ItemGroup>
+            <PackageReference Include="Asp.Versioning.Abstractions" Version="8.1.0" />
+            <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.2" />
+            <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
+            <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />
+            <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
+            <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
+        </ItemGroup>
+  
 
     <ItemGroup>
       <ProjectReference Include="..\MyRoad.Domain\MyRoad.Domain.csproj" />
