@@ -16,4 +16,8 @@
       <ProjectReference Include="..\MyRoad.Domain\MyRoad.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Persistence\Config\" />
+    </ItemGroup>
+
 </Project>
