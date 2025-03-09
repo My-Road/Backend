@@ -5,7 +5,7 @@ using MyRoad.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDomain()
-    .AddInfrastructure(builder.Configuration)
+    .AddInfrastructure(builder.Configuration, builder.Environment)
     .AddWeb();
 
 var app = builder.Build();
