@@ -27,5 +27,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGet("/", () => "Ohoooooooooooooo"); // just for test :3
 app.Run();
