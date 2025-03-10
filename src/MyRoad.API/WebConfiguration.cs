@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.OpenApi.Models;
 
 namespace MyRoad.API;
 
@@ -26,7 +27,32 @@ public static class WebConfiguration
             opts.ApiVersionReader = new UrlSegmentApiVersionReader();
             opts.UnsupportedApiVersionStatusCode = StatusCodes.Status406NotAcceptable;
         }).AddApiExplorer(options => options.GroupNameFormat = "'v'VVV");
-        
+        services.AddSwaggerGen(options =>
+        {
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+            {
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = "Bearer"
+            });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+        });
+        services.AddAuthentication().AddJwtBearer();
         return services;
     }
 }
