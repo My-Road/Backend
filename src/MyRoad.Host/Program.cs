@@ -6,7 +6,7 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDomain()
-    .AddInfrastructure()
+    .AddInfrastructure(builder.Configuration, builder.Environment)
     .AddWeb();
 
 builder.Host.UseSerilog((context, loggerConfig) 
