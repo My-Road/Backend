@@ -3,7 +3,8 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using MyRoad.Domain.Identity.Services;
+using MyRoad.Domain.Identity.Interfaces;
+using MyRoad.Domain.Identity.Models;
 using MyRoad.Domain.Users;
 using MyRoad.Infrastructure.Persistence.config;
 
@@ -13,7 +14,7 @@ public class JwtTokenGenerator(IOptions<JWT> jwt) : IJwtTokenGenerator
 {
     private readonly JWT _jwt = jwt.Value;
 
-    public Task<JwtSecurityToken> CreateJwtToken(User user)
+    public AccessToken CreateJwtToken(User user)
     {
         var claims = new[]
         {
@@ -34,6 +35,13 @@ public class JwtTokenGenerator(IOptions<JWT> jwt) : IJwtTokenGenerator
             expires: DateTime.Now.AddDays(_jwt.DurationInDays),
             signingCredentials: signingCredentials);
 
-        return Task.FromResult(jwtSecurityToken);
+        var token = new JwtSecurityTokenHandler()
+            .WriteToken(jwtSecurityToken);
+
+        return new AccessToken
+        {
+            Token = token,
+            ExpiresOn = jwtSecurityToken.ValidTo
+        };
     }
 }
