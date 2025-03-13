@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MyRoad.Domain.Entities.Users;
+using MyRoad.Domain.Users;
 
 namespace MyRoad.Infrastructure.Persistence.config;
 

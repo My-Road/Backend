@@ -1,6 +1,6 @@
 using MyRoad.Domain.Common.Entities;
 
-namespace MyRoad.Domain.Entities.Users;
+namespace MyRoad.Domain.Users;
 
 public class User : BaseEntity<long>
 { 
