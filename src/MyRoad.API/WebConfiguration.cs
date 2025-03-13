@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.OpenApi.Models;
 
 namespace MyRoad.API;
 
