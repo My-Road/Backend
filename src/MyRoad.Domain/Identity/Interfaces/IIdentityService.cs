@@ -6,4 +6,5 @@ namespace MyRoad.Domain.Identity.Interfaces;
 public interface IIdentityService
 {
     Task<LoginResponseDto> Login(LoginRequestDto dto);
+    Task<RegisterResponsesDto> Register(RegisterRequestDto dto);
 }
