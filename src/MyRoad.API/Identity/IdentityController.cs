@@ -25,4 +25,22 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
 
         return Ok(result);
     }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterRequestDto dto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        var response = await identityService.Register(dto);
+
+        if (!response.IsCreate)
+        {
+            return BadRequest(response);
+        }
+
+        return CreatedAtAction(nameof(Register), response);
+    }
 }
