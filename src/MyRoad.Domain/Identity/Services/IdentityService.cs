@@ -31,7 +31,7 @@ public class IdentityService(
         return new LoginResponseDto
         {
             IsAuthenticated = true,
-            Role = [user.Role],
+            Role = user.Role,
             Token = accessToken.Token,
             ExpiresOn = accessToken.ExpiresOn
         };
@@ -45,7 +45,7 @@ public class IdentityService(
             return new RegisterResponsesDto()
             {
                 Message = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)),
-                IsCreate = false
+                IsCreated  = false
             };
         }
         var password = passwordGenerationService.GenerateRandomPassword(8);
@@ -55,7 +55,7 @@ public class IdentityService(
             return new RegisterResponsesDto
             {
                 Message = "User registered successfully.",
-                IsCreate = true,
+                IsCreated  = true,
                 password = password // just for testing I will remove it when I finish test 
               
             };
@@ -65,7 +65,7 @@ public class IdentityService(
         return new RegisterResponsesDto
         {
             Message = result,
-            IsCreate = false,
+            IsCreated  = false,
         };
     }
 }
