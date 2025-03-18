@@ -1,6 +1,6 @@
 namespace MyRoad.Infrastructure.Persistence.config;
 
-public class JWT
+public class JwtConfig
 {
     public string Key { get; set; }
     public string Issuer { get; set; }

@@ -10,7 +10,7 @@ builder.Services.AddDomain()
     .AddInfrastructure(builder.Configuration, builder.Environment)
     .AddWeb();
 
-builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
+builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
 builder.Host.UseSerilog((context, loggerConfig) 
     => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
