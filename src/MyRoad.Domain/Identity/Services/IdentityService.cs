@@ -56,8 +56,6 @@ public class IdentityService(
             {
                 Message = "User registered successfully.",
                 IsCreated  = true,
-                password = password // just for testing I will remove it when I finish test 
-              
             };
         }
 

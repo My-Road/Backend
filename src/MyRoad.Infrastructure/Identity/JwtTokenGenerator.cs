@@ -10,9 +10,9 @@ using MyRoad.Infrastructure.Persistence.config;
 
 namespace MyRoad.Infrastructure.Identity;
 
-public class JwtTokenGenerator(IOptions<JWT> jwt) : IJwtTokenGenerator
+public class JwtTokenGenerator(IOptions<JwtConfig> jwt) : IJwtTokenGenerator
 {
-    private readonly JWT _jwt = jwt.Value;
+    private readonly JwtConfig _jwtConfig = jwt.Value;
 
     public AccessToken CreateJwtToken(User user)
     {
@@ -21,17 +21,17 @@ public class JwtTokenGenerator(IOptions<JWT> jwt) : IJwtTokenGenerator
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim("uid", user.Id.ToString()),
-            new Claim(ClaimTypes.Role, user.Role)
+            new Claim(ClaimTypes.Role, user.Role.ToString())
         };
 
-        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
+        var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.Key));
         var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
         var jwtSecurityToken = new JwtSecurityToken(
-            issuer: _jwt.Issuer,
-            audience: _jwt.Audience,
+            issuer: _jwtConfig.Issuer,
+            audience: _jwtConfig.Audience,
             claims: claims,
-            expires: DateTime.Now.AddDays(_jwt.DurationInDays),
+            expires: DateTime.Now.AddDays(_jwtConfig.DurationInDays),
             signingCredentials: signingCredentials);
 
         var token = new JwtSecurityTokenHandler()
