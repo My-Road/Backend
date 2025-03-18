@@ -53,8 +53,6 @@ public class AuthService(UserManager<ApplicationUser> userManager, ILogger<AuthS
         var errors = result.Errors.Select(e => e.Description);
         var errorMessage = string.Join(", ", errors);
 
-        logger.LogWarning("User registration failed: {Errors}", errorMessage);
-
         return errorMessage;
     }
 }
