@@ -12,7 +12,7 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250314211834_Initial")]
+    [Migration("20250318134405_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,6 +24,45 @@ namespace MyRoad.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityRole");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            Name = "SuperAdmin",
+                            NormalizedName = "SUPERADMIN"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "3",
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
+                        });
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<long>", b =>
                 {
@@ -239,6 +278,28 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("Users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "f451b48d-197e-46ef-ac51-b99e3ad52098",
+                            Email = "abdullmen2002@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "Abdullmen",
+                            IsActive = true,
+                            LastName = "Fayez",
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ABDULLMEN2002@GMAIL.COM",
+                            NormalizedUserName = "ABDULLMEN2002@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAED8KM8araMERdjjwlt6NMmD6cHKyH7/ay7ZrnLzjbO4oJ3ioEflWtG+yheG0rZwBhA==",
+                            PhoneNumber = "0123456789",
+                            PhoneNumberConfirmed = false,
+                            Role = "SuperAdmin",
+                            TwoFactorEnabled = false,
+                            UserName = "Abdullmen"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
