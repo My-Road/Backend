@@ -6,12 +6,15 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 builder.Services.AddDomain()
     .AddInfrastructure(builder.Configuration, builder.Environment)
-    .AddWeb();
+    .AddWeb(builder.Configuration);
 
-builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
-builder.Host.UseSerilog((context, loggerConfig) 
+
+builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(nameof(JwtConfig)));
+builder.Host.UseSerilog((context, loggerConfig)
     => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
 var app = builder.Build();
@@ -23,7 +26,7 @@ app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
 app.UseCors();
-
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
