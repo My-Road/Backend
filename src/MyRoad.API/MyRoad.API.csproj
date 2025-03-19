@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\MyRoad.Domain\MyRoad.Domain.csproj" />
+      <ProjectReference Include="..\MyRoad.Infrastructure\MyRoad.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
