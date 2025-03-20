@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Identity.Services;
+using MyRoad.Infrastructure.Email;
 using MyRoad.Infrastructure.Identity;
 using MyRoad.Infrastructure.Identity.Entities;
 using MyRoad.Infrastructure.Persistence;
@@ -16,6 +17,7 @@ public static class InfrastructureConfiguration
         IConfiguration builderConfiguration, IHostEnvironment environment)
     {
         services.AddInfrastructureServices(builderConfiguration, environment);
+        services.ConfigureEmail(builderConfiguration);
         services.AddIdentity<ApplicationUser, IdentityRole<long>>(options =>
             {
                 options.Password.RequireDigit = true;

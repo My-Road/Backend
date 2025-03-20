@@ -1,3 +1,6 @@
+using Microsoft.Extensions.Logging;
+using MyRoad.Domain.Email;
+using MyRoad.Domain.Identity.Enums;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Identity.RequestsDto;
 using MyRoad.Domain.Identity.Responses;
@@ -8,7 +11,8 @@ namespace MyRoad.Domain.Identity.Services;
 public class IdentityService(
     IAuthService authService,
     IJwtTokenGenerator tokenGenerator,
-    IPasswordGenerationService passwordGenerationService)
+    IPasswordGenerationService passwordGenerationService,
+    IEmailService emailService)
     : IIdentityService
 {
     private readonly RegisterValidator _registerValidator = new();
@@ -27,11 +31,11 @@ public class IdentityService(
         }
 
         var accessToken = tokenGenerator.CreateJwtToken(user);
-
+        
         return new LoginResponseDto
         {
             IsAuthenticated = true,
-            Role = user.Role,
+            Role = Enum.GetName(user.Role) ?? "UnknownRole" ,
             Token = accessToken.Token,
             ExpiresOn = accessToken.ExpiresOn
         };
@@ -50,20 +54,25 @@ public class IdentityService(
         }
         var password = passwordGenerationService.GenerateRandomPassword(8);
         var result = await authService.RegisterUser(dto, password);
-        if (result is "")
-        {
+        if (result is not "")
             return new RegisterResponsesDto
             {
-                Message = "User registered successfully.",
-                IsCreated  = true,
+                Message = result,
+                IsCreated = false,
             };
-        }
-
-
+        
+        await emailService.SendEmailAsync(new EmailRequest()
+        {
+            ToEmails = dto.Email,
+            Subject = "welcome in MyRoad Company",
+            Body = EmailUtils.GetRegistrationEmailBody(dto.Email, dto.FirstName + " " + dto.LastName, password, "loginlink")
+        });
         return new RegisterResponsesDto
         {
-            Message = result,
-            IsCreated  = false,
+            Message = "User registered successfully.",
+            IsCreated  = true,
         };
+
+
     }
 }
