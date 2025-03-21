@@ -15,25 +15,30 @@ public class EmailService(IOptions<EmailSettings> emailSettings) : IEmailService
     {
         var email = new MimeMessage();
         email.From.Add(MailboxAddress.Parse(_emailSettings.FromEmail));
-        email.To.Add(MailboxAddress.Parse(emailRequest.ToEmails));
+
+        foreach (var toEmail in emailRequest.ToEmails)
+            email.To.Add(MailboxAddress.Parse(toEmail));
+
         email.Subject = emailRequest.Subject;
         email.Body = new TextPart(TextFormat.Html)
         {
             Text = emailRequest.Body
         };
+
         using var smtp = new SmtpClient();
         try
         {
             await smtp.ConnectAsync(_emailSettings.Server, _emailSettings.Port, SecureSocketOptions.StartTls);
             await smtp.AuthenticateAsync(_emailSettings.Username, _emailSettings.Password);
             await smtp.SendAsync(email);
-            await smtp.DisconnectAsync(true);
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Email sending failed: {ex.Message}");
-            throw;
         }
-
+        finally
+        {
+            await smtp.DisconnectAsync(true);
+        }
     }
 }

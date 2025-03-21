@@ -60,8 +60,8 @@ public static class EmailUtils
             <p>مرحبًا <b>{name}</b>, شكرًا لانضمامك إلينا!</p>
 
             <div class='info'>
-                <p><strong>📧 البريد الإلكتروني:</strong> {email}</p>
-                <p><strong>🔑 كلمة المرور:</strong> {password}</p>
+                <p><strong>📧 Email:</strong> {email}</p>
+                <p><strong>🔑 Password:</strong> {password}</p>
             </div>
 
             <a href='{loginLink}' class='button'>تسجيل الدخول الآن</a>
