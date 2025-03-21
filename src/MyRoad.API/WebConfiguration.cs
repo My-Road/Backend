@@ -65,40 +65,8 @@ public static class WebConfiguration
                 }
             });
         });
-        services.AddJwtAuthentication(configuration);
         services.AddAuthorizationPolicy();
         return services;
-    }
-
-    private static void AddJwtAuthentication(this IServiceCollection services, ConfigurationManager configuration)
-    {
-        services.AddOptions<JwtConfig>()
-            .BindConfiguration(nameof(JwtConfig));
-
-        var jwtConfig = new JwtConfig();
-        configuration.GetSection(nameof(JwtConfig)).Bind(jwtConfig);
-
-        services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                var key = Encoding.UTF8.GetBytes(jwtConfig.Key);
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtConfig.Issuer,
-                    ValidAudience = jwtConfig.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
     }
 
     private static void AddAuthorizationPolicy(this IServiceCollection services)
