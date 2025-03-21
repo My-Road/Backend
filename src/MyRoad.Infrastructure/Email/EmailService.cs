@@ -35,6 +35,7 @@ public class EmailService(IOptions<EmailSettings> emailSettings) : IEmailService
         catch (Exception ex)
         {
             Console.WriteLine($"Email sending failed: {ex.Message}");
+            throw new Exception("Failed to send email", ex);
         }
         finally
         {

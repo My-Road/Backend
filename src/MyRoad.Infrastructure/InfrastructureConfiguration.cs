@@ -39,6 +39,7 @@ public static class InfrastructureConfiguration
         services.AddScoped<IIdentityService, IdentityService>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IPasswordGenerationService, PasswordGenerationService>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
         return services;
     }
 

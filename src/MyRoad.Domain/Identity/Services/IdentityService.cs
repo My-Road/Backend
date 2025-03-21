@@ -12,7 +12,8 @@ public class IdentityService(
     IAuthService authService,
     IJwtTokenGenerator tokenGenerator,
     IPasswordGenerationService passwordGenerationService,
-    IEmailService emailService)
+    IEmailService emailService,
+    IUnitOfWork unitOfWork)
     : IIdentityService
 {
     private readonly RegisterValidator _registerValidator = new();
@@ -53,26 +54,40 @@ public class IdentityService(
             };
         }
 
-        var password = passwordGenerationService.GenerateRandomPassword(8);
-        var result = await authService.RegisterUser(dto, password);
-        if (result is not "")
+        await unitOfWork.BeginTransactionAsync();
+        try
+        {
+            var password = passwordGenerationService.GenerateRandomPassword(8);
+            var result = await authService.RegisterUser(dto, password);
+            if (result is not "")
+                return new RegisterResponsesDto
+                {
+                    Message = result,
+                    IsCreated = false,
+                };
+
+            await emailService.SendEmailAsync(new EmailRequest()
+            {
+                ToEmails = [dto.Email],
+                Subject = "welcome in MyRoad Company",
+                Body = EmailUtils.GetRegistrationEmailBody(dto.Email, dto.FirstName + " " + dto.LastName, password,
+                    "loginlink")
+            });
+            await unitOfWork.CommitTransactionAsync();
             return new RegisterResponsesDto
             {
-                Message = result,
+                Message = "User registered successfully.",
+                IsCreated = true,
+            };
+        }
+        catch (Exception e)
+        {
+            await unitOfWork.RollbackTransactionAsync(); 
+            return new RegisterResponsesDto
+            {
+                Message = "User registration failed: " + e.Message,
                 IsCreated = false,
             };
-
-        await emailService.SendEmailAsync(new EmailRequest()
-        {
-            ToEmails = [dto.Email],
-            Subject = "welcome in MyRoad Company",
-            Body = EmailUtils.GetRegistrationEmailBody(dto.Email, dto.FirstName + " " + dto.LastName, password,
-                "loginlink")
-        });
-        return new RegisterResponsesDto
-        {
-            Message = "User registered successfully.",
-            IsCreated = true,
-        };
+        }
     }
 }
