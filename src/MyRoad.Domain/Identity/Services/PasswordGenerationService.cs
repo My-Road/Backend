@@ -1,3 +1,4 @@
+using System.Text;
 using MyRoad.Domain.Identity.Interfaces;
 
 namespace MyRoad.Domain.Identity.Services;
@@ -16,18 +17,18 @@ public class PasswordGenerationService : IPasswordGenerationService
         if (length < 8)
             throw new ArgumentException("Password length must be at least 8 to include all character types.");
 
+        var passwordBuilder = new StringBuilder(length);
 
-        var password = new char[length];
-        password[0] = Lowercase[Random.Next(Lowercase.Length)];
-        password[1] = Uppercase[Random.Next(Uppercase.Length)];
-        password[2] = Digits[Random.Next(Digits.Length)];
-        password[3] = SpecialChars[Random.Next(SpecialChars.Length)];
+        passwordBuilder.Append(Lowercase[Random.Next(Lowercase.Length)]);
+        passwordBuilder.Append(Uppercase[Random.Next(Uppercase.Length)]);
+        passwordBuilder.Append(Digits[Random.Next(Digits.Length)]);
+        passwordBuilder.Append(SpecialChars[Random.Next(SpecialChars.Length)]);
 
         for (var i = 4; i < length; i++)
         {
-            password[i] = CharsCombined[Random.Next(CharsCombined.Length)];
+            passwordBuilder.Append(CharsCombined[Random.Next(CharsCombined.Length)]);
         }
 
-        return new string(password.OrderBy(_ => Random.Next()).ToArray());
+        return new string(passwordBuilder.ToString().OrderBy(_ => Random.Next()).ToArray());
     }
 }
