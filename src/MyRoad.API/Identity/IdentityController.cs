@@ -28,7 +28,7 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
         return Ok(result);
     }
 
-    [Authorize(Roles = nameof(UserRole.SuperAdmin))]
+    [Authorize(Policy = "SuperAdmin")]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestDto dto)
     {
@@ -39,7 +39,7 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
 
         var response = await identityService.Register(dto);
 
-        if (!response.IsCreated )
+        if (!response.IsCreated)
         {
             return BadRequest(response);
         }

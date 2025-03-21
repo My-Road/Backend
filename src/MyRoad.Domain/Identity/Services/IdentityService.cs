@@ -31,11 +31,11 @@ public class IdentityService(
         }
 
         var accessToken = tokenGenerator.CreateJwtToken(user);
-        
+
         return new LoginResponseDto
         {
             IsAuthenticated = true,
-            Role = Enum.GetName(user.Role) ?? "UnknownRole" ,
+            Role = Enum.GetName(user.Role) ?? "UnknownRole",
             Token = accessToken.Token,
             ExpiresOn = accessToken.ExpiresOn
         };
@@ -49,9 +49,10 @@ public class IdentityService(
             return new RegisterResponsesDto()
             {
                 Message = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)),
-                IsCreated  = false
+                IsCreated = false
             };
         }
+
         var password = passwordGenerationService.GenerateRandomPassword(8);
         var result = await authService.RegisterUser(dto, password);
         if (result is not "")
@@ -60,19 +61,18 @@ public class IdentityService(
                 Message = result,
                 IsCreated = false,
             };
-        
+
         await emailService.SendEmailAsync(new EmailRequest()
         {
-            ToEmails = dto.Email,
+            ToEmails = [dto.Email],
             Subject = "welcome in MyRoad Company",
-            Body = EmailUtils.GetRegistrationEmailBody(dto.Email, dto.FirstName + " " + dto.LastName, password, "loginlink")
+            Body = EmailUtils.GetRegistrationEmailBody(dto.Email, dto.FirstName + " " + dto.LastName, password,
+                "loginlink")
         });
         return new RegisterResponsesDto
         {
             Message = "User registered successfully.",
-            IsCreated  = true,
+            IsCreated = true,
         };
-
-
     }
 }
