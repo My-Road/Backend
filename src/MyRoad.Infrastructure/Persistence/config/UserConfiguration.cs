@@ -1,30 +1,42 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MyRoad.Domain.Entities.Users;
+using MyRoad.Domain.Identity.Enums;
+using MyRoad.Infrastructure.Identity.Entities;
 
 namespace MyRoad.Infrastructure.Persistence.config;
 
-public class UserConfiguration : IEntityTypeConfiguration<User>
+public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
         builder.ToTable("Users");
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
-            .HasColumnName("UserId")
             .ValueGeneratedOnAdd()
             .IsRequired();
 
-        builder.Property(x => x.Email)
-            .HasMaxLength(100)
-            .IsRequired();
+        builder.HasData(GetSuperAdminUser());
+    }
 
-        builder.Property(x => x.Username)
-            .HasMaxLength(10)
-            .IsRequired();
+    private static ApplicationUser GetSuperAdminUser()
+    {
+        var hasher = new PasswordHasher<ApplicationUser>();
 
-        builder.Property(x => x.PhoneNumber)
-            .HasMaxLength(14)
-            .IsRequired();
+        return new ApplicationUser
+        {
+            Id = 1,
+            UserName = "Abdullmen",
+            FirstName = "Abdullmen",
+            LastName = "Fayez",
+            Role = UserRole.SuperAdmin,
+            IsActive = true,
+            PhoneNumber = "0123456789",
+            NormalizedEmail = "abdullmen2002@gmail.com".ToUpper(),
+            NormalizedUserName = "abdullmen2002@gmail.com".ToUpper(),
+            Email = "abdullmen2002@gmail.com",
+            EmailConfirmed = true,
+            PasswordHash = hasher.HashPassword(null, "Admin@123")
+        };
     }
 }

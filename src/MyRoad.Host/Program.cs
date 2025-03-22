@@ -1,15 +1,21 @@
 using MyRoad.API;
+using MyRoad.API.Middlewares;
 using MyRoad.Domain;
 using MyRoad.Infrastructure;
+using MyRoad.Infrastructure.Persistence.config;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 builder.Services.AddDomain()
     .AddInfrastructure(builder.Configuration, builder.Environment)
-    .AddWeb();
+    .AddWeb(builder.Configuration);
 
-builder.Host.UseSerilog((context, loggerConfig) 
+
+builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(nameof(JwtConfig)));
+builder.Host.UseSerilog((context, loggerConfig)
     => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
 var app = builder.Build();
@@ -19,9 +25,9 @@ app.UseSwaggerUI();
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseCors();
-
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 

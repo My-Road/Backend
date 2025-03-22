@@ -1,11 +1,16 @@
+using System.Text;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MyRoad.Domain.Identity.Enums;
+using MyRoad.Infrastructure.Persistence.config;
 
 namespace MyRoad.API;
 
 public static class WebConfiguration
 {
-    public static IServiceCollection AddWeb(this IServiceCollection services)
+    public static IServiceCollection AddWeb(this IServiceCollection services, ConfigurationManager configuration)
     {
         services.AddEndpointsApiExplorer()
             .AddSwaggerGen();
@@ -17,7 +22,7 @@ public static class WebConfiguration
             opts.ApiVersionReader = new UrlSegmentApiVersionReader();
             opts.UnsupportedApiVersionStatusCode = StatusCodes.Status406NotAcceptable;
         }).AddApiExplorer(options => options.GroupNameFormat = "'v'VVV");
-        
+
         services.AddControllers();
         services.AddCors(c =>
         {
@@ -26,7 +31,7 @@ public static class WebConfiguration
                     .AllowAnyMethod()
                     .AllowAnyHeader());
         });
-        
+
         services.AddApiVersioning(opts =>
         {
             opts.AssumeDefaultVersionWhenUnspecified = true;
@@ -60,7 +65,15 @@ public static class WebConfiguration
                 }
             });
         });
-        services.AddAuthentication().AddJwtBearer();
+        services.AddAuthorizationPolicy();
         return services;
+    }
+
+    private static void AddAuthorizationPolicy(this IServiceCollection services)
+    {
+        services.AddAuthorizationBuilder()
+            .AddPolicy("Admin", policy => policy.RequireRole(UserRole.Admin.ToString()))
+            .AddPolicy("SuperAdmin", policy => policy.RequireRole(UserRole.SuperAdmin.ToString()))
+            .AddPolicy("Manager", policy => policy.RequireRole(UserRole.Manager.ToString()));
     }
 }
