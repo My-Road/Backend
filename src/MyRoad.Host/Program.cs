@@ -1,4 +1,5 @@
 using MyRoad.API;
+using MyRoad.API.Middlewares;
 using MyRoad.Domain;
 using MyRoad.Infrastructure;
 using MyRoad.Infrastructure.Persistence.config;
@@ -24,7 +25,7 @@ app.UseSwaggerUI();
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseCors();
 app.UseRouting();
 app.UseAuthentication();

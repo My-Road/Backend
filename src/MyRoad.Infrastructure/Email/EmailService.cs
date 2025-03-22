@@ -36,15 +36,6 @@ public class EmailService(IOptions<EmailSettings> emailSettings) : IEmailService
             await smtp.AuthenticateAsync(_emailSettings.Username, _emailSettings.Password);
             await smtp.SendAsync(email);
         }
-        catch (SmtpCommandException ex)
-        {
-            errors.Add(EmailErrors.SmtpError(ex.Message));
-        }
-        catch (Exception ex)
-        {
-            errors.Add(EmailErrors.GenericError($"Unexpected email error: {ex.Message}"));
-        }
-
         finally
         {
             await smtp.DisconnectAsync(true);
