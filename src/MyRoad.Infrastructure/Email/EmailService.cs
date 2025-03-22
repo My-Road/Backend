@@ -1,3 +1,4 @@
+using ErrorOr;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
@@ -11,7 +12,7 @@ public class EmailService(IOptions<EmailSettings> emailSettings) : IEmailService
 {
     private readonly EmailSettings _emailSettings = emailSettings.Value;
 
-    public async Task SendEmailAsync(EmailRequest emailRequest)
+    public async Task<ErrorOr<Success>> SendEmailAsync(EmailRequest emailRequest)
     {
         var email = new MimeMessage();
         email.From.Add(MailboxAddress.Parse(_emailSettings.FromEmail));
@@ -20,26 +21,35 @@ public class EmailService(IOptions<EmailSettings> emailSettings) : IEmailService
             email.To.Add(MailboxAddress.Parse(toEmail));
 
         email.Subject = emailRequest.Subject;
-        email.Body = new TextPart(TextFormat.Html)
-        {
-            Text = emailRequest.Body
-        };
+        email.Body = new TextPart(TextFormat.Html) { Text = emailRequest.Body };
 
         using var smtp = new SmtpClient();
+
+        var errors = new List<Error>();
+
+        if (emailRequest.ToEmails.Count == 0)
+            errors.Add(EmailErrors.NoRecipient());
+
         try
         {
             await smtp.ConnectAsync(_emailSettings.Server, _emailSettings.Port, SecureSocketOptions.StartTls);
             await smtp.AuthenticateAsync(_emailSettings.Username, _emailSettings.Password);
             await smtp.SendAsync(email);
         }
+        catch (SmtpCommandException ex)
+        {
+            errors.Add(EmailErrors.SmtpError(ex.Message));
+        }
         catch (Exception ex)
         {
-            Console.WriteLine($"Email sending failed: {ex.Message}");
-            throw new Exception("Failed to send email", ex);
+            errors.Add(EmailErrors.GenericError($"Unexpected email error: {ex.Message}"));
         }
+
         finally
         {
             await smtp.DisconnectAsync(true);
         }
+
+        return errors.Count > 0 ? errors : Result.Success;
     }
 }

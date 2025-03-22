@@ -1,7 +1,7 @@
+using ErrorOr;
 namespace MyRoad.Domain.Identity.Interfaces;
-
 public interface IPasswordGenerationService
 {
-    string GenerateRandomPassword(int length);
+    ErrorOr<string> GenerateRandomPassword(int length);
     
 }

@@ -1,10 +1,10 @@
-using Microsoft.Extensions.Logging;
+using ErrorOr;
 using MyRoad.Domain.Email;
-using MyRoad.Domain.Identity.Enums;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Identity.RequestsDto;
 using MyRoad.Domain.Identity.Responses;
 using MyRoad.Domain.Identity.Validators;
+using MyRoad.Domain.Common;
 
 namespace MyRoad.Domain.Identity.Services;
 
@@ -18,76 +18,73 @@ public class IdentityService(
 {
     private readonly RegisterValidator _registerValidator = new();
 
-    public async Task<LoginResponseDto> Login(LoginRequestDto dto)
+    public async Task<ErrorOr<LoginResponseDto>> Login(LoginRequestDto dto)
     {
         var user = await authService.AuthenticateAsync(dto);
 
-        if (user is null)
+        if (user.IsError)
         {
-            return new LoginResponseDto
-            {
-                IsAuthenticated = false,
-                Message = "Invalid email or password."
-            };
+            return user.Errors;
         }
 
-        var accessToken = tokenGenerator.CreateJwtToken(user);
+        var accessToken = tokenGenerator.CreateJwtToken(user.Value);
 
         return new LoginResponseDto
         {
             IsAuthenticated = true,
-            Role = Enum.GetName(user.Role) ?? "UnknownRole",
+            Role = Enum.GetName(user.Value.Role) ?? "UnknownRole",
             Token = accessToken.Token,
             ExpiresOn = accessToken.ExpiresOn
         };
     }
 
-    public async Task<RegisterResponsesDto> Register(RegisterRequestDto dto)
+    public async Task<ErrorOr<RegisterResponsesDto>> Register(RegisterRequestDto dto)
     {
         var validationResult = await _registerValidator.ValidateAsync(dto);
         if (!validationResult.IsValid)
         {
-            return new RegisterResponsesDto()
-            {
-                Message = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)),
-                IsCreated = false
-            };
+            return validationResult.ExtractErrors();
+        }
+
+
+        var password = passwordGenerationService.GenerateRandomPassword(8);
+
+        if (password.IsError)
+        {
+            return password.Errors;
         }
 
         await unitOfWork.BeginTransactionAsync();
-        try
-        {
-            var password = passwordGenerationService.GenerateRandomPassword(8);
-            var result = await authService.RegisterUser(dto, password);
-            if (result is not "")
-                return new RegisterResponsesDto
-                {
-                    Message = result,
-                    IsCreated = false,
-                };
+        var result = await authService.RegisterUser(dto, password.Value);
 
-            await emailService.SendEmailAsync(new EmailRequest()
-            {
-                ToEmails = [dto.Email],
-                Subject = "welcome in MyRoad Company",
-                Body = EmailUtils.GetRegistrationEmailBody(dto.Email, dto.FirstName + " " + dto.LastName, password,
-                    "loginlink")
-            });
-            await unitOfWork.CommitTransactionAsync();
-            return new RegisterResponsesDto
-            {
-                Message = "User registered successfully.",
-                IsCreated = true,
-            };
-        }
-        catch (Exception e)
+        if (result.IsError)
         {
-            await unitOfWork.RollbackTransactionAsync(); 
-            return new RegisterResponsesDto
-            {
-                Message = "User registration failed: " + e.Message,
-                IsCreated = false,
-            };
+            await unitOfWork.RollbackTransactionAsync();
+            return result.Errors;
         }
+
+        var emailResult = await emailService.SendEmailAsync(new EmailRequest()
+        {
+            ToEmails = [dto.Email],
+            Subject = "Welcome to MyRoad Company",
+            Body = EmailUtils.GetRegistrationEmailBody(
+                dto.Email,
+                $"{dto.FirstName} {dto.LastName}",
+                password.Value,
+                "loginlink")
+        });
+
+        if (emailResult.IsError)
+        {
+            await unitOfWork.RollbackTransactionAsync();
+            return emailResult.Errors;
+        }
+
+        await unitOfWork.CommitTransactionAsync();
+        return new RegisterResponsesDto
+        {
+            Message = "User registered successfully.",
+            IsCreated = true,
+        };
     }
 }

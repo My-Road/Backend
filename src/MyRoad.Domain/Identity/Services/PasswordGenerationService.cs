@@ -1,6 +1,6 @@
 using System.Text;
 using MyRoad.Domain.Identity.Interfaces;
-
+using ErrorOr;
 namespace MyRoad.Domain.Identity.Services;
 
 public class PasswordGenerationService : IPasswordGenerationService
@@ -12,10 +12,10 @@ public class PasswordGenerationService : IPasswordGenerationService
     private const string CharsCombined = $"{Lowercase}{Uppercase}{Digits}{SpecialChars}";
     private static readonly Random Random = new();
 
-    public string GenerateRandomPassword(int length)
+    public ErrorOr<string> GenerateRandomPassword(int length)
     {
         if (length < 8)
-            throw new ArgumentException("Password length must be at least 8 to include all character types.");
+            return Error.Validation("Password.ShortLength", "Password length must be at least 8 characters.");
 
         var passwordBuilder = new StringBuilder(length);
 
@@ -29,6 +29,6 @@ public class PasswordGenerationService : IPasswordGenerationService
             passwordBuilder.Append(CharsCombined[Random.Next(CharsCombined.Length)]);
         }
 
-        return new string(passwordBuilder.ToString().OrderBy(_ => Random.Next()).ToArray());
+        return passwordBuilder.ToString();
     }
 }

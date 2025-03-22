@@ -3,22 +3,24 @@ using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Identity.RequestsDto;
 using MyRoad.Domain.Users;
 using MyRoad.Infrastructure.Identity.Entities;
+using ErrorOr;
+using MyRoad.Domain.Identity;
 
 namespace MyRoad.Infrastructure.Identity;
 
 public class AuthService(UserManager<ApplicationUser> userManager)
     : IAuthService
 {
-    public async Task<User?> AuthenticateAsync(LoginRequestDto dto)
+    public async Task<ErrorOr<User>> AuthenticateAsync(LoginRequestDto dto)
     {
         var userApplication = await userManager.FindByEmailAsync(dto.Email);
         if (userApplication is null)
-            return null;
+            return UserErrors.InvalidCredentials;
 
         var isPasswordValid = await userManager.CheckPasswordAsync(userApplication, dto.Password);
         if (!isPasswordValid)
-            return null;
-        
+            return UserErrors.InvalidCredentials;
+
         return new User
         {
             Id = userApplication.Id,
@@ -28,11 +30,11 @@ public class AuthService(UserManager<ApplicationUser> userManager)
         };
     }
 
-    public async Task<string?> RegisterUser(RegisterRequestDto registerRequestDto, string password)
+    public async Task<ErrorOr<bool>> RegisterUser(RegisterRequestDto registerRequestDto, string password)
     {
         var userApplication = await userManager.FindByEmailAsync(registerRequestDto.Email);
         if (userApplication is not null)
-            return "user already exists";
+            return UserErrors.EmailExists;
 
         var user = new ApplicationUser
         {
@@ -46,11 +48,14 @@ public class AuthService(UserManager<ApplicationUser> userManager)
 
         var result = await userManager.CreateAsync(user, password);
 
-        if (result.Succeeded) return string.Empty;
+        if (result.Succeeded)
+            return true;
 
-        var errors = result.Errors.Select(e => e.Description);
-        var errorMessage = string.Join(", ", errors);
 
-        return errorMessage;
+        var errors = result.Errors
+            .Select(e => IdentityErrors.GenericError(e.Description))
+            .ToList();
+
+        return errors;
     }
 }

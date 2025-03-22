@@ -1,12 +1,10 @@
-using Microsoft.IdentityModel.Tokens;
 using MyRoad.Domain.Identity.RequestsDto;
 using MyRoad.Domain.Users;
-using ValidationFailure = FluentValidation.Results.ValidationFailure;
-
+using ErrorOr;
 namespace MyRoad.Domain.Identity.Interfaces;
 
 public interface IAuthService
 {
-    Task<User?> AuthenticateAsync(LoginRequestDto dto);
-    Task<string?> RegisterUser(RegisterRequestDto registerRequestDto, string password);
+    Task<ErrorOr<User>> AuthenticateAsync(LoginRequestDto dto);
+    Task<ErrorOr<bool>> RegisterUser(RegisterRequestDto registerRequestDto, string password);
 }

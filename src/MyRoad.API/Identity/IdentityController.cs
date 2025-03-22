@@ -1,7 +1,7 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyRoad.Domain.Identity.Enums;
+using MyRoad.API.Extensions;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Identity.RequestsDto;
 
@@ -20,12 +20,9 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
             return BadRequest(ModelState);
         }
 
-        var result = await identityService.Login(loginRequestDto);
+        var response = await identityService.Login(loginRequestDto);
 
-        if (!result.IsAuthenticated)
-            return Unauthorized(result.Message);
-
-        return Ok(result);
+        return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
     }
 
     [Authorize(Policy = "SuperAdmin")]
@@ -38,12 +35,7 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
         }
 
         var response = await identityService.Register(dto);
-
-        if (!response.IsCreated)
-        {
-            return BadRequest(response);
-        }
-
-        return CreatedAtAction(nameof(Register), response);
+        
+        return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
     }
 }

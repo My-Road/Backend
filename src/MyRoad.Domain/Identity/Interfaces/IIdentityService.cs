@@ -1,3 +1,4 @@
+using ErrorOr;
 using MyRoad.Domain.Identity.RequestsDto;
 using MyRoad.Domain.Identity.Responses;
 
@@ -5,6 +6,6 @@ namespace MyRoad.Domain.Identity.Interfaces;
 
 public interface IIdentityService
 {
-    Task<LoginResponseDto> Login(LoginRequestDto dto);
-    Task<RegisterResponsesDto> Register(RegisterRequestDto dto);
+    Task<ErrorOr<LoginResponseDto>> Login(LoginRequestDto dto);
+    Task<ErrorOr<RegisterResponsesDto>> Register(RegisterRequestDto dto);
 }
