@@ -11,5 +11,5 @@ public class User : BaseEntity<long>
     public string LastName { get; set; }
     public UserRole Role { get; set; }
     public bool IsActive { get; set; }
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
 }

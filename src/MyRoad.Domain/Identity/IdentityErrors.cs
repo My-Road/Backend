@@ -8,4 +8,9 @@ public static class IdentityErrors
         code: "Identity.GenericError",
         description: message
     );
+
+    public static Error WrongCurrentPassword => Error.Conflict(
+        code: "Identity.WrongCurrentPassword",
+        description: "Current password is wrong"
+    );
 }

@@ -2,9 +2,10 @@ using ErrorOr;
 using MyRoad.Domain.Email;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Identity.RequestsDto;
-using MyRoad.Domain.Identity.Responses;
 using MyRoad.Domain.Identity.Validators;
 using MyRoad.Domain.Common;
+using MyRoad.Domain.Identity.ResponsesDto;
+using MyRoad.Domain.Users;
 
 namespace MyRoad.Domain.Identity.Services;
 
@@ -13,10 +14,12 @@ public class IdentityService(
     IJwtTokenGenerator tokenGenerator,
     IPasswordGenerationService passwordGenerationService,
     IEmailService emailService,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork,
+    IUserService userService)
     : IIdentityService
 {
     private readonly RegisterValidator _registerValidator = new();
+    private readonly ChangePasswordValidator _changePasswordValidator = new();
 
     public async Task<ErrorOr<LoginResponseDto>> Login(LoginRequestDto dto)
     {
@@ -85,6 +88,55 @@ public class IdentityService(
         {
             Message = "User registered successfully.",
             IsCreated = true,
+        };
+    }
+
+    public async Task<ErrorOr<ChangePasswordResponsesDto>> ChangePassword(string userId, ChangePasswordRequestDto dto)
+    {
+        var validationResult = await _changePasswordValidator.ValidateAsync(dto);
+        if (!validationResult.IsValid)
+        {
+            return validationResult.ExtractErrors();
+        }
+
+        var user = await userService.GetByIdAsync(userId);
+        if (user.IsError)
+        {
+            return UserErrors.NotFound;
+        }
+
+        if (!await authService.IsOwnPasswordAsync(userId, dto.CurrentPassword))
+        {
+            return IdentityErrors.WrongCurrentPassword;
+        }
+
+        await unitOfWork.BeginTransactionAsync();
+        var result = await authService.ChangePasswordAsync(userId, dto.CurrentPassword, dto.NewPassword);
+
+        if (result.IsError)
+        {
+            await unitOfWork.RollbackTransactionAsync();
+            return result.Errors;
+        }
+
+        var user1 = user.Value;
+        var emailResult = await emailService.SendEmailAsync(new EmailRequest()
+        {
+            ToEmails = [user1.Email],
+            Subject = "Your password has been changed",
+            Body = EmailUtils.GetPasswordResetSuccessEmailBody(user1.Email, user1.FirstName + " " + user1.LastName),
+        });
+        if (emailResult.IsError)
+        {
+            await unitOfWork.RollbackTransactionAsync();
+            return emailResult.Errors;
+        }
+
+        await unitOfWork.CommitTransactionAsync();
+        return new ChangePasswordResponsesDto
+        {
+            Message = "password has been changed",
+            Success = true,
         };
     }
 }

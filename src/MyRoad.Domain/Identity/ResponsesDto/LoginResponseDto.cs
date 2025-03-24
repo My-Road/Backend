@@ -1,6 +1,4 @@
-using MyRoad.Domain.Identity.Enums;
-
-namespace MyRoad.Domain.Identity.Responses;
+namespace MyRoad.Domain.Identity.ResponsesDto;
 
 public class LoginResponseDto
 {

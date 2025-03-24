@@ -4,7 +4,9 @@ using MyRoad.Domain.Identity.RequestsDto;
 using MyRoad.Domain.Users;
 using MyRoad.Infrastructure.Identity.Entities;
 using ErrorOr;
+using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Identity;
+using static System.Int64;
 
 namespace MyRoad.Infrastructure.Identity;
 
@@ -57,5 +59,32 @@ public class AuthService(UserManager<ApplicationUser> userManager)
             .ToList();
 
         return errors;
+    }
+
+    public async Task<ErrorOr<bool>> ChangePasswordAsync(string userId, string currentPassword, string newPassword)
+    {
+        TryParse(userId, out var parsedUserId);
+        var user = await userManager.Users.FirstOrDefaultAsync(u => u.Id == parsedUserId);
+
+        var result = await userManager.ChangePasswordAsync(user!, currentPassword, newPassword);
+
+        if (result.Succeeded)
+        {
+            return true;
+        }
+
+        var errors = result.Errors
+            .Select(e => IdentityErrors.GenericError(e.Description))
+            .ToList();
+
+        return errors;
+    }
+
+    public async Task<bool> IsOwnPasswordAsync(string userId, string password)
+    {
+        TryParse(userId, out var parsedUserId);
+        var user = await userManager.Users.FirstOrDefaultAsync(u => u.Id == parsedUserId);
+
+        return await userManager.CheckPasswordAsync(user!, password);
     }
 }
