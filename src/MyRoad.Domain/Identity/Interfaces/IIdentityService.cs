@@ -8,5 +8,7 @@ public interface IIdentityService
 {
     Task<ErrorOr<LoginResponseDto>> Login(LoginRequestDto dto);
     Task<ErrorOr<RegisterResponsesDto>> Register(RegisterRequestDto dto);
-    Task<ErrorOr<ChangePasswordResponsesDto>> ChangePassword(string userId, ChangePasswordRequestDto dto);
+    Task<ErrorOr<Success>> ChangePassword(string userId, ChangePasswordRequestDto dto);
+    Task<ErrorOr<Success>> ForgotPassword(ForgetPasswordRequestDto dto);
+    Task<ErrorOr<Success>> ResetForgetPassword(ResetForgetPasswordRequestDto dto);
 }

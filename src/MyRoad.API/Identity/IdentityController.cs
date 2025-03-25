@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,12 +41,26 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
 
     [Authorize]
     [HttpPost("change-password")]
-    public async Task<IActionResult> ChangePassword(ChangePasswordRequestDto changePasswordRequestDto)
+    public async Task<IActionResult> ChangePassword(ChangePasswordRequestDto dto)
     {
         var userId = User.FindFirst("uid")?.Value;
         if (userId == null) return BadRequest(ModelState);
-        
-        var response = await identityService.ChangePassword(userId ,changePasswordRequestDto);
+
+        var response = await identityService.ChangePassword(userId, dto);
+        return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
+    }
+
+    [HttpPost("forget-password")]
+    public async Task<IActionResult> ForgetPassword(ForgetPasswordRequestDto dto)
+    {
+        var response = await identityService.ForgotPassword(dto);
+        return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
+    }
+
+    [HttpPost("reset-forget-password")]
+    public async Task<IActionResult> ResetForgetPassword(ResetForgetPasswordRequestDto dto)
+    {
+        var response = await identityService.ResetForgetPassword(dto);
         return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
     }
 }

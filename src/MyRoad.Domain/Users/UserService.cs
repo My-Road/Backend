@@ -19,4 +19,15 @@ public class UserService(
         
         return user;
     }
+
+    public async Task<ErrorOr<User>> GetByEmailAsync(string email)
+    {
+        var user = await userRepository.GetByEmailAsync(email);
+
+        if (user is null)
+        {
+            return UserErrors.NotFound;
+        }
+        return user;
+    }
 }

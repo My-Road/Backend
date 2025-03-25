@@ -87,4 +87,30 @@ public class AuthService(UserManager<ApplicationUser> userManager)
 
         return await userManager.CheckPasswordAsync(user!, password);
     }
+
+    public async Task<string> GenerateResetPasswordTokenAsync(long userId)
+    {
+        var user = await userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        return await userManager.GeneratePasswordResetTokenAsync(user!);
+    }
+
+    public async Task<bool> ValidateResetPasswordToken(long userId, string token)
+    {
+        var user = await userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        return await userManager.VerifyUserTokenAsync(
+            user!,
+            userManager.Options.Tokens.PasswordResetTokenProvider,
+            "ResetPassword",
+            token
+        );
+    }
+
+    public async Task<bool> ResetPasswordAsync(long userId, string token, string newPassword)
+    {
+        var user = await userManager.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+        var resetPasswordResult = await userManager.ResetPasswordAsync(user!, token, newPassword);
+
+        return resetPasswordResult.Succeeded;
+    }
 }

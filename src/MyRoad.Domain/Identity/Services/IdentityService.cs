@@ -19,7 +19,8 @@ public class IdentityService(
     : IIdentityService
 {
     private readonly RegisterValidator _registerValidator = new();
-    private readonly ChangePasswordValidator _changePasswordValidator = new();
+    private readonly ChangePasswordValidator _passwordValidator = new();
+    private readonly ForgotPasswordValidator _forgotPasswordValidator = new();
 
     public async Task<ErrorOr<LoginResponseDto>> Login(LoginRequestDto dto)
     {
@@ -74,7 +75,7 @@ public class IdentityService(
                 dto.Email,
                 $"{dto.FirstName} {dto.LastName}",
                 password.Value,
-                "loginlink")
+                "loginLink")
         });
 
         if (emailResult.IsError)
@@ -91,16 +92,16 @@ public class IdentityService(
         };
     }
 
-    public async Task<ErrorOr<ChangePasswordResponsesDto>> ChangePassword(string userId, ChangePasswordRequestDto dto)
+    public async Task<ErrorOr<Success>> ChangePassword(string userId, ChangePasswordRequestDto dto)
     {
-        var validationResult = await _changePasswordValidator.ValidateAsync(dto);
+        var validationResult = await _passwordValidator.ValidateAsync(dto);
         if (!validationResult.IsValid)
         {
             return validationResult.ExtractErrors();
         }
 
-        var user = await userService.GetByIdAsync(userId);
-        if (user.IsError)
+        var userReturnResult = await userService.GetByIdAsync(userId);
+        if (userReturnResult.IsError)
         {
             return UserErrors.NotFound;
         }
@@ -108,6 +109,11 @@ public class IdentityService(
         if (!await authService.IsOwnPasswordAsync(userId, dto.CurrentPassword))
         {
             return IdentityErrors.WrongCurrentPassword;
+        }
+
+        if (userReturnResult.Value.Email is null)
+        {
+            return UserErrors.NotFound;
         }
 
         await unitOfWork.BeginTransactionAsync();
@@ -119,12 +125,12 @@ public class IdentityService(
             return result.Errors;
         }
 
-        var user1 = user.Value;
+        var user = userReturnResult.Value;
         var emailResult = await emailService.SendEmailAsync(new EmailRequest()
         {
-            ToEmails = [user1.Email],
+            ToEmails = [user.Email],
             Subject = "Your password has been changed",
-            Body = EmailUtils.GetPasswordResetSuccessEmailBody(user1.Email, user1.FirstName + " " + user1.LastName),
+            Body = EmailUtils.GetPasswordChangeSuccessEmailBody(user.Email, user.FirstName + " " + user.LastName),
         });
         if (emailResult.IsError)
         {
@@ -133,10 +139,89 @@ public class IdentityService(
         }
 
         await unitOfWork.CommitTransactionAsync();
-        return new ChangePasswordResponsesDto
+        return new Success();
+    }
+
+    public async Task<ErrorOr<Success>> ForgotPassword(ForgetPasswordRequestDto dto)
+    {
+        var userReturnResult = await userService.GetByEmailAsync(dto.Email);
+        if (userReturnResult.IsError)
         {
-            Message = "password has been changed",
-            Success = true,
-        };
+            return userReturnResult.Errors;
+        }
+
+        var user = userReturnResult.Value;
+        if (user.Email is null)
+        {
+            return UserErrors.NotFound;
+        }
+
+        var token = await authService.GenerateResetPasswordTokenAsync(user.Id);
+
+        var emailResult = await emailService.SendEmailAsync(new EmailRequest()
+        {
+            ToEmails = [user.Email],
+            Subject = "Rest your password in MyRoad Company",
+            Body = EmailUtils.GetPasswordResetEmailBody(user.Email, user.FirstName + " " + user.LastName, token,
+                user.Id.ToString()),
+        });
+        if (emailResult.IsError)
+        {
+            return emailResult.Errors;
+        }
+
+        return new Success();
+    }
+
+    public async Task<ErrorOr<Success>> ResetForgetPassword(ResetForgetPasswordRequestDto dto)
+    {
+        var validationResult = await _forgotPasswordValidator.ValidateAsync(dto);
+        if (!validationResult.IsValid)
+        {
+            return validationResult.ExtractErrors();
+        }
+
+        var userReturnResult = await userService.GetByIdAsync(dto.UserId);
+        if (userReturnResult.IsError)
+        {
+            return userReturnResult.Errors;
+        }
+
+        var user = userReturnResult.Value;
+        if (user.Email is null)
+        {
+            return UserErrors.NotFound;
+        }
+
+
+        if (!await authService.ValidateResetPasswordToken(user.Id, dto.Token))
+        {
+            return IdentityErrors.InvalidResetPasswordToken;
+        }
+
+        await unitOfWork.BeginTransactionAsync();
+
+        if (!await authService.ResetPasswordAsync(user.Id, dto.Token, dto.NewPassword))
+        {
+            await unitOfWork.RollbackTransactionAsync();
+            return IdentityErrors.FailedToResetPassword;
+        }
+
+        var emailResult = await emailService.SendEmailAsync(new EmailRequest
+        {
+            ToEmails = [user.Email],
+            Subject = "Your password has been changed",
+            Body = EmailUtils.GetPasswordChangedEmailBody($"{user.FirstName}  {user.LastName}")
+        });
+
+        if (emailResult.IsError)
+        {
+            await unitOfWork.RollbackTransactionAsync();
+            return emailResult.Errors;
+        }
+
+        await unitOfWork.CommitTransactionAsync();
+
+        return new Success();
     }
 }

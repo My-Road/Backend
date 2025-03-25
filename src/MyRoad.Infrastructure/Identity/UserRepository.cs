@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Users;
 using MyRoad.Infrastructure.Identity.Entities;
+using MyRoad.Infrastructure.Mappings;
 
 namespace MyRoad.Infrastructure.Identity;
 
@@ -11,19 +12,12 @@ public class UserRepository(UserManager<ApplicationUser> userManager) : IUserRep
     {
         var applicationUser = await userManager.FindByIdAsync(id);
 
-        if (applicationUser == null)
-        {
-            return null;
-        }
+        return applicationUser?.ToDomain();
+    }
 
-        return new User()
-        {
-            Id = applicationUser.Id,
-            Email = applicationUser.Email,
-            PhoneNumber = applicationUser.PhoneNumber,
-            FirstName = applicationUser.FirstName,
-            LastName = applicationUser.LastName,
-            IsActive = applicationUser.IsActive,
-        };
+    public async Task<User?> GetByEmailAsync(string email)
+    {
+        var applicationUser = await userManager.FindByEmailAsync(email);
+        return applicationUser?.ToDomain();
     }
 }

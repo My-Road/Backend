@@ -9,4 +9,7 @@ public interface IAuthService
     Task<ErrorOr<bool>> RegisterUser(RegisterRequestDto registerRequestDto, string password);
     Task<ErrorOr<bool>> ChangePasswordAsync(string userId, string currentPassword, string newPassword);
     public Task<bool> IsOwnPasswordAsync(string userId, string password);
+    public Task<string> GenerateResetPasswordTokenAsync(long userId);
+    public Task<bool> ValidateResetPasswordToken(long userId, string token);
+    Task<bool> ResetPasswordAsync(long userId, string token, string newPassword);
 }
