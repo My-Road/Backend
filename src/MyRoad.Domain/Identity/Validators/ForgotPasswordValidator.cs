@@ -10,8 +10,6 @@ public class ForgotPasswordValidator : AbstractValidator<ForgetPasswordRequestDt
             .NotEmpty().WithMessage("Current password is required")
             .Equal(u => u.ConfirmNewPassword)
             .WithMessage("Current passwords does not match");
-
-
         RuleFor(x => x.NewPassword)
             .NotEmpty().WithMessage("New password is required")
             .MinimumLength(8).WithMessage("New password must be at least 8 characters")
