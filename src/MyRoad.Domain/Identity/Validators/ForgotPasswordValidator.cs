@@ -1,9 +1,8 @@
 using FluentValidation;
-using MyRoad.Domain.Identity.RequestsDto;
 
 namespace MyRoad.Domain.Identity.Validators;
 
-public class ForgotPasswordValidator : AbstractValidator<ResetForgetPasswordRequestDto>
+public class ForgotPasswordValidator : AbstractValidator<ForgetPasswordRequestDto>
 {
     public ForgotPasswordValidator()
     {
@@ -21,4 +20,10 @@ public class ForgotPasswordValidator : AbstractValidator<ResetForgetPasswordRequ
             .Matches(@"\d").WithMessage("New password must contain at least one digit")
             .Matches(@"[\W]").WithMessage("New password must contain at least one special character");
     }
+}
+
+public class ForgetPasswordRequestDto(string newPassword, string confirmNewPassword)
+{
+    public string NewPassword { get; set; } = newPassword;
+    public string ConfirmNewPassword { get; set; } = confirmNewPassword;
 }

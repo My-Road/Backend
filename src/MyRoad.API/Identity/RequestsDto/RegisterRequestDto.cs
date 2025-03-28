@@ -1,6 +1,6 @@
 using MyRoad.Domain.Identity.Enums;
 
-namespace MyRoad.Domain.Identity.RequestsDto;
+namespace MyRoad.API.Identity.RequestsDto;
 
 public class RegisterRequestDto
 {

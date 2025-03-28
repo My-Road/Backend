@@ -8,9 +8,9 @@ namespace MyRoad.Infrastructure.Identity;
 
 public class UserRepository(UserManager<ApplicationUser> userManager) : IUserRepository
 {
-    public async Task<User?> GetByIdAsync(string id)
+    public async Task<User?> GetByIdAsync(long id)
     {
-        var applicationUser = await userManager.FindByIdAsync(id);
+        var applicationUser = await userManager.FindByIdAsync(id.ToString());
 
         return applicationUser?.ToDomain();
     }

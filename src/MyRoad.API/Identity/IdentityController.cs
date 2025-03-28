@@ -2,8 +2,8 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Extensions;
+using MyRoad.API.Identity.RequestsDto;
 using MyRoad.Domain.Identity.Interfaces;
-using MyRoad.Domain.Identity.RequestsDto;
 
 namespace MyRoad.API.Identity;
 
@@ -20,7 +20,7 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
             return BadRequest(ModelState);
         }
 
-        var response = await identityService.Login(loginRequestDto);
+        var response = await identityService.Login(loginRequestDto.Email, loginRequestDto.Password);
 
         return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
     }
@@ -34,7 +34,7 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
             return BadRequest(ModelState);
         }
 
-        var response = await identityService.Register(dto);
+        var response = await identityService.Register(dto.ToDomainUser());
 
         return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
     }
@@ -43,24 +43,21 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
     [HttpPost("change-password")]
     public async Task<IActionResult> ChangePassword(ChangePasswordRequestDto dto)
     {
-        var userId = User.FindFirst("uid")?.Value;
-        if (userId == null) return BadRequest(ModelState);
-
-        var response = await identityService.ChangePassword(userId, dto);
+        var response = await identityService.ChangePassword(dto.CurrentPassword, dto.NewPassword);
         return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
     }
 
     [HttpPost("forget-password")]
     public async Task<IActionResult> ForgetPassword(ForgetPasswordRequestDto dto)
     {
-        var response = await identityService.ForgotPassword(dto);
+        var response = await identityService.ForgotPassword(dto.Email);
         return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
     }
 
     [HttpPost("reset-forget-password")]
     public async Task<IActionResult> ResetForgetPassword(ResetForgetPasswordRequestDto dto)
     {
-        var response = await identityService.ResetForgetPassword(dto);
+        var response = await identityService.ResetForgetPassword(dto.Token, dto.NewPassword, dto.ConfirmNewPassword);
         return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
     }
 }

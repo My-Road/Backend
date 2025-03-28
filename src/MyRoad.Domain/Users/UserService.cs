@@ -8,7 +8,7 @@ public class UserService(
 ) : IUserService
 
 {
-    public async Task<ErrorOr<User>> GetByIdAsync(string id)
+    public async Task<ErrorOr<User>> GetByIdAsync(long id)
     {
         var user = await userRepository.GetByIdAsync(id);
 

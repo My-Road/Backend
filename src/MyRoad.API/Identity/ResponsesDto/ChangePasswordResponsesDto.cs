@@ -1,4 +1,4 @@
-namespace MyRoad.Domain.Identity.ResponsesDto;
+namespace MyRoad.API.Identity.ResponsesDto;
 
 public class ChangePasswordResponsesDto
 {

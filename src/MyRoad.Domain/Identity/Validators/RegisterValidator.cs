@@ -1,10 +1,10 @@
 using FluentValidation;
 using MyRoad.Domain.Identity.Enums;
-using MyRoad.Domain.Identity.RequestsDto;
+using MyRoad.Domain.Users;
 
 namespace MyRoad.Domain.Identity.Validators;
 
-public class RegisterValidator : AbstractValidator<RegisterRequestDto>
+public class RegisterValidator : AbstractValidator<User>
 {
     public RegisterValidator()
     {

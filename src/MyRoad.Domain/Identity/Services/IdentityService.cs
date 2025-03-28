@@ -1,10 +1,10 @@
 using ErrorOr;
+using Microsoft.Extensions.Logging;
 using MyRoad.Domain.Email;
 using MyRoad.Domain.Identity.Interfaces;
-using MyRoad.Domain.Identity.RequestsDto;
 using MyRoad.Domain.Identity.Validators;
 using MyRoad.Domain.Common;
-using MyRoad.Domain.Identity.ResponsesDto;
+using MyRoad.Domain.Identity.Models;
 using MyRoad.Domain.Users;
 
 namespace MyRoad.Domain.Identity.Services;
@@ -15,16 +15,18 @@ public class IdentityService(
     IPasswordGenerationService passwordGenerationService,
     IEmailService emailService,
     IUnitOfWork unitOfWork,
-    IUserService userService)
+    IUserService userService,
+    IUserContext userContext,
+    ILogger<IdentityService> logger)
     : IIdentityService
 {
     private readonly RegisterValidator _registerValidator = new();
     private readonly ChangePasswordValidator _passwordValidator = new();
     private readonly ForgotPasswordValidator _forgotPasswordValidator = new();
 
-    public async Task<ErrorOr<LoginResponseDto>> Login(LoginRequestDto dto)
+    public async Task<ErrorOr<AccessToken>> Login(string email, string password)
     {
-        var user = await authService.AuthenticateAsync(dto);
+        var user = await authService.AuthenticateAsync(email, password);
 
         if (user.IsError)
         {
@@ -33,18 +35,12 @@ public class IdentityService(
 
         var accessToken = tokenGenerator.CreateJwtToken(user.Value);
 
-        return new LoginResponseDto
-        {
-            IsAuthenticated = true,
-            Role = Enum.GetName(user.Value.Role) ?? "UnknownRole",
-            Token = accessToken.Token,
-            ExpiresOn = accessToken.ExpiresOn
-        };
+        return accessToken;
     }
 
-    public async Task<ErrorOr<RegisterResponsesDto>> Register(RegisterRequestDto dto)
+    public async Task<ErrorOr<Success>> Register(User user)
     {
-        var validationResult = await _registerValidator.ValidateAsync(dto);
+        var validationResult = await _registerValidator.ValidateAsync(user);
         if (!validationResult.IsValid)
         {
             return validationResult.ExtractErrors();
@@ -59,7 +55,7 @@ public class IdentityService(
         }
 
         await unitOfWork.BeginTransactionAsync();
-        var result = await authService.RegisterUser(dto, password.Value);
+        var result = await authService.RegisterUser(user, password.Value);
 
         if (result.IsError)
         {
@@ -69,11 +65,11 @@ public class IdentityService(
 
         var emailResult = await emailService.SendEmailAsync(new EmailRequest()
         {
-            ToEmails = [dto.Email],
+            ToEmails = [user.Email],
             Subject = "Welcome to MyRoad Company",
             Body = EmailUtils.GetRegistrationEmailBody(
-                dto.Email,
-                $"{dto.FirstName} {dto.LastName}",
+                user.Email,
+                $"{user.FirstName} {user.LastName}",
                 password.Value,
                 "loginLink")
         });
@@ -85,28 +81,29 @@ public class IdentityService(
         }
 
         await unitOfWork.CommitTransactionAsync();
-        return new RegisterResponsesDto
-        {
-            Message = "User registered successfully.",
-            IsCreated = true,
-        };
+        return new Success();
     }
 
-    public async Task<ErrorOr<Success>> ChangePassword(string userId, ChangePasswordRequestDto dto)
+    public async Task<ErrorOr<Success>> ChangePassword(string currentPassword, string newPassword)
     {
-        var validationResult = await _passwordValidator.ValidateAsync(dto);
+        var validationResult =
+            await _passwordValidator.ValidateAsync(new ChangePasswordDto(currentPassword, newPassword));
         if (!validationResult.IsValid)
         {
             return validationResult.ExtractErrors();
         }
 
+        var userId = userContext.Id;
+        logger.LogInformation("user Id: " + userContext.Id + " Email: " + userContext.Email + " Role: " +
+                              userContext.Role);
+        
         var userReturnResult = await userService.GetByIdAsync(userId);
         if (userReturnResult.IsError)
         {
             return UserErrors.NotFound;
         }
 
-        if (!await authService.IsOwnPasswordAsync(userId, dto.CurrentPassword))
+        if (!await authService.IsOwnPasswordAsync(userId, currentPassword))
         {
             return IdentityErrors.WrongCurrentPassword;
         }
@@ -117,7 +114,7 @@ public class IdentityService(
         }
 
         await unitOfWork.BeginTransactionAsync();
-        var result = await authService.ChangePasswordAsync(userId, dto.CurrentPassword, dto.NewPassword);
+        var result = await authService.ChangePasswordAsync(userId, currentPassword, newPassword);
 
         if (result.IsError)
         {
@@ -142,9 +139,9 @@ public class IdentityService(
         return new Success();
     }
 
-    public async Task<ErrorOr<Success>> ForgotPassword(ForgetPasswordRequestDto dto)
+    public async Task<ErrorOr<Success>> ForgotPassword(string email)
     {
-        var userReturnResult = await userService.GetByEmailAsync(dto.Email);
+        var userReturnResult = await userService.GetByEmailAsync(email);
         if (userReturnResult.IsError)
         {
             return userReturnResult.Errors;
@@ -173,15 +170,16 @@ public class IdentityService(
         return new Success();
     }
 
-    public async Task<ErrorOr<Success>> ResetForgetPassword(ResetForgetPasswordRequestDto dto)
+    public async Task<ErrorOr<Success>> ResetForgetPassword(string token, string newPassword, string confirmNewPassword)
     {
-        var validationResult = await _forgotPasswordValidator.ValidateAsync(dto);
+        var validationResult =
+            await _forgotPasswordValidator.ValidateAsync(new ForgetPasswordRequestDto(newPassword, confirmNewPassword));
         if (!validationResult.IsValid)
         {
             return validationResult.ExtractErrors();
         }
 
-        var userReturnResult = await userService.GetByIdAsync(dto.UserId);
+        var userReturnResult = await userService.GetByIdAsync(userContext.Id);
         if (userReturnResult.IsError)
         {
             return userReturnResult.Errors;
@@ -194,14 +192,14 @@ public class IdentityService(
         }
 
 
-        if (!await authService.ValidateResetPasswordToken(user.Id, dto.Token))
+        if (!await authService.ValidateResetPasswordToken(user.Id, token))
         {
             return IdentityErrors.InvalidResetPasswordToken;
         }
 
         await unitOfWork.BeginTransactionAsync();
 
-        if (!await authService.ResetPasswordAsync(user.Id, dto.Token, dto.NewPassword))
+        if (!await authService.ResetPasswordAsync(user.Id, token, newPassword))
         {
             await unitOfWork.RollbackTransactionAsync();
             return IdentityErrors.FailedToResetPassword;

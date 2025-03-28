@@ -1,10 +1,8 @@
-using System.Data;
 using FluentValidation;
-using MyRoad.Domain.Identity.RequestsDto;
 
 namespace MyRoad.Domain.Identity.Validators;
 
-public class ChangePasswordValidator : AbstractValidator<ChangePasswordRequestDto>
+public class ChangePasswordValidator : AbstractValidator<ChangePasswordDto>
 {
     public ChangePasswordValidator()
     {
@@ -22,4 +20,10 @@ public class ChangePasswordValidator : AbstractValidator<ChangePasswordRequestDt
             .Matches(@"\d").WithMessage("New password must contain at least one digit")
             .Matches(@"[\W]").WithMessage("New password must contain at least one special character");
     }
+}
+
+public class ChangePasswordDto(string currentPassword, string newPassword)
+{
+    public string CurrentPassword { get; set; } = currentPassword;
+    public string NewPassword { get; set; } = newPassword;
 }

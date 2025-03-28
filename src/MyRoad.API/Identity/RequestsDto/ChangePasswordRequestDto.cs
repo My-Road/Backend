@@ -1,4 +1,4 @@
-namespace MyRoad.Domain.Identity.RequestsDto;
+namespace MyRoad.API.Identity.RequestsDto;
 
 public class ChangePasswordRequestDto
 {
