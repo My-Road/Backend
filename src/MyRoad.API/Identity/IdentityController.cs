@@ -1,9 +1,11 @@
 using Asp.Versioning;
+using ErrorOr;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Extensions;
 using MyRoad.API.Identity.RequestsDto;
 using MyRoad.Domain.Identity.Interfaces;
+using MyRoad.Domain.Identity.Models;
 
 namespace MyRoad.API.Identity;
 
@@ -22,7 +24,7 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
 
         var response = await identityService.Login(loginRequestDto.Email, loginRequestDto.Password);
 
-        return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
+        return ResponseHandler.HandleResult(response);
     }
 
     [Authorize(Policy = "SuperAdmin")]
@@ -36,7 +38,7 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
 
         var response = await identityService.Register(dto.ToDomainUser());
 
-        return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
+        return ResponseHandler.HandleResult(response);
     }
 
     [Authorize]
@@ -44,20 +46,20 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
     public async Task<IActionResult> ChangePassword(ChangePasswordRequestDto dto)
     {
         var response = await identityService.ChangePassword(dto.CurrentPassword, dto.NewPassword);
-        return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
+        return ResponseHandler.HandleResult(response);
     }
 
     [HttpPost("forget-password")]
     public async Task<IActionResult> ForgetPassword(ForgetPasswordRequestDto dto)
     {
         var response = await identityService.ForgotPassword(dto.Email);
-        return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
+        return ResponseHandler.HandleResult(response);;
     }
 
     [HttpPost("reset-forget-password")]
     public async Task<IActionResult> ResetForgetPassword(ResetForgetPasswordRequestDto dto)
     {
         var response = await identityService.ResetForgetPassword(dto.Token, dto.NewPassword, dto.ConfirmNewPassword);
-        return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
+        return ResponseHandler.HandleResult(response);
     }
 }
