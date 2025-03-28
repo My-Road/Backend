@@ -33,6 +33,18 @@ public static class InfrastructureConfiguration
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
+        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+        services.Configure<DataProtectionTokenProviderOptions>(options =>
+        {
+            options.TokenLifespan = TimeSpan.FromHours(1);
+        });
+
         services.AddJwtAuthentication(builderConfiguration);
 
         services.AddScoped<IAuthService, AuthService>();
