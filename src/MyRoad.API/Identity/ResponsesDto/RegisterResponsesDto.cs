@@ -1,4 +1,4 @@
-namespace MyRoad.Domain.Identity.Responses;
+namespace MyRoad.API.Identity.ResponsesDto;
 
 public class RegisterResponsesDto
 {

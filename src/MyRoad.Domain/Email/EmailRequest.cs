@@ -1,3 +1,5 @@
+using MyRoad.Domain.Users;
+
 namespace MyRoad.Domain.Email;
 
 public class EmailRequest

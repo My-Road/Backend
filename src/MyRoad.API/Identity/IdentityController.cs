@@ -1,9 +1,9 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyRoad.API.Extensions;
+using MyRoad.API.Common;
+using MyRoad.API.Identity.RequestsDto;
 using MyRoad.Domain.Identity.Interfaces;
-using MyRoad.Domain.Identity.RequestsDto;
 
 namespace MyRoad.API.Identity;
 
@@ -20,9 +20,9 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
             return BadRequest(ModelState);
         }
 
-        var response = await identityService.Login(loginRequestDto);
+        var response = await identityService.Login(loginRequestDto.Email, loginRequestDto.Password);
 
-        return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
+        return ResponseHandler.HandleResult(response);
     }
 
     [Authorize(Policy = "SuperAdmin")]
@@ -34,8 +34,32 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
             return BadRequest(ModelState);
         }
 
-        var response = await identityService.Register(dto);
-        
-        return response.IsError ? response.ToProblemDetails() : Ok(response.Value);
+        var response = await identityService.Register(dto.ToDomainUser());
+
+        return ResponseHandler.HandleResult(response);
+    }
+
+    [Authorize]
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword(ChangePasswordRequestDto dto)
+    {
+        var response = await identityService.ChangePassword(dto.CurrentPassword, dto.NewPassword);
+        return ResponseHandler.HandleResult(response);
+    }
+
+    [HttpPost("forget-password")]
+    public async Task<IActionResult> ForgetPassword(ForgetPasswordRequestDto dto)
+    {
+        var response = await identityService.ForgotPassword(dto.Email);
+        return ResponseHandler.HandleResult(response);
+        ;
+    }
+
+    [HttpPost("reset-forget-password")]
+    public async Task<IActionResult> ResetForgetPassword(ResetForgetPasswordRequestDto dto)
+    {
+        var response =
+            await identityService.ResetForgetPassword(dto.UserId, dto.Token, dto.NewPassword, dto.ConfirmNewPassword);
+        return ResponseHandler.HandleResult(response);
     }
 }
