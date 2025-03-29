@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Identity.Services;
+using MyRoad.Domain.Users;
 using MyRoad.Infrastructure.Email;
 using MyRoad.Infrastructure.Identity;
 using MyRoad.Infrastructure.Identity.Entities;
@@ -28,22 +29,10 @@ public static class InfrastructureConfiguration
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequiredLength = 6;
+                options.Password.RequiredLength = 8;
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
-
-        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-            {
-                options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;
-            })
-            .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
-
-        services.Configure<DataProtectionTokenProviderOptions>(options =>
-        {
-            options.TokenLifespan = TimeSpan.FromHours(1);
-        });
 
         services.AddJwtAuthentication(builderConfiguration);
 
@@ -53,6 +42,7 @@ public static class InfrastructureConfiguration
         services.AddScoped<IPasswordGenerationService, PasswordGenerationService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IUserService, UserService>();
         return services;
     }
 
@@ -63,7 +53,10 @@ public static class InfrastructureConfiguration
 
         var jwtConfig = new JwtConfig();
         configuration.GetSection(nameof(JwtConfig)).Bind(jwtConfig);
-
+        
+        
+        services.Configure<DataProtectionTokenProviderOptions>(opt =>
+            opt.TokenLifespan = TimeSpan.FromMinutes(jwtConfig.ResetPasswordTokenLifeTimeMinutes));
         services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

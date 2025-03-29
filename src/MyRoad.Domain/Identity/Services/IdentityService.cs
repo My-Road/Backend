@@ -96,7 +96,7 @@ public class IdentityService(
         var userId = userContext.Id;
         logger.LogInformation("user Id: " + userContext.Id + " Email: " + userContext.Email + " Role: " +
                               userContext.Role);
-        
+
         var userReturnResult = await userService.GetByIdAsync(userId);
         if (userReturnResult.IsError)
         {
@@ -170,7 +170,8 @@ public class IdentityService(
         return new Success();
     }
 
-    public async Task<ErrorOr<Success>> ResetForgetPassword(string token, string newPassword, string confirmNewPassword)
+    public async Task<ErrorOr<Success>> ResetForgetPassword(long userId, string token, string newPassword,
+        string confirmNewPassword)
     {
         var validationResult =
             await _forgotPasswordValidator.ValidateAsync(new ForgetPasswordRequestDto(newPassword, confirmNewPassword));
@@ -179,7 +180,7 @@ public class IdentityService(
             return validationResult.ExtractErrors();
         }
 
-        var userReturnResult = await userService.GetByIdAsync(userContext.Id);
+        var userReturnResult = await userService.GetByIdAsync(userId);
         if (userReturnResult.IsError)
         {
             return userReturnResult.Errors;

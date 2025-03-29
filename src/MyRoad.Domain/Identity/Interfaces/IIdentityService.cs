@@ -11,5 +11,7 @@ public interface IIdentityService
     Task<ErrorOr<Success>> Register(User user);
     Task<ErrorOr<Success>> ChangePassword(string currentPassword, string newPassword);
     Task<ErrorOr<Success>> ForgotPassword(string email);
-    Task<ErrorOr<Success>> ResetForgetPassword(string token, string newPassword, string confirmNewPassword);
+
+    Task<ErrorOr<Success>> ResetForgetPassword(long userId, string token, string newPassword,
+        string confirmNewPassword);
 }

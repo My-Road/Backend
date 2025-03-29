@@ -1,11 +1,9 @@
 using Asp.Versioning;
-using ErrorOr;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MyRoad.API.Extensions;
+using MyRoad.API.Common;
 using MyRoad.API.Identity.RequestsDto;
 using MyRoad.Domain.Identity.Interfaces;
-using MyRoad.Domain.Identity.Models;
 
 namespace MyRoad.API.Identity;
 
@@ -53,13 +51,15 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
     public async Task<IActionResult> ForgetPassword(ForgetPasswordRequestDto dto)
     {
         var response = await identityService.ForgotPassword(dto.Email);
-        return ResponseHandler.HandleResult(response);;
+        return ResponseHandler.HandleResult(response);
+        ;
     }
 
     [HttpPost("reset-forget-password")]
     public async Task<IActionResult> ResetForgetPassword(ResetForgetPasswordRequestDto dto)
     {
-        var response = await identityService.ResetForgetPassword(dto.Token, dto.NewPassword, dto.ConfirmNewPassword);
+        var response =
+            await identityService.ResetForgetPassword(dto.UserId, dto.Token, dto.NewPassword, dto.ConfirmNewPassword);
         return ResponseHandler.HandleResult(response);
     }
 }

@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
 using ErrorOr;
+using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Extensions;
 
-namespace MyRoad.API.Identity
+namespace MyRoad.API.Common
 {
     public static class ResponseHandler
     {
