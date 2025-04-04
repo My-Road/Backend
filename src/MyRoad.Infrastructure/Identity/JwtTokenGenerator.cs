@@ -21,6 +21,7 @@ public class JwtTokenGenerator(IOptions<JwtConfig> jwt) : IJwtTokenGenerator
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim("uid", user.Id.ToString()),
+            new Claim("UserName", user.FirstName + " " + user.LastName),
             new Claim("UserRole", user.Role.ToString()) 
         };
 
