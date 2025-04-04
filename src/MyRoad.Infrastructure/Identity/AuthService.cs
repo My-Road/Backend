@@ -26,6 +26,8 @@ public class AuthService(UserManager<ApplicationUser> userManager)
             Id = userApplication.Id,
             Email = userApplication.Email,
             Username = userApplication.UserName,
+            FirstName = userApplication.FirstName,
+            LastName = userApplication.LastName,
             Role = userApplication.Role
         };
     }
