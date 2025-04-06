@@ -21,8 +21,8 @@ public class JwtTokenGenerator(IOptions<JwtConfig> jwt) : IJwtTokenGenerator
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
             new Claim("uid", user.Id.ToString()),
-            new Claim("FullName", user.FirstName + " " + user.LastName),
-            new Claim("UserRole", user.Role.ToString()) 
+            new Claim("fullName", user.FirstName + " " + user.LastName),
+            new Claim("userRole", user.Role.ToString()) 
         };
 
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfig.Key));

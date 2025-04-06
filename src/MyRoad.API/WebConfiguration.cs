@@ -68,8 +68,8 @@ public static class WebConfiguration
     private static void AddAuthorizationPolicy(this IServiceCollection services)
     {
         services.AddAuthorizationBuilder()
+            .AddPolicy("SuperAdmin", policy => policy.RequireClaim("userRole", UserRole.SuperAdmin.ToString()))
             .AddPolicy("Admin", policy => policy.RequireRole(UserRole.Admin.ToString()))
-            .AddPolicy("SuperAdmin", policy => policy.RequireRole(UserRole.SuperAdmin.ToString()))
             .AddPolicy("Manager", policy => policy.RequireRole(UserRole.Manager.ToString()));
     }
 }
