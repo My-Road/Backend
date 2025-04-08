@@ -13,7 +13,7 @@ public class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContex
             : throw new Exception("User ID claim is missing or invalid."); 
 
     public UserRole Role =>
-        Enum.TryParse(httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Role)?.Value, out UserRole role)
+        Enum.TryParse(httpContextAccessor.HttpContext?.User.FindFirst("userRole")?.Value, out UserRole role)
             ? role
             : throw new Exception("User role claim is missing or invalid.");
 
