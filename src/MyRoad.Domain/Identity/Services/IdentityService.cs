@@ -94,8 +94,6 @@ public class IdentityService(
         }
 
         var userId = userContext.Id;
-        logger.LogInformation("user Id: " + userContext.Id + " Email: " + userContext.Email + " Role: " +
-                              userContext.Role);
 
         var userReturnResult = await userService.GetByIdAsync(userId);
         if (userReturnResult.IsError)
