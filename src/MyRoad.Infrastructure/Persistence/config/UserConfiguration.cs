@@ -15,28 +15,5 @@ public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd()
             .IsRequired();
-
-        builder.HasData(GetSuperAdminUser());
-    }
-
-    private static ApplicationUser GetSuperAdminUser()
-    {
-        var hasher = new PasswordHasher<ApplicationUser>();
-
-        return new ApplicationUser
-        {
-            Id = 1,
-            UserName = "Abdullmen",
-            FirstName = "Abdullmen",
-            LastName = "Fayez",
-            Role = UserRole.SuperAdmin,
-            IsActive = true,
-            PhoneNumber = "0123456789",
-            NormalizedEmail = "abdullmen2002@gmail.com".ToUpper(),
-            NormalizedUserName = "abdullmen2002@gmail.com".ToUpper(),
-            Email = "abdullmen2002@gmail.com",
-            EmailConfirmed = true,
-            PasswordHash = hasher.HashPassword(null, "Admin@123")
-        };
     }
 }
