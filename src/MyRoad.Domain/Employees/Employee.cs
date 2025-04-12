@@ -1,4 +1,5 @@
-﻿using MyRoad.Domain.Common.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using MyRoad.Domain.Common.Entities;
 
 namespace MyRoad.Domain.Employees
 {
@@ -10,8 +11,11 @@ namespace MyRoad.Domain.Employees
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
         public bool Status { get; set; }
-        public string Notes { get; set; }
-        public decimal TotalDebt { get; set; }
+        public string ?Notes { get; set; }
+        public decimal TotalSalary { get; set; }
         public decimal TotalPaid { get; set; }
+        [NotMapped]
+        public decimal RemainingSalary => TotalSalary - TotalPaid;
+
     }
 }
