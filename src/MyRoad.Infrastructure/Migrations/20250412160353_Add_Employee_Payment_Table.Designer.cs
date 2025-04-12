@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyRoad.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250412160353_Add_Employee_Payment_Table")]
+    partial class Add_Employee_Payment_Table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -306,7 +309,7 @@ namespace MyRoad.Infrastructure.Migrations
                         {
                             Id = 1L,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f451b48d-197e-46ef-ac51-b99e3ad52098",
+                            ConcurrencyStamp = "0a49d7eb-e1be-4e73-bfd1-15027e74b6e8",
                             Email = "abdullmen2002@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Abdullmen",
@@ -315,7 +318,7 @@ namespace MyRoad.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ABDULLMEN2002@GMAIL.COM",
                             NormalizedUserName = "ABDULLMEN2002@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAED8KM8araMERdjjwlt6NMmD6cHKyH7/ay7ZrnLzjbO4oJ3ioEflWtG+yheG0rZwBhA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPlao2hldRUstqNw/VzBoF3WnEUrk4UQxC7dAPDNO+AQBBCSS7G2F2qSTXpOtYC4jw==",
                             PhoneNumber = "0123456789",
                             PhoneNumberConfirmed = false,
                             Role = "SuperAdmin",
