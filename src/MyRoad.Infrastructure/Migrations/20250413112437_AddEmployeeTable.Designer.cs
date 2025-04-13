@@ -12,7 +12,7 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250413093136_AddEmployeeTable")]
+    [Migration("20250413112437_AddEmployeeTable")]
     partial class AddEmployeeTable
     {
         /// <inheritdoc />
@@ -210,7 +210,7 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
-                    b.Property<DateTime>("CreatedOn")
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FullName")
@@ -222,9 +222,6 @@ namespace MyRoad.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(500)
