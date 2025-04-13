@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Employees;
 
-namespace MyRoad.Infrastructure
+namespace MyRoad.Infrastructure.Employees
 {
     public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
     {

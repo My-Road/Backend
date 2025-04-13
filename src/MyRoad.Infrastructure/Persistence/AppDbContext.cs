@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Employees;
+using MyRoad.Infrastructure.Employees;
 using MyRoad.Infrastructure.Identity.Entities;
 using MyRoad.Infrastructure.Persistence.config;
 
