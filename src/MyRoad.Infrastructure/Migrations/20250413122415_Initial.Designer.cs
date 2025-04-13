@@ -12,8 +12,8 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250413112437_AddEmployeeTable")]
-    partial class AddEmployeeTable
+    [Migration("20250413122415_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -247,6 +247,31 @@ namespace MyRoad.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Employee", (string)null);
+                });
+
+            modelBuilder.Entity("MyRoad.Domain.Payments.EmployeePayment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(6,2)");
+
+                    b.Property<long>("EmployeeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmployeePayment", (string)null);
                 });
 
             modelBuilder.Entity("MyRoad.Infrastructure.Identity.Entities.ApplicationUser", b =>

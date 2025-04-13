@@ -29,6 +29,44 @@ namespace MyRoad.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Employee",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FullName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    JobTitle = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    TotalSalary = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
+                    TotalPaid = table.Column<decimal>(type: "decimal(6,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Employee", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmployeePayment",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeId = table.Column<long>(type: "bigint", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(500)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeePayment", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "IdentityRole",
                 columns: table => new
                 {
@@ -188,11 +226,6 @@ namespace MyRoad.Infrastructure.Migrations
                     { "3", null, "Manager", "MANAGER" }
                 });
 
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "IsActive", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "Role", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1L, 0, "f451b48d-197e-46ef-ac51-b99e3ad52098", "abdullmen2002@gmail.com", true, "Abdullmen", true, "Fayez", false, null, "ABDULLMEN2002@GMAIL.COM", "ABDULLMEN2002@GMAIL.COM", "AQAAAAIAAYagAAAAED8KM8araMERdjjwlt6NMmD6cHKyH7/ay7ZrnLzjbO4oJ3ioEflWtG+yheG0rZwBhA==", "0123456789", false, "SuperAdmin", null, false, "Abdullmen" });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -250,6 +283,12 @@ namespace MyRoad.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Employee");
+
+            migrationBuilder.DropTable(
+                name: "EmployeePayment");
 
             migrationBuilder.DropTable(
                 name: "IdentityRole");

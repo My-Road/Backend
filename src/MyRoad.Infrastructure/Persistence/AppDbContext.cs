@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Employees;
 using MyRoad.Infrastructure.Employees;
 using MyRoad.Infrastructure.Identity.Entities;
+using MyRoad.Infrastructure.Payments;
 using MyRoad.Infrastructure.Persistence.config;
 
 namespace MyRoad.Infrastructure.Persistence;
@@ -20,7 +21,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             .HasConversion<string>();
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
+        modelBuilder.ApplyConfiguration(new EmployeePaymentConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
-        
     }
 }
