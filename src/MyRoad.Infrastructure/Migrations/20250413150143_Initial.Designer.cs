@@ -12,7 +12,7 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250413122415_Initial")]
+    [Migration("20250413150143_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -206,7 +206,6 @@ namespace MyRoad.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
@@ -228,7 +227,6 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasColumnType("nvarchar");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar");
 
@@ -239,10 +237,10 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<decimal>("TotalPaid")
-                        .HasColumnType("decimal(6,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<decimal>("TotalSalary")
-                        .HasColumnType("decimal(6,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
 
@@ -258,7 +256,7 @@ namespace MyRoad.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(6,2)");
+                        .HasColumnType("decimal(10,2)");
 
                     b.Property<long>("EmployeeId")
                         .HasColumnType("bigint");
@@ -270,6 +268,8 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasColumnType("datetime");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("EmployeePayment", (string)null);
                 });
@@ -406,6 +406,22 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("MyRoad.Domain.Payments.EmployeePayment", b =>
+                {
+                    b.HasOne("MyRoad.Domain.Employees.Employee", "Employee")
+                        .WithMany("Payments")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("MyRoad.Domain.Employees.Employee", b =>
+                {
+                    b.Navigation("Payments");
                 });
 #pragma warning restore 612, 618
         }

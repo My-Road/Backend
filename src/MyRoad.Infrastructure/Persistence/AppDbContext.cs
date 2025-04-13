@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Employees;
+using MyRoad.Domain.Payments;
 using MyRoad.Infrastructure.Employees;
 using MyRoad.Infrastructure.Identity.Entities;
 using MyRoad.Infrastructure.Payments;
@@ -13,6 +14,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
     : IdentityDbContext<ApplicationUser, IdentityRole<long>, long>(options)
 {
     public DbSet<Employee> Employee { get; set; }
+    public DbSet<EmployeePayment> EmployeePayment { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

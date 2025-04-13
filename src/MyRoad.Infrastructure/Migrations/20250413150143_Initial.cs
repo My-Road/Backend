@@ -38,32 +38,16 @@ namespace MyRoad.Infrastructure.Migrations
                     JobTitle = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    TotalSalary = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
-                    TotalPaid = table.Column<decimal>(type: "decimal(6,2)", nullable: false)
+                    TotalSalary = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    TotalPaid = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employee", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EmployeePayment",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<long>(type: "bigint", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(6,2)", nullable: false),
-                    PaymentDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(500)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmployeePayment", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -127,6 +111,28 @@ namespace MyRoad.Infrastructure.Migrations
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmployeePayment",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeId = table.Column<long>(type: "bigint", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(500)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeePayment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmployeePayment_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -254,6 +260,11 @@ namespace MyRoad.Infrastructure.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_EmployeePayment_EmployeeId",
+                table: "EmployeePayment",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "Users",
                 column: "NormalizedEmail");
@@ -285,9 +296,6 @@ namespace MyRoad.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Employee");
-
-            migrationBuilder.DropTable(
                 name: "EmployeePayment");
 
             migrationBuilder.DropTable(
@@ -298,6 +306,9 @@ namespace MyRoad.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Employee");
         }
     }
 }
