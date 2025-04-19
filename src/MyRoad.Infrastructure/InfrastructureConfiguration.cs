@@ -5,14 +5,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using MyRoad.Domain.Employees;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Identity.Services;
+using MyRoad.Domain.Payments.EmployeePayments;
 using MyRoad.Domain.Users;
 using MyRoad.Infrastructure.Email;
+using MyRoad.Infrastructure.Employees;
 using MyRoad.Infrastructure.Identity;
 using MyRoad.Infrastructure.Identity.Entities;
+using MyRoad.Infrastructure.Payments.EmployeePayments;
 using MyRoad.Infrastructure.Persistence;
 using MyRoad.Infrastructure.Persistence.config;
+using Sieve.Models;
+using Sieve.Services;
 
 namespace MyRoad.Infrastructure;
 
@@ -23,16 +29,7 @@ public static class InfrastructureConfiguration
     {
         services.AddInfrastructureServices(builderConfiguration, environment);
         services.ConfigureEmail(builderConfiguration);
-        services.AddIdentity<ApplicationUser, IdentityRole<long>>(options =>
-            {
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequiredLength = 8;
-            })
-            .AddEntityFrameworkStores<AppDbContext>()
-            .AddDefaultTokenProviders();
+        UserApplicationOptions(services);
 
         services.AddJwtAuthentication(builderConfiguration);
 
@@ -43,7 +40,37 @@ public static class InfrastructureConfiguration
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IEmployeePaymentRepository, EmployeePaymentRepository>();
+        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+        services.AddScoped<ISieveProcessor, SieveProcessor>();
+        
+        
+        SieveOption(services);
         return services;
+    }
+
+    private static void SieveOption(IServiceCollection services)
+    {
+        services.Configure<SieveOptions>(options =>
+        {
+            options.CaseSensitive = false;
+            options.ThrowExceptions = true;
+            options.IgnoreNullsOnNotEqual = true;
+        });
+    }
+
+    private static void UserApplicationOptions(IServiceCollection services)
+    {
+        services.AddIdentity<ApplicationUser, IdentityRole<long>>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequiredLength = 8;
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
     }
 
     private static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
@@ -53,8 +80,8 @@ public static class InfrastructureConfiguration
 
         var jwtConfig = new JwtConfig();
         configuration.GetSection(nameof(JwtConfig)).Bind(jwtConfig);
-        
-        
+
+
         services.Configure<DataProtectionTokenProviderOptions>(opt =>
             opt.TokenLifespan = TimeSpan.FromMinutes(jwtConfig.ResetPasswordTokenLifeTimeMinutes));
         services.AddAuthentication(options =>

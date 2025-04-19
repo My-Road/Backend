@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MyRoad.Domain.Payments;
+using MyRoad.Domain.Payments.EmployeePayments;
 
-namespace MyRoad.Infrastructure.Payments;
+namespace MyRoad.Infrastructure.Payments.EmployeePayments;
 
 public class EmployeePaymentConfiguration : IEntityTypeConfiguration<EmployeePayment>
 {

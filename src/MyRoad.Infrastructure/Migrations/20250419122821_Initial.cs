@@ -37,13 +37,13 @@ namespace MyRoad.Infrastructure.Migrations
                     FullName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     JobTitle = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    TotalSalary = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    TotalPaid = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
+                    TotalDueAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    TotalPaidAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -124,7 +124,9 @@ namespace MyRoad.Infrastructure.Migrations
                     EmployeeId = table.Column<long>(type: "bigint", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(500)", nullable: true)
+                    Notes = table.Column<string>(type: "nvarchar(500)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {

@@ -12,7 +12,7 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250413150143_Initial")]
+    [Migration("20250419122821_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -209,7 +209,7 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FullName")
@@ -236,10 +236,10 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("TotalPaid")
+                    b.Property<decimal>("TotalDueAmount")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<decimal>("TotalSalary")
+                    b.Property<decimal>("TotalPaidAmount")
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
@@ -247,7 +247,7 @@ namespace MyRoad.Infrastructure.Migrations
                     b.ToTable("Employee", (string)null);
                 });
 
-            modelBuilder.Entity("MyRoad.Domain.Payments.EmployeePayment", b =>
+            modelBuilder.Entity("MyRoad.Domain.Payments.EmployeePayments.EmployeePayment", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -258,8 +258,14 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(10,2)");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<long>("EmployeeId")
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(500)");
@@ -408,7 +414,7 @@ namespace MyRoad.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MyRoad.Domain.Payments.EmployeePayment", b =>
+            modelBuilder.Entity("MyRoad.Domain.Payments.EmployeePayments.EmployeePayment", b =>
                 {
                     b.HasOne("MyRoad.Domain.Employees.Employee", "Employee")
                         .WithMany("Payments")

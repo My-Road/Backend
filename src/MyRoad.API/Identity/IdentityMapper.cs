@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity.Data;
 using MyRoad.API.Identity.RequestsDto;
 using MyRoad.Domain.Users;
 using Riok.Mapperly.Abstractions;
