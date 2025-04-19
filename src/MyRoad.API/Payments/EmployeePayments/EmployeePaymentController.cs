@@ -31,7 +31,7 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
     }
 
     [HttpGet("{id:long}")]
-    public async Task<IActionResult> GetByIdAsync(long id)
+    public async Task<IActionResult> GetById(long id)
     {
         var response = await employeePaymentService.GetByIdAsync(id);
         return ResponseHandler.HandleResult(response);

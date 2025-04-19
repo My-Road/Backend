@@ -46,6 +46,7 @@ public class EmployeePaymentRepository(
         return await dbContext.EmployeePayment
             .FirstOrDefaultAsync(p => p.Id == employeePaymentId);
     }
+
     public async Task<PaginatedResponse<EmployeePayment>> GetAsync(SieveModel sieveModel)
     {
         var query = dbContext.EmployeePayment.AsQueryable();
@@ -68,29 +69,29 @@ public class EmployeePaymentRepository(
     }
 
     public async Task<PaginatedResponse<EmployeePayment>> GetByEmployeeIdAsync(long employeeId, SieveModel sieveModel)
-{
-    var query = dbContext.EmployeePayment
-        .Where(p => p.EmployeeId == employeeId)
-        .AsQueryable();
-
-    var totalItems = await sieveProcessor
-        .Apply(sieveModel, query, applyPagination: false)
-        .CountAsync();
-
-    query = sieveProcessor.Apply(sieveModel, query);
-
-    var result = await query.AsNoTracking().ToListAsync();
-
-    var page = sieveModel.Page ?? 1;
-    var pageSize = sieveModel.PageSize ?? 10;
-
-    return new PaginatedResponse<EmployeePayment>
     {
-        Items = result,
-        TotalCount = totalItems,
-        Page = sieveModel.Page ?? 1,
-        PageSize = sieveModel.PageSize ?? 10,
-    };
-}
+        var query = dbContext.EmployeePayment
+            .Where(p => p.EmployeeId == employeeId && !p.IsDeleted)
+            .AsQueryable();
+
+        var totalItems = await sieveProcessor
+            .Apply(sieveModel, query, applyPagination: false)
+            .CountAsync();
+
+        query = sieveProcessor.Apply(sieveModel, query);
+
+        var result = await query.AsNoTracking().ToListAsync();
+
+        var page = sieveModel.Page ?? 1;
+        var pageSize = sieveModel.PageSize ?? 10;
+
+        return new PaginatedResponse<EmployeePayment>
+        {
+            Items = result,
+            TotalCount = totalItems,
+            Page = sieveModel.Page ?? 1,
+            PageSize = sieveModel.PageSize ?? 10,
+        };
+    }
 
 }
