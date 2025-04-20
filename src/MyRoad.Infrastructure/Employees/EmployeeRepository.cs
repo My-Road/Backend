@@ -13,16 +13,9 @@ public class EmployeeRepository(AppDbContext context) : IEmployeeRepository
 
     public async Task<ErrorOr<bool>> UpdateAsync(Employee employee)
     {
-        try
-        {
-            context.Employee.Update(employee);
-            var result = await context.SaveChangesAsync();
+        context.Employee.Update(employee);
+        var result = await context.SaveChangesAsync();
 
-            return result > 0;
-        }
-        catch (Exception ex)
-        {
-            return Error.Failure(code: "UpdateFailed", description: ex.Message);
-        }
+        return result > 0;
     }
 }

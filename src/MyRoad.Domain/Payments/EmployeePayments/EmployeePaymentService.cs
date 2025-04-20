@@ -87,10 +87,11 @@ public class EmployeePaymentService(
             return EmployeeErrors.NotFound;
         }
 
-        await unitOfWork.BeginTransactionAsync();
+        
 
         try
         {
+            await unitOfWork.BeginTransactionAsync();
             var newTotalPaidAmount = employee.TotalPaidAmount - existingPayment.Amount + employeePayment.Amount;
             if (newTotalPaidAmount > employee.TotalDueAmount)
             {
@@ -128,9 +129,7 @@ public class EmployeePaymentService(
         {
             return PaymentErrors.NotFound;
         }
-
-        await unitOfWork.BeginTransactionAsync();
-
+        
         var employee = await employeeRepository.GetByIdAsync(payment.EmployeeId);
         if (employee is null)
         {
@@ -140,25 +139,15 @@ public class EmployeePaymentService(
         employee.TotalPaidAmount -= payment.Amount;
         payment.IsDeleted = true;
         payment.DeletedAt = DateTime.UtcNow;
-        payment.Notes = "why this payment deleted: " + note;
+        payment.Notes = $"why this payment deleted: {note}";
 
-        try
+        var updateEmployeeResult = await employeeRepository.UpdateAsync(employee);
+        if (updateEmployeeResult.IsError)
         {
-            var updateEmployeeResult = await employeeRepository.UpdateAsync(employee);
-            if (updateEmployeeResult.IsError)
-            {
-                await unitOfWork.RollbackTransactionAsync();
-                return updateEmployeeResult.Errors;
-            }
+            return updateEmployeeResult.Errors;
+        }
 
-            await unitOfWork.CommitTransactionAsync();
-            return new Success();
-        }
-        catch (Exception)
-        {
-            await unitOfWork.RollbackTransactionAsync();
-            throw;
-        }
+        return new Success();
     }
 
 

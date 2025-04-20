@@ -3,18 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using MyRoad.API.Common;
 using MyRoad.API.Payments.EmployeePayments.RequestsDto;
-using MyRoad.Domain.Employees;
 using MyRoad.Domain.Payments.EmployeePayments;
 
 namespace MyRoad.API.Payments.EmployeePayments;
 
-[Route("api/v{version:apiVersion}/EmployeePayments")]
+[Route("api/v{version:apiVersion}/employee-payments")]
 [ApiVersion("1.0")]
 [ApiController]
-public class EmployeePaymentController(IEmployeePaymentService employeePaymentService, IEmployeeRepository ee)
-    : Controller
+public class EmployeePaymentController(IEmployeePaymentService employeePaymentService)
+    : ControllerBase
 {
-    [HttpPost("Create")]
+    [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateEmployeePaymentDto dto)
     {
         var response = await employeePaymentService.CreateAsync(dto.ToDomainEmployeePayment());
@@ -22,7 +21,7 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
         return ResponseHandler.HandleResult(response);
     }
 
-    [HttpDelete("Delete")]
+    [HttpDelete]
     public async Task<IActionResult> Delete([FromBody] DeleteEmployeePaymentDto dto)
     {
         var response = await employeePaymentService.DeleteAsync(dto.EmployeePaymentId, dto.note);
@@ -45,18 +44,17 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
         return ResponseHandler.HandleResult(response);
     }
 
-    [HttpPost("Update")]
+    [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateEmployeePaymentDto dto)
     {
         var response = await employeePaymentService.UpdateAsync(dto.ToDomainEmployeePayment());
         return ResponseHandler.HandleResult(response);
     }
 
-    [HttpGet("GetByEmployeeId/{id:long}")]
-    public async Task<IActionResult> GetByEmployeeIdAsync(long id, [FromQuery] RetrievalRequest request)
+    [HttpGet("by-employee/{employeeId:long}")]
+    public async Task<IActionResult> GetByEmployeeIdAsync(long employeeId, [FromQuery] RetrievalRequest request)
     {
-        var response = await employeePaymentService.GetByEmployeeIdAsync(id, request.ToSieveModel());
+        var response = await employeePaymentService.GetByEmployeeIdAsync(employeeId, request.ToSieveModel());
         return ResponseHandler.HandleResult(response);
     }
-    
 }
