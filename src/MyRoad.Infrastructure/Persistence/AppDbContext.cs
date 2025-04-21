@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Employees;
+using MyRoad.Domain.EmployeesLogs;
 using MyRoad.Domain.Payments.EmployeePayments;
 using MyRoad.Infrastructure.Employees;
+using MyRoad.Infrastructure.EmployeesLogs;
 using MyRoad.Infrastructure.Identity.Entities;
 using MyRoad.Infrastructure.Payments;
 using MyRoad.Infrastructure.Payments.EmployeePayments;
@@ -16,6 +18,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
 {
     public DbSet<Employee> Employee { get; set; }
     public DbSet<EmployeePayment> EmployeePayment { get; set; }
+    public DbSet<EmployeeLogs> EmployeeLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -27,5 +30,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
         modelBuilder.ApplyConfiguration(new RoleConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeePaymentConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
+        modelBuilder.ApplyConfiguration(new EmployeeLogsConfiguration());
     }
 }
