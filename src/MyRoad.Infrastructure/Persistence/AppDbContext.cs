@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Employees;
-using MyRoad.Domain.Payments;
+using MyRoad.Domain.Payments.EmployeePayments;
 using MyRoad.Infrastructure.Employees;
 using MyRoad.Infrastructure.Identity.Entities;
 using MyRoad.Infrastructure.Payments;
+using MyRoad.Infrastructure.Payments.EmployeePayments;
 using MyRoad.Infrastructure.Persistence.config;
 
 namespace MyRoad.Infrastructure.Persistence;

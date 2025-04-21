@@ -13,6 +13,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
         <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
         <PackageReference Include="Riok.Mapperly" Version="4.1.1" />
+        <PackageReference Include="Sieve" Version="2.5.5" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.6.0" />
         <PackageReference Include="FluentValidation" Version="11.11.0" />
         <PackageReference Include="ErrorOr" Version="2.0.1" />

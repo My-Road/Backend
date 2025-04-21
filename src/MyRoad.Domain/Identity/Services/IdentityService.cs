@@ -16,8 +16,7 @@ public class IdentityService(
     IEmailService emailService,
     IUnitOfWork unitOfWork,
     IUserService userService,
-    IUserContext userContext,
-    ILogger<IdentityService> logger)
+    IUserContext userContext)
     : IIdentityService
 {
     private readonly RegisterValidator _registerValidator = new();
@@ -71,7 +70,7 @@ public class IdentityService(
                 user.Email,
                 $"{user.FirstName} {user.LastName}",
                 password.Value,
-                "loginLink")
+                "https://frontend-emuj.onrender.com/")
         });
 
         if (emailResult.IsError)
