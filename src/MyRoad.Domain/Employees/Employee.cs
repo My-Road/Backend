@@ -1,5 +1,6 @@
 ﻿using MyRoad.Domain.Common.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
+using MyRoad.Domain.EmployeeLog;
 using MyRoad.Domain.Payments.EmployeePayments;
 
 namespace MyRoad.Domain.Employees
@@ -19,5 +20,7 @@ namespace MyRoad.Domain.Employees
         [NotMapped] public decimal RemainingAmount => TotalDueAmount - TotalPaidAmount;
 
         public ICollection<EmployeePayment> Payments { get; set; } = new List<EmployeePayment>();
+        public ICollection<EmployeeLogs> Logs { get; set; } = new List<EmployeeLogs>();
+
     }
 }
