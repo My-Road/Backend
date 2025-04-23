@@ -1,6 +1,6 @@
 ﻿using MyRoad.Domain.Common.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
-using MyRoad.Domain.EmployeesLogs;
+using MyRoad.Domain.EmployeeLog;
 using MyRoad.Domain.Payments.EmployeePayments;
 
 namespace MyRoad.Domain.Employees

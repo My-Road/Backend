@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Employees;
-using MyRoad.Domain.EmployeesLogs;
+using MyRoad.Domain.EmployeeLog;
 using MyRoad.Domain.Payments.EmployeePayments;
 using MyRoad.Infrastructure.Employees;
 using MyRoad.Infrastructure.EmployeesLogs;
@@ -18,7 +18,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
 {
     public DbSet<Employee> Employee { get; set; }
     public DbSet<EmployeePayment> EmployeePayment { get; set; }
-    public DbSet<EmployeeLogs> EmployeeLogs { get; set; }
+    public DbSet<EmployeeLogs> EmployeeLog { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,20 +1,22 @@
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Employees;
+using MyRoad.Domain.Users;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MyRoad.Domain.EmployeesLogs;
+namespace MyRoad.Domain.EmployeeLog;
 public class EmployeeLogs :BaseEntity<long>
 {
     public long EmployeeId { get; set; }
     public Employee Employee { get; set; } 
     public DateTime? CheckIn { get; set; }
     public DateTime? CheckOut { get; set; }
-    public bool IsWork { get; set; }
+    public bool IsWorkingDay { get; set; }
+    public decimal HourlyWage { get; set; }
     public string? Notes { get; set; }
-    public int CreatedByUserId { get; set; }
-    
-    [NotMapped]
-    public double TotalHours
+    public long CreatedByUserId { get; set; }
+    public User CreatedByUser { get; set; }
+
+    [NotMapped] public double TotalHours
     {
         get
         {
@@ -23,4 +25,5 @@ public class EmployeeLogs :BaseEntity<long>
             return 0;
         }
     }
+    [NotMapped] public decimal DailyWage => (decimal)TotalHours * HourlyWage;
 }
