@@ -12,7 +12,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd();
-        
+
         builder.Property(x => x.OrderDate)
             .HasColumnType("datetime")
             .IsRequired();
@@ -37,6 +37,8 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .HasForeignKey(x => x.CreatedByUserId)
             .IsRequired();
 
+        builder.Ignore(x => x.TotalDueAmount);
+        
         builder.ToTable("Order");
     }
 }

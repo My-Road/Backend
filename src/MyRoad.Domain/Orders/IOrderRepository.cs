@@ -10,8 +10,8 @@ public interface IOrderRepository
 
     Task<bool> UpdateAsync(Order order);
 
-    Task<Order?> GetByIdAsync(long orderId);
+    Task<Order?> GetByIdAsync(long id);
 
     Task<PaginatedResponse<Order>> GetAsync(SieveModel sieveModel);
-    Task<PaginatedResponse<Order>>GetByCustomerAsync(long userId, SieveModel sieveModel);
+    Task<PaginatedResponse<Order>>GetByCustomerAsync(long customerId, SieveModel sieveModel);
 }

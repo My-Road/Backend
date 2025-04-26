@@ -20,7 +20,7 @@ public class Customer : BaseEntity<long>
 
     public DateTime? DeletedAt { get; set; }
 
-    [NotMapped] public decimal RemainingAmount => TotalDueAmount - TotalPaidAmount;
+    public decimal RemainingAmount => TotalDueAmount - TotalPaidAmount;
 
     public ICollection<Order> Orders { get; set; } = new List<Order>();
     public ICollection<CustomerPayment> CustomerPayments { get; set; } = new List<CustomerPayment>();

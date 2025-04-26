@@ -140,9 +140,9 @@ public class OrderService(
         return new Success();
     }
 
-    public async Task<ErrorOr<Success>> RestoreAsync(long customerId, string note)
+    public async Task<ErrorOr<Success>> RestoreAsync(long id, string note)
     {
-        var order = await orderRepository.GetByIdAsync(customerId);
+        var order = await orderRepository.GetByIdAsync(id);
         if (order is null)
         {
             return CustomerErrors.NotFound;

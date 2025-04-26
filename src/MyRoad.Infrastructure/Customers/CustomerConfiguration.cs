@@ -40,8 +40,7 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .WithOne(x => x.Customer)
             .HasForeignKey(x => x.CustomerId);
 
-        builder.HasIndex(x => x.Email).IsUnique();
-        builder.HasIndex(x => x.PhoneNumber);
+        builder.Ignore(x => x.RemainingAmount);
 
         builder.ToTable("Customer");
     }

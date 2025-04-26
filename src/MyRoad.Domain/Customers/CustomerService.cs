@@ -19,9 +19,9 @@ public class CustomerService(
             return validate.ExtractErrors();
         }
 
-        var isCreate = await customerRepository.CreateAsync(customer);
+        var isCreated = await customerRepository.CreateAsync(customer);
 
-        return isCreate ? new Success() : new ErrorOr<Success>();
+        return isCreated ? new Success() : new ErrorOr<Success>();
     }
 
     public async Task<ErrorOr<Success>> UpdateAsync(Customer customer)
@@ -48,9 +48,9 @@ public class CustomerService(
     }
 
 
-    public async Task<ErrorOr<Success>> DeleteAsync(long customerId)
+    public async Task<ErrorOr<Success>> DeleteAsync(long id)
     {
-        var customer = await customerRepository.GetByIdAsync(customerId);
+        var customer = await customerRepository.GetByIdAsync(id);
         if (customer is null)
         {
             return CustomerErrors.NotFound;
@@ -67,9 +67,9 @@ public class CustomerService(
         return new Success();
     }
 
-    public async Task<ErrorOr<Customer>> GetByIdAsync(long customerId)
+    public async Task<ErrorOr<Customer>> GetByIdAsync(long id)
     {
-        var customer = await customerRepository.GetByIdAsync(customerId);
+        var customer = await customerRepository.GetByIdAsync(id);
         if (customer is null || customer.IsDeleted)
         {
             return CustomerErrors.NotFound;
@@ -84,9 +84,9 @@ public class CustomerService(
         return result;
     }
 
-    public async Task<ErrorOr<Success>> RestoreAsync(long customerId)
+    public async Task<ErrorOr<Success>> RestoreAsync(long id)
     {
-        var customer = await customerRepository.GetByIdAsync(customerId);
+        var customer = await customerRepository.GetByIdAsync(id);
         if (customer is null)
         {
             return CustomerErrors.NotFound;

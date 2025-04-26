@@ -23,5 +23,5 @@ public class EmployeeLog :BaseEntity<long>
             return 0;
         }
     }
-    [NotMapped] public decimal DailyWage => (decimal)TotalHours * HourlyWage;
+    public decimal DailyWage => (decimal)TotalHours * HourlyWage;
 }

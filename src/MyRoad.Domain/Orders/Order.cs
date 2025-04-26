@@ -13,25 +13,11 @@ namespace MyRoad.Domain.Orders
         public string? RecipientPhoneNumber { get; set; }
         public long Quantity { get; set; }
         public decimal Price { get; set; }
-
-
-        [NotMapped]
-        public decimal TotalDueAmount
-        {
-            get
-            {
-                if (Quantity > 0 && Price > 0)
-                {
-                    return Quantity * Price;
-                }
-
-                return 0;
-            }
-        }
+        
+        public decimal TotalDueAmount => Price * Quantity;
 
         public string? Notes { get; set; }
-
-
+        
         public long CustomerId { get; set; }
         public Customer Customer { get; set; }
 
