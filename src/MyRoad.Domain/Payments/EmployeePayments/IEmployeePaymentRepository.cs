@@ -8,7 +8,7 @@ public interface IEmployeePaymentRepository
 {
     Task<bool> CreateAsync(EmployeePayment employeePayment);
 
-    Task<ErrorOr<Success>> UpdateAsync(EmployeePayment employeePayment);
+    Task<bool>UpdateAsync(EmployeePayment employeePayment);
 
     Task<EmployeePayment?> GetByIdAsync(long employeePaymentId);
 

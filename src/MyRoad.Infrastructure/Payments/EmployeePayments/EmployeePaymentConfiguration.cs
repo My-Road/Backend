@@ -8,7 +8,7 @@ public class EmployeePaymentConfiguration : IEntityTypeConfiguration<EmployeePay
 {
     public void Configure(EntityTypeBuilder<EmployeePayment> builder)
     {
-        builder.ToTable("EmployeePayment");
+        builder.ToTable("EmployeePayments");
 
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd();

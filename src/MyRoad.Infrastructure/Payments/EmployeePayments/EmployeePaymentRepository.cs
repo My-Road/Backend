@@ -1,7 +1,5 @@
-using ErrorOr;
 using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Common.Entities;
-using MyRoad.Domain.Payments;
 using MyRoad.Domain.Payments.EmployeePayments;
 using MyRoad.Infrastructure.Persistence;
 using Sieve.Models;
@@ -16,7 +14,7 @@ public class EmployeePaymentRepository(
 {
     public async Task<bool> CreateAsync(EmployeePayment employeePayment)
     {
-        dbContext.EmployeePayment.Add(new EmployeePayment()
+        dbContext.EmployeePayments.Add(new EmployeePayment()
         {
             EmployeeId = employeePayment.EmployeeId,
             Amount = employeePayment.Amount,
@@ -26,30 +24,23 @@ public class EmployeePaymentRepository(
         return await dbContext.SaveChangesAsync() > 0;
     }
 
-    public async Task<ErrorOr<Success>> UpdateAsync(EmployeePayment employeePayment)
+    public async Task<bool> UpdateAsync(EmployeePayment employeePayment)
     {
-        var payment = await dbContext.EmployeePayment.FindAsync(employeePayment.Id);
+        dbContext.EmployeePayments.Update(employeePayment);
 
-        if (payment is null)
-        {
-            return PaymentErrors.NotFound;
-        }
-
-        dbContext.EmployeePayment.Update(employeePayment);
-        await dbContext.SaveChangesAsync();
-        return new Success();
+        return await dbContext.SaveChangesAsync() > 0;
     }
 
 
     public async Task<EmployeePayment?> GetByIdAsync(long employeePaymentId)
     {
-        return await dbContext.EmployeePayment
+        return await dbContext.EmployeePayments
             .FirstOrDefaultAsync(p => p.Id == employeePaymentId);
     }
 
     public async Task<PaginatedResponse<EmployeePayment>> GetAsync(SieveModel sieveModel)
     {
-        var query = dbContext.EmployeePayment.AsQueryable();
+        var query = dbContext.EmployeePayments.AsQueryable();
 
         var totalItems = await sieveProcessor
             .Apply(sieveModel, query, applyPagination: false)
@@ -70,7 +61,7 @@ public class EmployeePaymentRepository(
 
     public async Task<PaginatedResponse<EmployeePayment>> GetByEmployeeIdAsync(long employeeId, SieveModel sieveModel)
     {
-        var query = dbContext.EmployeePayment
+        var query = dbContext.EmployeePayments
             .Where(p => p.EmployeeId == employeeId && !p.IsDeleted)
             .AsQueryable();
 
@@ -82,9 +73,6 @@ public class EmployeePaymentRepository(
 
         var result = await query.AsNoTracking().ToListAsync();
 
-        var page = sieveModel.Page ?? 1;
-        var pageSize = sieveModel.PageSize ?? 10;
-
         return new PaginatedResponse<EmployeePayment>
         {
             Items = result,
@@ -93,5 +81,4 @@ public class EmployeePaymentRepository(
             PageSize = sieveModel.PageSize ?? 10,
         };
     }
-
 }
