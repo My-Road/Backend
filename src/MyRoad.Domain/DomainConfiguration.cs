@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using MyRoad.Domain.Employees;
 using MyRoad.Domain.Identity;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Payments.EmployeePayments;
@@ -12,6 +13,7 @@ public static class DomainConfiguration
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IUserContext, UserContext>();
         services.AddScoped<IEmployeePaymentService, EmployeePaymentService>();
+        services.AddScoped<IEmployeeService,EmployeeService>();
         
         return services;
     }

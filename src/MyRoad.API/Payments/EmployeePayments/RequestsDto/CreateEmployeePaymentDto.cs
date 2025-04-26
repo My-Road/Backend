@@ -7,3 +7,4 @@ public class CreateEmployeePaymentDto
     public string? Notes { get; set; }
     public long EmployeeId { get; set; }
 }
+

@@ -43,6 +43,7 @@ public static class InfrastructureConfiguration
         services.AddScoped<IEmployeePaymentRepository, EmployeePaymentRepository>();
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<ISieveProcessor, SieveProcessor>();
+        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         
         
         SieveOption(services);
