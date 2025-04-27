@@ -37,9 +37,9 @@ public class OrderRepository(
         return await dbContext.SaveChangesAsync() > 0;
     }
 
-    public async Task<Order?> GetByIdAsync(long Id)
+    public async Task<Order?> GetByIdAsync(long id)
     {
-        var order = await dbContext.Orders.FindAsync(Id);
+        var order = await dbContext.Orders.FindAsync(id);
         return order;
     }
 

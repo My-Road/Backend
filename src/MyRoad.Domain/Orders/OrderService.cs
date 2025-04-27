@@ -55,6 +55,7 @@ public class OrderService(
             }
 
             await orderRepository.CreateAsync(order);
+            await customerRepository.UpdateAsync(customer);
             await unitOfWork.CommitTransactionAsync();
 
             return new Success();
