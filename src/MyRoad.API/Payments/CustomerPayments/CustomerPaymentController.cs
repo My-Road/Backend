@@ -27,8 +27,8 @@ public class CustomerPaymentController(
         return ResponseHandler.HandleResult(response);
     }
 
-    [HttpGet("search")]
-    public async Task<IActionResult> Get([FromQuery]  RetrievalRequest request)
+    [HttpPost("search")]
+    public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
     {
         var response = await customerPaymentService.GetAsync(request.ToSieveModel());
         return ResponseHandler.HandleResult(response);
@@ -48,8 +48,8 @@ public class CustomerPaymentController(
         return ResponseHandler.HandleResult(response);
     }
 
-    [HttpGet("by-customer/{customerId:long}")]
-    public async Task<IActionResult> GetByCustomerId(long customerId, [FromQuery] RetrievalRequest request)
+    [HttpPost("by-customer/{customerId:long}")]
+    public async Task<IActionResult> GetByCustomerId(long customerId, [FromBody] RetrievalRequest request)
     {
         var response = await customerPaymentService.GetByCustomerIdAsync(customerId, request.ToSieveModel());
         return ResponseHandler.HandleResult(response);

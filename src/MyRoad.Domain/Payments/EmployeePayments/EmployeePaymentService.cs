@@ -69,6 +69,7 @@ public class EmployeePaymentService(
             await unitOfWork.RollbackTransactionAsync();
             throw;
         }
+
         return new Success();
     }
 
@@ -115,10 +116,7 @@ public class EmployeePaymentService(
 
             employee.TotalPaidAmount = newTotalPaidAmount;
 
-            existingPayment.Amount = employeePayment.Amount;
-            existingPayment.PaymentDate = employeePayment.PaymentDate;
-            existingPayment.Notes = employeePayment.Notes;
-
+            existingPayment.MapUpdatedPayment(employeePayment);
 
             await employeeRepository.UpdateAsync(employee);
             await employeePaymentRepository.UpdateAsync(existingPayment);
@@ -151,10 +149,8 @@ public class EmployeePaymentService(
         }
 
         employee.TotalPaidAmount -= payment.Amount;
-        payment.IsDeleted = true;
-        payment.DeletedAt = DateTime.UtcNow;
-        payment.Notes = note;
-
+        payment.Delete(note);
+        
         var updateEmployeeResult = await employeeRepository.UpdateAsync(employee);
         if (updateEmployeeResult.IsError)
         {

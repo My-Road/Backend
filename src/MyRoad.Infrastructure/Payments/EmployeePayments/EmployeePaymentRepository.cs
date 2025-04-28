@@ -14,13 +14,9 @@ public class EmployeePaymentRepository(
 {
     public async Task<bool> CreateAsync(EmployeePayment employeePayment)
     {
-        dbContext.EmployeePayments.Add(new EmployeePayment()
-        {
-            EmployeeId = employeePayment.EmployeeId,
-            Amount = employeePayment.Amount,
-            PaymentDate = employeePayment.PaymentDate,
-            Notes = employeePayment.Notes,
-        });
+        dbContext.EmployeePayments.Add(
+            employeePayment
+        );
         return await dbContext.SaveChangesAsync() > 0;
     }
 

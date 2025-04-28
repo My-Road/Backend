@@ -26,5 +26,4 @@ public class Payment : BaseEntity<long>
 
         return new Success();
     }
-    
 }

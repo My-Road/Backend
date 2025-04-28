@@ -15,18 +15,7 @@ public class OrderRepository(
     public async Task<bool> CreateAsync(Order order)
     {
         await dbContext.Orders.AddAsync(
-            new Order
-            {
-                OrderDate = order.OrderDate,
-                Notes = order.Notes,
-                Price = order.Price,
-                Quantity = order.Quantity,
-                RecipientName = order.RecipientName,
-                RecipientPhoneNumber = order.RecipientPhoneNumber,
-                CustomerId = order.CustomerId,
-                CreatedByUserId = order.CreatedByUserId,
-                IsCompleted = order.IsCompleted
-            }
+            order
         );
         return await dbContext.SaveChangesAsync() > 0;
     }

@@ -51,6 +51,7 @@ public static class InfrastructureConfiguration
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<ICustomerPaymentRepository, CustomerPaymentRepository>();
+        services.AddScoped<ISieveConfiguration, CustomerSieveConfiguration>();
 
 
         SieveOption(services);

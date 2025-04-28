@@ -16,13 +16,7 @@ public class CustomerPaymentRepository(
     public async Task<bool> CreateAsync(CustomerPayment customerPayment)
     {
         await dbContext.CustomerPayments.AddAsync(
-            new CustomerPayment
-            {
-                CustomerId = customerPayment.CustomerId,
-                Amount = customerPayment.Amount,
-                Notes = customerPayment.Notes,
-                PaymentDate = customerPayment.PaymentDate,
-            }
+            customerPayment
         );
         return await dbContext.SaveChangesAsync() > 0;
     }

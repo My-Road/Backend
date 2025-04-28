@@ -33,8 +33,8 @@ public class CustomerController(ICustomerService customerService)
         return ResponseHandler.HandleResult(result);
     }
 
-    [HttpGet("search")]
-    public async Task<IActionResult> Get([FromQuery] RetrievalRequest request)
+    [HttpPost("search")]
+    public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
     {
         var response = await customerService.GetAsync(request.ToSieveModel());
 

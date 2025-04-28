@@ -1,5 +1,3 @@
-using MyRoad.Domain.Customers;
-
 namespace MyRoad.Domain.Orders;
 
 public static class OrderMapper

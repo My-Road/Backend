@@ -15,13 +15,7 @@ public class CustomerRepository(
     public async Task<bool> CreateAsync(Customer customer)
     {
         await dbContext.Customers.AddAsync(
-            new Customer
-            {
-                FullName = customer.FullName,
-                Email = customer.Email,
-                Address = customer.Address,
-                PhoneNumber = customer.PhoneNumber
-            }
+            customer
         );
         return await dbContext.SaveChangesAsync() > 0;
     }

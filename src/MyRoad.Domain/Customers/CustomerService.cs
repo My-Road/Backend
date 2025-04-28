@@ -9,7 +9,7 @@ public class CustomerService(
     ICustomerRepository customerRepository
 ) : ICustomerService
 {
-    private readonly CustomerValidator _customerValidator = new CustomerValidator();
+    private readonly CustomerValidator _customerValidator = new();
 
     public async Task<ErrorOr<Success>> CreateAsync(Customer customer)
     {
@@ -31,20 +31,16 @@ public class CustomerService(
         {
             return validate.ExtractErrors();
         }
-        
+
         var result = await customerRepository.GetByIdAsync(customer.Id);
         if (result is null || result.IsDeleted)
         {
             return CustomerErrors.NotFound;
         }
-        
-        result.FullName = customer.FullName;
-        result.Email = customer.Email;
-        result.PhoneNumber = customer.PhoneNumber;
-        result.Address = customer.Address;
 
-        var isUpdated = await customerRepository.UpdateAsync(result);
-        return isUpdated ? new Success() : new ErrorOr<Success>();
+        result.MapUpdatedCustomer(customer);
+        await customerRepository.UpdateAsync(result);
+        return new Success();
     }
 
 
