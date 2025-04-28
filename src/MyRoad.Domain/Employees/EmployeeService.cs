@@ -16,71 +16,78 @@ IUnitOfWork unitOfWork
 
         public async Task<ErrorOr<Success>> CreateAsync(Employee employee)
         {
-            var validation = await _employeeValidator.ValidateAsync(employee);
-            if (!validation.IsValid)
-                return validation.ExtractErrors();
-
-            await unitOfWork.BeginTransactionAsync();
-            var result = await employeeRepository.UpdateAsync(employee);
-            if (result.IsError)
+            var validate = await _employeeValidator.ValidateAsync(employee);
+            if (!validate.IsValid)
             {
-                await unitOfWork.RollbackTransactionAsync();
-                return result.Errors;
+                return validate.ExtractErrors();
             }
 
-            await unitOfWork.CommitTransactionAsync();
-            return new Success();
+            var isCreated = await employeeRepository.CreateAsync(employee);
+
+            return isCreated ? new Success() : new ErrorOr<Success>();
         }
 
         public async Task<ErrorOr<Success>> UpdateAsync(Employee employee)
         {
-            var validation = await _employeeValidator.ValidateAsync(employee);
-            if (!validation.IsValid)
-                return validation.ExtractErrors();
+            var validate = await _employeeValidator.ValidateAsync(employee);
+            if (!validate.IsValid)
+                return validate.ExtractErrors();
 
-            var existing = await employeeRepository.GetByIdAsync(employee.Id);
-            if (existing is null)
+            var result = await employeeRepository.GetByIdAsync(employee.Id);
+            if (result is null || result.IsDeleted)
                 return EmployeeErrors.NotFound;
 
-            existing.FullName = employee.FullName;
-            existing.JobTitle = employee.JobTitle;
-            existing.PhoneNumber = employee.PhoneNumber;
-            existing.Address = employee.Address;
-            existing.Notes = employee.Notes;
-            existing.Status = employee.Status;
-            existing.TotalDueAmount = employee.TotalDueAmount;
-            existing.TotalPaidAmount = employee.TotalPaidAmount;
-            existing.StartDate = employee.StartDate;
-            existing.EndDate = employee.EndDate;
+            result.FullName = employee.FullName;
+            result.JobTitle = employee.JobTitle;
+            result.PhoneNumber = employee.PhoneNumber;
+            result.Address = employee.Address;
+            result.Notes = employee.Notes;
+            result.Status = employee.Status;
+            result.StartDate = employee.StartDate;
+            result.EndDate = employee.EndDate;
 
-            var updateResult = await employeeRepository.UpdateAsync(existing);
-            return updateResult.IsError ? updateResult.Errors : new Success();
+            var isUpdated = await employeeRepository.UpdateAsync(result);
+            return isUpdated.IsError ? isUpdated.Errors : new Success();
         }
 
-        public async Task<ErrorOr<Success>> DeleteAsync(long id,string note)
+        public async Task<ErrorOr<Success>> DeleteAsync(long id)
         {
             var employee = await employeeRepository.GetByIdAsync(id);
             if (employee is null)
                 return EmployeeErrors.NotFound;
 
-            employee.Status = false;
-            employee.EndDate = DateTime.UtcNow;
-            employee.Notes= note; 
+            var result = employee.Delete();
+            if(result.IsError)
+                return result.Errors;
 
-            var updateResult = await employeeRepository.UpdateAsync(employee);
-            return updateResult.IsError ? updateResult.Errors : new Success();
+            await employeeRepository.UpdateAsync(employee);
+            return new Success();
         }
 
         public async Task<ErrorOr<Employee>> GetByIdAsync(long id)
         {
             var employee = await employeeRepository.GetByIdAsync(id);
-            return employee is null ? EmployeeErrors.NotFound : employee;
+            return employee is null||employee.IsDeleted ? EmployeeErrors.NotFound : employee;
         }
 
         public async Task<ErrorOr<PaginatedResponse<Employee>>> GetAsync(SieveModel sieveModel)
         {
             var employees = await employeeRepository.GetAsync(sieveModel);
             return employees;
+        }
+
+        public async Task<ErrorOr<Success>> RestoreAsync(long id)
+        {
+            var employee = await employeeRepository.GetByIdAsync(id);
+            if(employee is null)
+                return EmployeeErrors.NotFound;
+
+            var result = employee.Restore();
+            if(result.IsError)
+                return result.Errors;
+
+            await employeeRepository.UpdateAsync(employee);
+            return new Success();
         }
     }
 }

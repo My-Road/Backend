@@ -11,7 +11,6 @@
         public string? Address { get; set; }
         public bool Status { get; set; }
         public string? Notes { get; set; }
-        public decimal TotalDueAmount { get; set; }
-        public decimal TotalPaidAmount { get; set; }
+
     }
 }

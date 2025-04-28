@@ -13,8 +13,26 @@ public class EmployeeRepository(
     ISieveProcessor sieveProcessor
 ) : IEmployeeRepository
 {
+    public async Task<bool> CreateAsync(Employee employee)
+    {
+        await dbContext.Employee.AddAsync(
+            new Employee
+            {
+                FullName = employee.FullName,
+                JobTitle = employee.JobTitle,
+                StartDate = DateTime.Now,
+                PhoneNumber = employee.PhoneNumber,
+                Address = employee.Address,
+                Status = employee.Status,
+                Notes = employee.Notes,
+                
+            });
+        return await dbContext.SaveChangesAsync()>0;
+    }
+
     public async Task<ErrorOr<PaginatedResponse<Employee>>> GetAsync(SieveModel sieveModel)
     {
+
         var query = dbContext.Employee.AsQueryable();
 
         var totalItems = await sieveProcessor
@@ -36,21 +54,13 @@ public class EmployeeRepository(
 
     public async Task<Employee?> GetByIdAsync(long id)
     {
-        return await dbContext.Employee
-            .FirstOrDefaultAsync(e => e.Id == id);
+        var employee = await dbContext.Employee.FindAsync(id);
+        return employee;
     }
 
     public async Task<ErrorOr<bool>> UpdateAsync(Employee employee)
     {
-        var existingEmployee = await dbContext.Employee.FindAsync(employee.Id);
-
-        if (existingEmployee is null)
-        {
-            return EmployeeErrors.NotFound;
-        }
-
-        dbContext.Entry(existingEmployee).CurrentValues.SetValues(employee);
-        await dbContext.SaveChangesAsync();
-        return true;
+        dbContext.Employee.Update(employee);
+        return await dbContext.SaveChangesAsync() > 0;
     }
 }

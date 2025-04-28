@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using MyRoad.Domain.EmployeeLog;
 using MyRoad.Domain.Payments.EmployeePayments;
+using ErrorOr;
 
 namespace MyRoad.Domain.Employees
 {
@@ -18,7 +19,29 @@ namespace MyRoad.Domain.Employees
         public decimal TotalDueAmount { get; set; }
         public decimal TotalPaidAmount { get; set; }
         [NotMapped] public decimal RemainingAmount => TotalDueAmount - TotalPaidAmount;
+        public bool IsDeleted { get; set; } = false;
+        public ErrorOr<Success> Restore()
+        {
+            if (!IsDeleted)
+            {
+                return EmployeeErrors.NotDeleted;
+            }
 
+            IsDeleted = false;
+            return new Success();
+        }
+        public ErrorOr<Success> Delete()
+        {
+            if (IsDeleted)
+            {
+                return EmployeeErrors.AlreadyDeleted;
+            }
+
+            IsDeleted = true;
+            EndDate = DateTime.UtcNow;
+
+            return new Success();
+        }
         public ICollection<EmployeePayment> Payments { get; set; } = new List<EmployeePayment>();
         public ICollection<EmployeeLogs> Logs { get; set; } = new List<EmployeeLogs>();
 

@@ -253,6 +253,9 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("JobTitle")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -263,7 +266,7 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasColumnType("nvarchar");
 
                     b.Property<string>("PhoneNumber")
-                        .HasMaxLength(10)
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar");
 
                     b.Property<DateTime>("StartDate")

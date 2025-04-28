@@ -12,8 +12,8 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250419122821_Initial")]
-    partial class Initial
+    [Migration("20250428091555_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -197,6 +197,45 @@ namespace MyRoad.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("MyRoad.Domain.EmployeeLog.EmployeeLogs", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("CheckIn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("CheckOut")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("CreatedByUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("EmployeeId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("HourlyWage")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsWorkingDay")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("EmployeeLog", (string)null);
+                });
+
             modelBuilder.Entity("MyRoad.Domain.Employees.Employee", b =>
                 {
                     b.Property<long>("Id")
@@ -217,6 +256,9 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("JobTitle")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -227,7 +269,7 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasColumnType("nvarchar");
 
                     b.Property<string>("PhoneNumber")
-                        .HasMaxLength(10)
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar");
 
                     b.Property<DateTime>("StartDate")
@@ -278,6 +320,42 @@ namespace MyRoad.Infrastructure.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("EmployeePayment", (string)null);
+                });
+
+            modelBuilder.Entity("MyRoad.Domain.Users.User", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("MyRoad.Infrastructure.Identity.Entities.ApplicationUser", b =>
@@ -414,6 +492,25 @@ namespace MyRoad.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MyRoad.Domain.EmployeeLog.EmployeeLogs", b =>
+                {
+                    b.HasOne("MyRoad.Domain.Users.User", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyRoad.Domain.Employees.Employee", "Employee")
+                        .WithMany("Logs")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("MyRoad.Domain.Payments.EmployeePayments.EmployeePayment", b =>
                 {
                     b.HasOne("MyRoad.Domain.Employees.Employee", "Employee")
@@ -427,6 +524,8 @@ namespace MyRoad.Infrastructure.Migrations
 
             modelBuilder.Entity("MyRoad.Domain.Employees.Employee", b =>
                 {
+                    b.Navigation("Logs");
+
                     b.Navigation("Payments");
                 });
 #pragma warning restore 612, 618

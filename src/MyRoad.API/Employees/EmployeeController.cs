@@ -26,8 +26,15 @@ namespace MyRoad.API.Employees
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] DeleteEmployeeDto dto)
         {
-            var response = await employeeService.DeleteAsync(dto.Id, dto.Note);
+            var response = await employeeService.DeleteAsync(dto.Id);
             return ResponseHandler.HandleResult(response);
+        }
+
+        [HttpPut("restore/{id:long}")]
+        public async Task<IActionResult> Restore(long id)
+        {
+            var result = await employeeService.RestoreAsync(id);
+            return ResponseHandler.HandleResult(result);
         }
 
         [HttpGet("{id:long}")]

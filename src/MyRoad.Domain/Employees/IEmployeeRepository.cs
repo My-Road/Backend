@@ -5,7 +5,9 @@ namespace MyRoad.Domain.Employees;
 
 public interface IEmployeeRepository
 {
-    Task<ErrorOr<PaginatedResponse<Employee>>> GetAsync(SieveModel sieveModel);
-    Task<Employee?> GetByIdAsync(long id);
+    Task <bool> CreateAsync(Employee employee);
     Task<ErrorOr<bool>> UpdateAsync(Employee employee);
+    Task<Employee?> GetByIdAsync(long id);
+    Task<ErrorOr<PaginatedResponse<Employee>>> GetAsync(SieveModel sieveModel);
+
 }
