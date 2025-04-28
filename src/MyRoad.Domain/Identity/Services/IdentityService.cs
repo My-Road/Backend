@@ -1,5 +1,4 @@
 using ErrorOr;
-using Microsoft.Extensions.Logging;
 using MyRoad.Domain.Email;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Identity.Validators;

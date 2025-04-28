@@ -18,5 +18,9 @@ namespace MyRoad.Domain.Payments
             code: "Payment.NotFound",
             description: "can't find this payment"
         );
+        
+        public static Error IsDeleted => Error.Validation(
+            code: "Payment.AlreadyDeleted",
+            description: "The Payment has already been deleted.");
     }
 }

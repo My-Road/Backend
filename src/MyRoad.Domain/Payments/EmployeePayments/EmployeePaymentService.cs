@@ -48,31 +48,47 @@ public class EmployeePaymentService(
 
         employee.TotalPaidAmount += employeePayment.Amount;
 
-        await unitOfWork.BeginTransactionAsync();
-        var updateResult = await employeeRepository.UpdateAsync(employee);
-        if (updateResult.IsError)
+        try
+        {
+            await unitOfWork.BeginTransactionAsync();
+            var updateResult = await employeeRepository.UpdateAsync(employee);
+            if (updateResult.IsError)
+            {
+                await unitOfWork.RollbackTransactionAsync();
+                return updateResult.Errors;
+            }
+
+            if (await employeePaymentRepository.CreateAsync(employeePayment))
+            {
+                await unitOfWork.CommitTransactionAsync();
+                return new Success();
+            }
+        }
+        catch (Exception e)
         {
             await unitOfWork.RollbackTransactionAsync();
-            return updateResult.Errors;
+            throw;
         }
 
-        if (await employeePaymentRepository.CreateAsync(employeePayment))
-        {
-            await unitOfWork.CommitTransactionAsync();
-            return new Success();
-        }
-
-        await unitOfWork.RollbackTransactionAsync();
-        return PaymentErrors.SomethingWrong;
+        return new Success();
     }
 
 
     public async Task<ErrorOr<Success>> UpdateAsync(EmployeePayment employeePayment)
     {
-        var validationResult = await _paymentValidator.ValidateAsync(employeePayment);
-        if (!validationResult.IsValid)
+        var validators = new List<IValidator<EmployeePayment>>
         {
-            return validationResult.ExtractErrors();
+            _paymentValidator,
+            _employeePayments
+        };
+
+        foreach (var validator in validators)
+        {
+            var result = await validator.ValidateAsync(employeePayment);
+            if (!result.IsValid)
+            {
+                return result.ExtractErrors();
+            }
         }
 
         var existingPayment = await employeePaymentRepository.GetByIdAsync(employeePayment.Id);
@@ -87,7 +103,6 @@ public class EmployeePaymentService(
             return EmployeeErrors.NotFound;
         }
 
-        
 
         try
         {
@@ -101,10 +116,7 @@ public class EmployeePaymentService(
 
             employee.TotalPaidAmount = newTotalPaidAmount;
 
-            existingPayment.Amount = employeePayment.Amount;
-            existingPayment.PaymentDate = employeePayment.PaymentDate;
-            existingPayment.Notes = employeePayment.Notes;
-
+            existingPayment.MapUpdatedPayment(employeePayment);
 
             await employeeRepository.UpdateAsync(employee);
             await employeePaymentRepository.UpdateAsync(existingPayment);
@@ -129,7 +141,7 @@ public class EmployeePaymentService(
         {
             return PaymentErrors.NotFound;
         }
-        
+
         var employee = await employeeRepository.GetByIdAsync(payment.EmployeeId);
         if (employee is null)
         {
@@ -137,10 +149,8 @@ public class EmployeePaymentService(
         }
 
         employee.TotalPaidAmount -= payment.Amount;
-        payment.IsDeleted = true;
-        payment.DeletedAt = DateTime.UtcNow;
-        payment.Notes = $"why this payment deleted: {note}";
-
+        payment.Delete(note);
+        
         var updateEmployeeResult = await employeeRepository.UpdateAsync(employee);
         if (updateEmployeeResult.IsError)
         {

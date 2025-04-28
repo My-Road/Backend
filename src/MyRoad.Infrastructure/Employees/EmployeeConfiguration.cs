@@ -14,13 +14,13 @@ namespace MyRoad.Infrastructure.Employees
             builder.Property(x => x.JobTitle).HasMaxLength(30).HasColumnType("nvarchar").IsRequired();
             builder.Property(x => x.StartDate).IsRequired();
             builder.Property(x => x.EndDate).IsRequired(false);
-            builder.Property(x => x.PhoneNumber).HasColumnType("nvarchar").HasMaxLength(10);
+            builder.Property(x => x.PhoneNumber).HasColumnType("nvarchar").HasMaxLength(15);
             builder.Property(x => x.Address).HasColumnType("nvarchar").HasMaxLength(50);
             builder.Property(x => x.Status).IsRequired();
             builder.Property(x => x.Notes).HasColumnType("nvarchar").HasMaxLength(500);
             builder.Property(x => x.TotalDueAmount).HasColumnType("decimal(10,2)").IsRequired();
             builder.Property(x => x.TotalPaidAmount).HasColumnType("decimal(10,2)").IsRequired();
-
+            builder.Ignore(x => x.RemainingAmount);
             builder.ToTable("Employee");
         }
     }

@@ -1,6 +1,5 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 using MyRoad.API.Common;
 using MyRoad.API.Payments.EmployeePayments.RequestsDto;
 using MyRoad.Domain.Payments.EmployeePayments;
@@ -36,8 +35,8 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
         return ResponseHandler.HandleResult(response);
     }
 
-    [HttpGet("search")]
-    public async Task<IActionResult> Get([FromQuery] RetrievalRequest request)
+    [HttpPost("search")]
+    public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
     {
         var response = await employeePaymentService.GetAsync(request.ToSieveModel());
 
@@ -51,8 +50,8 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
         return ResponseHandler.HandleResult(response);
     }
 
-    [HttpGet("by-employee/{employeeId:long}")]
-    public async Task<IActionResult> GetByEmployeeIdAsync(long employeeId, [FromQuery] RetrievalRequest request)
+    [HttpPost("by-employee/{employeeId:long}")]
+    public async Task<IActionResult> GetByEmployeeIdAsync(long employeeId, [FromBody] RetrievalRequest request)
     {
         var response = await employeePaymentService.GetByEmployeeIdAsync(employeeId, request.ToSieveModel());
         return ResponseHandler.HandleResult(response);

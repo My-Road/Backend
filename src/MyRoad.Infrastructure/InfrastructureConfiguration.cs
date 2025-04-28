@@ -5,15 +5,21 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using MyRoad.Domain.Customers;
 using MyRoad.Domain.Employees;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Identity.Services;
+using MyRoad.Domain.Orders;
+using MyRoad.Domain.Payments.CustomerPayments;
 using MyRoad.Domain.Payments.EmployeePayments;
 using MyRoad.Domain.Users;
+using MyRoad.Infrastructure.Customers;
 using MyRoad.Infrastructure.Email;
 using MyRoad.Infrastructure.Employees;
 using MyRoad.Infrastructure.Identity;
 using MyRoad.Infrastructure.Identity.Entities;
+using MyRoad.Infrastructure.Orders;
+using MyRoad.Infrastructure.Payments.CustomerPayments;
 using MyRoad.Infrastructure.Payments.EmployeePayments;
 using MyRoad.Infrastructure.Persistence;
 using MyRoad.Infrastructure.Persistence.config;
@@ -42,15 +48,19 @@ public static class InfrastructureConfiguration
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IEmployeePaymentRepository, EmployeePaymentRepository>();
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-        services.AddScoped<ISieveProcessor, SieveProcessor>();
-        
-        
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<ICustomerPaymentRepository, CustomerPaymentRepository>();
+        services.AddScoped<ISieveConfiguration, CustomerSieveConfiguration>();
+
+
         SieveOption(services);
         return services;
     }
 
     private static void SieveOption(IServiceCollection services)
     {
+        services.AddScoped<ISieveProcessor, MyRoadSieveProcessor>();
         services.Configure<SieveOptions>(options =>
         {
             options.CaseSensitive = false;
