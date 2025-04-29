@@ -24,7 +24,7 @@ IUnitOfWork unitOfWork
 
             var isCreated = await employeeRepository.CreateAsync(employee);
 
-            return isCreated ? new Success() : new ErrorOr<Success>();
+            return isCreated ? new Success() : EmployeeErrors.CreationFailed;
         }
 
         public async Task<ErrorOr<Success>> UpdateAsync(Employee employee)
@@ -37,17 +37,9 @@ IUnitOfWork unitOfWork
             if (result is null || result.IsDeleted)
                 return EmployeeErrors.NotFound;
 
-            result.FullName = employee.FullName;
-            result.JobTitle = employee.JobTitle;
-            result.PhoneNumber = employee.PhoneNumber;
-            result.Address = employee.Address;
-            result.Notes = employee.Notes;
-            result.Status = employee.Status;
-            result.StartDate = employee.StartDate;
-            result.EndDate = employee.EndDate;
-
-            var isUpdated = await employeeRepository.UpdateAsync(result);
-            return isUpdated.IsError ? isUpdated.Errors : new Success();
+            result.MapUpdatedEmployee(employee);
+            await employeeRepository.UpdateAsync(result);
+            return new Success();
         }
 
         public async Task<ErrorOr<Success>> DeleteAsync(long id)

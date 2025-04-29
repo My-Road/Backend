@@ -15,18 +15,8 @@ public class EmployeeRepository(
 {
     public async Task<bool> CreateAsync(Employee employee)
     {
-        await dbContext.Employee.AddAsync(
-            new Employee
-            {
-                FullName = employee.FullName,
-                JobTitle = employee.JobTitle,
-                StartDate = DateTime.Now,
-                PhoneNumber = employee.PhoneNumber,
-                Address = employee.Address,
-                Status = employee.Status,
-                Notes = employee.Notes,
-                
-            });
+        employee.StartDate = DateTime.Now;
+        await dbContext.Employee.AddAsync(employee);
         return await dbContext.SaveChangesAsync()>0;
     }
 

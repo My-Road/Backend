@@ -15,4 +15,7 @@ public static class EmployeeErrors
          code: "Employee.AlreadyDeleted",
          description: "Employee is already deleted."
      );
+    public static Error CreationFailed => Error.Failure(
+          code: "Employee.CreationFailed",
+          description: "Something went wrong. Please verify the information you entered.");
 }

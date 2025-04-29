@@ -18,7 +18,7 @@ namespace MyRoad.Domain.Employees
         public string? Notes { get; set; }
         public decimal TotalDueAmount { get; set; }
         public decimal TotalPaidAmount { get; set; }
-        [NotMapped] public decimal RemainingAmount => TotalDueAmount - TotalPaidAmount;
+        public decimal RemainingAmount => TotalDueAmount - TotalPaidAmount;
         public bool IsDeleted { get; set; } = false;
         public ErrorOr<Success> Restore()
         {

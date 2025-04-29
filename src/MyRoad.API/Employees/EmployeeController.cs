@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
 using MyRoad.API.Employees.RequestsDto;
 using MyRoad.Domain.Employees;
 namespace MyRoad.API.Employees
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/employee")]
+    [ApiVersion("1.0")]
     [ApiController]
     public class EmployeeController (IEmployeeService employeeService) : ControllerBase
     {
@@ -44,8 +46,8 @@ namespace MyRoad.API.Employees
             return ResponseHandler.HandleResult(response);
         }
 
-        [HttpGet("search")]
-        public async Task<IActionResult> GetAll([FromQuery] RetrievalRequest request)
+        [HttpPost("search")]
+        public async Task<IActionResult> GetAll([FromBody] RetrievalRequest request)
         {
             var response = await employeeService.GetAsync(request.ToSieveModel());
             return ResponseHandler.HandleResult(response);
