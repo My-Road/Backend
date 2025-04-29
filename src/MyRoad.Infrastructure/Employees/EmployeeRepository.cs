@@ -15,7 +15,6 @@ public class EmployeeRepository(
 {
     public async Task<bool> CreateAsync(Employee employee)
     {
-        employee.StartDate = DateTime.Now;
         await dbContext.Employee.AddAsync(employee);
         return await dbContext.SaveChangesAsync()>0;
     }
