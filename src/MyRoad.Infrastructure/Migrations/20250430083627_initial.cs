@@ -41,7 +41,6 @@ namespace MyRoad.Infrastructure.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     TotalDueAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     TotalPaidAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)

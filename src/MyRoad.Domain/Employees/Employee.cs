@@ -3,19 +3,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 using MyRoad.Domain.EmployeeLog;
 using MyRoad.Domain.Payments.EmployeePayments;
 using ErrorOr;
+using System.Text.Json.Serialization;
 
 namespace MyRoad.Domain.Employees
 {
     public class Employee : BaseEntity<long>
     {
+        [JsonPropertyName("EmployeeName")]
         public string? FullName { get; set; }
         public string? JobTitle { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
-        public bool Status { get; set; }
-        public string? Notes { get; set; }
+        public bool Status { get; set; } = true;
         public decimal TotalDueAmount { get; set; }
         public decimal TotalPaidAmount { get; set; }
         public decimal RemainingAmount => TotalDueAmount - TotalPaidAmount;

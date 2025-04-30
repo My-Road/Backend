@@ -251,7 +251,8 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar");
+                        .HasColumnType("nvarchar")
+                        .HasAnnotation("Relational:JsonPropertyName", "EmployeeName");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -259,10 +260,6 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<string>("JobTitle")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
                         .HasColumnType("nvarchar");
 
                     b.Property<string>("PhoneNumber")

@@ -12,7 +12,7 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250429215348_initial")]
+    [Migration("20250430083627_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -254,7 +254,8 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar");
+                        .HasColumnType("nvarchar")
+                        .HasAnnotation("Relational:JsonPropertyName", "EmployeeName");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -262,10 +263,6 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<string>("JobTitle")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
                         .HasColumnType("nvarchar");
 
                     b.Property<string>("PhoneNumber")

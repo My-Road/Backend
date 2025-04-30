@@ -8,8 +8,6 @@
             existingEmployee.JobTitle = updatedEmployee.JobTitle;
             existingEmployee.PhoneNumber = updatedEmployee.PhoneNumber;
             existingEmployee.Address = updatedEmployee.Address;
-            existingEmployee.Notes = updatedEmployee.Notes;
-            existingEmployee.Status = updatedEmployee.Status;
             existingEmployee.StartDate = updatedEmployee.StartDate;
             existingEmployee.EndDate = updatedEmployee.EndDate;
         }
