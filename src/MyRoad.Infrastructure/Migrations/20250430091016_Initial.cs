@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MyRoad.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -29,6 +29,26 @@ namespace MyRoad.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Customer",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FullName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    TotalPaidAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    TotalDueAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customer", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Employee",
                 columns: table => new
                 {
@@ -42,8 +62,7 @@ namespace MyRoad.Infrastructure.Migrations
                     Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     TotalDueAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    TotalPaidAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    TotalPaidAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,25 +81,6 @@ namespace MyRoad.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityRole", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "User",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role = table.Column<int>(type: "int", nullable: false),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -135,7 +135,31 @@ namespace MyRoad.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmployeePayment",
+                name: "CustomerPayment",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerId = table.Column<long>(type: "bigint", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerPayment", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CustomerPayment_Customer_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customer",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmployeePayments",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -149,42 +173,11 @@ namespace MyRoad.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmployeePayment", x => x.Id);
+                    table.PrimaryKey("PK_EmployeePayments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EmployeePayment_Employee_EmployeeId",
+                        name: "FK_EmployeePayments_Employee_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employee",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "EmployeeLog",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    EmployeeId = table.Column<long>(type: "bigint", nullable: false),
-                    CheckIn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CheckOut = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsWorkingDay = table.Column<bool>(type: "bit", nullable: false),
-                    HourlyWage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    CreatedByUserId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmployeeLog", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EmployeeLog_Employee_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employee",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EmployeeLog_User_CreatedByUserId",
-                        column: x => x.CreatedByUserId,
-                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -274,6 +267,72 @@ namespace MyRoad.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "EmployeeLog",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeId = table.Column<long>(type: "bigint", nullable: false),
+                    CheckIn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CheckOut = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsWorkingDay = table.Column<bool>(type: "bit", nullable: false),
+                    HourlyWage = table.Column<decimal>(type: "decimal(4,2)", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    CreatedByUserId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeeLog", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmployeeLog_Employee_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EmployeeLog_Users_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    RecipientName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RecipientPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Quantity = table.Column<long>(type: "bigint", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    CustomerId = table.Column<long>(type: "bigint", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedByUserId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Order", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Order_Customer_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customer",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Order_Users_CreatedByUserId",
+                        column: x => x.CreatedByUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "IdentityRole",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
@@ -312,6 +371,11 @@ namespace MyRoad.Infrastructure.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CustomerPayment_CustomerId",
+                table: "CustomerPayment",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EmployeeLog_CreatedByUserId",
                 table: "EmployeeLog",
                 column: "CreatedByUserId");
@@ -322,9 +386,19 @@ namespace MyRoad.Infrastructure.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeePayment_EmployeeId",
-                table: "EmployeePayment",
+                name: "IX_EmployeePayments_EmployeeId",
+                table: "EmployeePayments",
                 column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_CreatedByUserId",
+                table: "Order",
+                column: "CreatedByUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Order_CustomerId",
+                table: "Order",
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -358,25 +432,31 @@ namespace MyRoad.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CustomerPayment");
+
+            migrationBuilder.DropTable(
                 name: "EmployeeLog");
 
             migrationBuilder.DropTable(
-                name: "EmployeePayment");
+                name: "EmployeePayments");
 
             migrationBuilder.DropTable(
                 name: "IdentityRole");
 
             migrationBuilder.DropTable(
+                name: "Order");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "User");
-
-            migrationBuilder.DropTable(
                 name: "Employee");
+
+            migrationBuilder.DropTable(
+                name: "Customer");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

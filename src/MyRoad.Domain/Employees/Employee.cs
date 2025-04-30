@@ -9,8 +9,7 @@ namespace MyRoad.Domain.Employees
 {
     public class Employee : BaseEntity<long>
     {
-        [JsonPropertyName("EmployeeName")]
-        public string? FullName { get; set; }
+        [JsonPropertyName("EmployeeName")] public string? FullName { get; set; }
         public string? JobTitle { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -20,29 +19,31 @@ namespace MyRoad.Domain.Employees
         public decimal TotalDueAmount { get; set; }
         public decimal TotalPaidAmount { get; set; }
         public decimal RemainingAmount => TotalDueAmount - TotalPaidAmount;
-        public bool IsDeleted { get; set; } = false;
+
         public ErrorOr<Success> Restore()
         {
-            if (!IsDeleted)
+            if (!Status)
             {
                 return EmployeeErrors.NotDeleted;
             }
 
-            IsDeleted = false;
+            Status = false;
             return new Success();
         }
+
         public ErrorOr<Success> Delete()
         {
-            if (IsDeleted)
+            if (Status)
             {
                 return EmployeeErrors.AlreadyDeleted;
             }
 
-            IsDeleted = true;
+            Status = true;
             EndDate = DateTime.UtcNow;
 
             return new Success();
         }
+
         public ICollection<EmployeePayment> Payments { get; set; } = new List<EmployeePayment>();
         public ICollection<EmployeeLog> Logs { get; set; } = new List<EmployeeLog>();
     }

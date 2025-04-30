@@ -1,16 +1,13 @@
-﻿
-using ErrorOr;
+﻿using ErrorOr;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Common;
-using MyRoad.Domain.Identity.Interfaces;
 using Sieve.Models;
 
 namespace MyRoad.Domain.Employees
 {
     public class EmployeeService(
-IEmployeeRepository employeeRepository,
-IUnitOfWork unitOfWork
-) : IEmployeeService
+        IEmployeeRepository employeeRepository
+    ) : IEmployeeService
     {
         private readonly EmployeeValidator _employeeValidator = new();
 
@@ -21,6 +18,7 @@ IUnitOfWork unitOfWork
             {
                 return validate.ExtractErrors();
             }
+
             employee.StartDate = DateTime.Now;
             var isCreated = await employeeRepository.CreateAsync(employee);
 
@@ -34,7 +32,7 @@ IUnitOfWork unitOfWork
                 return validate.ExtractErrors();
 
             var result = await employeeRepository.GetByIdAsync(employee.Id);
-            if (result is null || result.IsDeleted)
+            if (result is null || result.Status)
                 return EmployeeErrors.NotFound;
 
             result.MapUpdatedEmployee(employee);
@@ -49,7 +47,7 @@ IUnitOfWork unitOfWork
                 return EmployeeErrors.NotFound;
 
             var result = employee.Delete();
-            if(result.IsError)
+            if (result.IsError)
                 return result.Errors;
 
             await employeeRepository.UpdateAsync(employee);
@@ -59,7 +57,7 @@ IUnitOfWork unitOfWork
         public async Task<ErrorOr<Employee>> GetByIdAsync(long id)
         {
             var employee = await employeeRepository.GetByIdAsync(id);
-            return employee is null||employee.IsDeleted ? EmployeeErrors.NotFound : employee;
+            return (employee is null || !employee.Status) ? EmployeeErrors.NotFound : employee;
         }
 
         public async Task<ErrorOr<PaginatedResponse<Employee>>> GetAsync(SieveModel sieveModel)
@@ -71,11 +69,11 @@ IUnitOfWork unitOfWork
         public async Task<ErrorOr<Success>> RestoreAsync(long id)
         {
             var employee = await employeeRepository.GetByIdAsync(id);
-            if(employee is null)
+            if (employee is null)
                 return EmployeeErrors.NotFound;
 
             var result = employee.Restore();
-            if(result.IsError)
+            if (result.IsError)
                 return result.Errors;
 
             await employeeRepository.UpdateAsync(employee);

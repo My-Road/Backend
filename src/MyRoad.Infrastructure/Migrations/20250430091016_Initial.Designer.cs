@@ -12,7 +12,7 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250426072812_Initial")]
+    [Migration("20250430091016_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -220,7 +220,8 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasAnnotation("Relational:JsonPropertyName", "CustomerName");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -237,11 +238,6 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("PhoneNumber");
 
                     b.ToTable("Customer", (string)null);
                 });
@@ -264,15 +260,12 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar");
+                        .HasColumnType("nvarchar")
+                        .HasAnnotation("Relational:JsonPropertyName", "EmployeeName");
 
                     b.Property<string>("JobTitle")
                         .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar");
-
-                    b.Property<string>("Notes")
-                        .HasMaxLength(500)
                         .HasColumnType("nvarchar");
 
                     b.Property<string>("PhoneNumber")
@@ -293,7 +286,7 @@ namespace MyRoad.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employee", (string)null);
                 });
 
             modelBuilder.Entity("MyRoad.Domain.EmployeesLogs.EmployeeLog", b =>

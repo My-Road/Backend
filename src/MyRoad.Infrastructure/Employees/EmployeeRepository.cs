@@ -15,14 +15,14 @@ public class EmployeeRepository(
 {
     public async Task<bool> CreateAsync(Employee employee)
     {
-        await dbContext.Employee.AddAsync(employee);
+        await dbContext.Employees.AddAsync(employee);
         return await dbContext.SaveChangesAsync()>0;
     }
 
     public async Task<ErrorOr<PaginatedResponse<Employee>>> GetAsync(SieveModel sieveModel)
     {
 
-        var query = dbContext.Employee.AsQueryable();
+        var query = dbContext.Employees.AsQueryable();
 
         var totalItems = await sieveProcessor
             .Apply(sieveModel, query, applyPagination: false)
@@ -43,13 +43,13 @@ public class EmployeeRepository(
 
     public async Task<Employee?> GetByIdAsync(long id)
     {
-        var employee = await dbContext.Employee.FindAsync(id);
+        var employee = await dbContext.Employees.FindAsync(id);
         return employee;
     }
 
     public async Task<ErrorOr<bool>> UpdateAsync(Employee employee)
     {
-        dbContext.Employee.Update(employee);
+        dbContext.Employees.Update(employee);
         return await dbContext.SaveChangesAsync() > 0;
     }
 }

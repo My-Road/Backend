@@ -217,7 +217,8 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(50)")
+                        .HasAnnotation("Relational:JsonPropertyName", "CustomerName");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -234,11 +235,6 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("PhoneNumber");
 
                     b.ToTable("Customer", (string)null);
                 });
@@ -264,9 +260,6 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasColumnType("nvarchar")
                         .HasAnnotation("Relational:JsonPropertyName", "EmployeeName");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("JobTitle")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -290,7 +283,7 @@ namespace MyRoad.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Employees", (string)null);
+                    b.ToTable("Employee", (string)null);
                 });
 
             modelBuilder.Entity("MyRoad.Domain.EmployeesLogs.EmployeeLog", b =>
