@@ -5,7 +5,7 @@ namespace MyRoad.API.Customers.RequestDto;
 public class CreateCustomerDto
 {
     
-    [JsonPropertyName("CustomerName")]
+    [JsonPropertyName("customerName")]
     public string? FullName { get; set; }
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }

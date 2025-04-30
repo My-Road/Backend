@@ -9,7 +9,7 @@ namespace MyRoad.Domain.Employees
 {
     public class Employee : BaseEntity<long>
     {
-        [JsonPropertyName("EmployeeName")] public string? FullName { get; set; }
+        [JsonPropertyName("employeeName")] public string? FullName { get; set; }
         public string? JobTitle { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -22,23 +22,23 @@ namespace MyRoad.Domain.Employees
 
         public ErrorOr<Success> Restore()
         {
-            if (!Status)
+            if (Status)
             {
                 return EmployeeErrors.NotDeleted;
             }
 
-            Status = false;
+            Status = true;
             return new Success();
         }
 
         public ErrorOr<Success> Delete()
         {
-            if (Status)
+            if (!Status)
             {
                 return EmployeeErrors.AlreadyDeleted;
             }
 
-            Status = true;
+            Status = false;
             EndDate = DateTime.UtcNow;
 
             return new Success();

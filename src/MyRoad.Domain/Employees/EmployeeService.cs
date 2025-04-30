@@ -32,7 +32,7 @@ namespace MyRoad.Domain.Employees
                 return validate.ExtractErrors();
 
             var result = await employeeRepository.GetByIdAsync(employee.Id);
-            if (result is null || result.Status)
+            if (result is null || !result.Status)
                 return EmployeeErrors.NotFound;
 
             result.MapUpdatedEmployee(employee);

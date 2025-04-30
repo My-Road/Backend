@@ -9,7 +9,7 @@ namespace MyRoad.Domain.Customers;
 
 public class Customer : BaseEntity<long>
 {
-    [JsonPropertyName("CustomerName")] public string? FullName { get; set; }
+    [JsonPropertyName("customerName")] public string? FullName { get; set; }
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }
     public string? Address { get; set; }
