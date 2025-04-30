@@ -48,12 +48,12 @@ public static class InfrastructureConfiguration
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IEmployeePaymentRepository, EmployeePaymentRepository>();
         services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+        services.AddScoped<ISieveProcessor, SieveProcessor>();
+        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
         services.AddScoped<ICustomerPaymentRepository, CustomerPaymentRepository>();
         services.AddScoped<ISieveConfiguration, CustomerSieveConfiguration>();
-
-
         SieveOption(services);
         return services;
     }

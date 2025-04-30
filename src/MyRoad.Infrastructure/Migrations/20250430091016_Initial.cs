@@ -49,7 +49,7 @@ namespace MyRoad.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Employees",
+                name: "Employee",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -61,13 +61,12 @@ namespace MyRoad.Infrastructure.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     TotalDueAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     TotalPaidAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.PrimaryKey("PK_Employee", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -176,9 +175,9 @@ namespace MyRoad.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_EmployeePayments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EmployeePayments_Employees_EmployeeId",
+                        name: "FK_EmployeePayments_Employee_EmployeeId",
                         column: x => x.EmployeeId,
-                        principalTable: "Employees",
+                        principalTable: "Employee",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -286,9 +285,9 @@ namespace MyRoad.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_EmployeeLog", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EmployeeLog_Employees_EmployeeId",
+                        name: "FK_EmployeeLog_Employee_EmployeeId",
                         column: x => x.EmployeeId,
-                        principalTable: "Employees",
+                        principalTable: "Employee",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -372,17 +371,6 @@ namespace MyRoad.Infrastructure.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Customer_Email",
-                table: "Customer",
-                column: "Email",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Customer_PhoneNumber",
-                table: "Customer",
-                column: "PhoneNumber");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CustomerPayment_CustomerId",
                 table: "CustomerPayment",
                 column: "CustomerId");
@@ -462,7 +450,7 @@ namespace MyRoad.Infrastructure.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "Employee");
 
             migrationBuilder.DropTable(
                 name: "Customer");
