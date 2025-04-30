@@ -9,7 +9,6 @@
             existingEmployee.PhoneNumber = updatedEmployee.PhoneNumber;
             existingEmployee.Address = updatedEmployee.Address;
             existingEmployee.StartDate = updatedEmployee.StartDate;
-            existingEmployee.EndDate = updatedEmployee.EndDate;
         }
     }
 }
