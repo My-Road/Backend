@@ -12,10 +12,15 @@ public static class UserErrors
         "User.EmailExists",
         "User Email Already Exists"
     );
-    
+
     public static Error InvalidCredentials => Error.Unauthorized(
         code: "User.InvalidCredentials",
         description: "Invalid email or password."
+    );
+
+    public static Error UnauthorizedUser => Error.Unauthorized(
+        code: "User.Unauthorized",
+        description: "this user Unauthorized"
     );
 
     public static Error GenericError(string details) => Error.Failure(

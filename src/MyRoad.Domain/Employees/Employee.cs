@@ -1,6 +1,6 @@
 ﻿using MyRoad.Domain.Common.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
-using MyRoad.Domain.EmployeeLog;
+using MyRoad.Domain.EmployeesLogs;
 using MyRoad.Domain.Payments.EmployeePayments;
 using ErrorOr;
 using System.Text.Json.Serialization;
@@ -44,7 +44,6 @@ namespace MyRoad.Domain.Employees
             return new Success();
         }
         public ICollection<EmployeePayment> Payments { get; set; } = new List<EmployeePayment>();
-        public ICollection<EmployeeLogs> Logs { get; set; } = new List<EmployeeLogs>();
-
+        public ICollection<EmployeeLog> Logs { get; set; } = new List<EmployeeLog>();
     }
 }

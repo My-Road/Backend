@@ -1,10 +1,9 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Employees;
-using MyRoad.Domain.Users;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MyRoad.Domain.EmployeeLog;
-public class EmployeeLogs :BaseEntity<long>
+namespace MyRoad.Domain.EmployeesLogs;
+public class EmployeeLog :BaseEntity<long>
 {
     public long EmployeeId { get; set; }
     public Employee Employee { get; set; } 
@@ -14,8 +13,7 @@ public class EmployeeLogs :BaseEntity<long>
     public decimal HourlyWage { get; set; }
     public string? Notes { get; set; }
     public long CreatedByUserId { get; set; }
-    public User CreatedByUser { get; set; }
-
+    
     [NotMapped] public double TotalHours
     {
         get
@@ -25,5 +23,5 @@ public class EmployeeLogs :BaseEntity<long>
             return 0;
         }
     }
-    [NotMapped] public decimal DailyWage => (decimal)TotalHours * HourlyWage;
+    public decimal DailyWage => (decimal)TotalHours * HourlyWage;
 }
