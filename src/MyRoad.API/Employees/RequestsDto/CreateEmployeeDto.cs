@@ -2,7 +2,7 @@
 {
     public class CreateEmployeeDto
     {
-        public string? FullName { get; set; }
+        public string? employeeName { get; set; }
         public string? JobTitle { get; set; }
         public DateTime StartDate { get; set; }
         public string? PhoneNumber { get; set; }

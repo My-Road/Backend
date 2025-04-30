@@ -3,7 +3,7 @@
     public class UpdateEmployeeDto
     {
         public long Id { get; set; }
-        public string? FullName { get; set; }
+        public string? employeeName { get; set; }
         public string? JobTitle { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
