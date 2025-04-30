@@ -6,7 +6,7 @@ namespace MyRoad.API.Employees.RequestsDto
     {
         public long Id { get; set; }
 
-        [JsonPropertyName("EmployeeName")]
+        [JsonPropertyName("employeeName")]
         public string? FullName { get; set; }
         public string? JobTitle { get; set; }
         public DateTime StartDate { get; set; }
