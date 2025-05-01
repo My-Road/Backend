@@ -20,10 +20,10 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
         return ResponseHandler.HandleResult(response);
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromBody] DeleteEmployeePaymentDto dto)
+    [HttpDelete("{id:long}")]
+    public async Task<IActionResult> Delete(long id)
     {
-        var response = await employeePaymentService.DeleteAsync(dto.EmployeePaymentId, dto.note);
+        var response = await employeePaymentService.DeleteAsync(id);
 
         return ResponseHandler.HandleResult(response);
     }

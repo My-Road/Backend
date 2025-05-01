@@ -114,7 +114,7 @@ public class OrderService(
     }
 
 
-    public async Task<ErrorOr<Success>> DeleteAsync(long orderId, string note)
+    public async Task<ErrorOr<Success>> DeleteAsync(long orderId)
     {
         var order = await orderRepository.GetByIdAsync(orderId);
         if (order is null || order.IsDeleted)
@@ -128,7 +128,7 @@ public class OrderService(
             return CustomerErrors.NotFound;
         }
 
-        var result = order.Delete(note);
+        var result = order.Delete();
         if (result.IsError)
         {
             return result.Errors;
@@ -141,7 +141,7 @@ public class OrderService(
         return new Success();
     }
 
-    public async Task<ErrorOr<Success>> RestoreAsync(long id, string note)
+    public async Task<ErrorOr<Success>> RestoreAsync(long id)
     {
         var order = await orderRepository.GetByIdAsync(id);
         if (order is null)
@@ -155,7 +155,7 @@ public class OrderService(
             return CustomerErrors.NotFound;
         }
 
-        var result = order.Restore(note);
+        var result = order.Restore();
         if (result.IsError)
         {
             return result.Errors;

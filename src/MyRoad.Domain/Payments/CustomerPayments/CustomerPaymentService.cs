@@ -128,7 +128,7 @@ public class CustomerPaymentService(
         }
     }
 
-    public async Task<ErrorOr<Success>> DeleteAsync(long id, string note)
+    public async Task<ErrorOr<Success>> DeleteAsync(long id)
     {
         var payment = await customerPaymentRepository.GetByIdAsync(id);
 
@@ -145,7 +145,7 @@ public class CustomerPaymentService(
 
         employee.TotalPaidAmount -= payment.Amount;
 
-        var result = payment.Delete(note);
+        var result = payment.Delete();
 
         if (result.IsError)
         {

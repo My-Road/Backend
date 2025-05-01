@@ -21,16 +21,16 @@ public class OrderController(
     }
 
     [HttpDelete("{id:long}")]
-    public async Task<IActionResult> DeleteAsync(long id, [FromBody] string note)
+    public async Task<IActionResult> DeleteAsync(long id)
     {
-        var response = await orderService.DeleteAsync(id, note);
+        var response = await orderService.DeleteAsync(id);
         return ResponseHandler.HandleResult(response);
     }
 
     [HttpPut("restore/{id:long}")]
-    public async Task<IActionResult> Restore(long id, [FromBody] string note)
+    public async Task<IActionResult> Restore(long id)
     {
-        var result = await orderService.RestoreAsync(id, note);
+        var result = await orderService.RestoreAsync(id);
         return ResponseHandler.HandleResult(result);
     }
 

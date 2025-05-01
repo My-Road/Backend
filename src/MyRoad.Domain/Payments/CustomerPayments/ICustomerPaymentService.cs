@@ -10,7 +10,7 @@ public interface ICustomerPaymentService
 
     Task<ErrorOr<Success>> UpdateAsync(CustomerPayment customerPayment);
 
-    Task<ErrorOr<Success>> DeleteAsync(long id, string note);
+    Task<ErrorOr<Success>> DeleteAsync(long id);
 
     Task<ErrorOr<CustomerPayment>> GetByIdAsync(long id);
 
