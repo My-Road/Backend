@@ -28,7 +28,7 @@ namespace MyRoad.Domain.Orders
 
         public long CreatedByUserId { get; set; }
 
-        public ErrorOr<Success> Delete(string note)
+        public ErrorOr<Success> Delete()
         {
             if (IsDeleted)
             {
@@ -37,12 +37,11 @@ namespace MyRoad.Domain.Orders
 
             IsDeleted = true;
             DeletedAt = DateTime.UtcNow;
-            Notes = note;
-
+            
             return new Success();
         }
 
-        public ErrorOr<Success> Restore(string note)
+        public ErrorOr<Success> Restore()
         {
             if (!IsDeleted)
             {
@@ -51,7 +50,6 @@ namespace MyRoad.Domain.Orders
 
             IsDeleted = false;
             DeletedAt = null;
-            Notes = note;
 
             return new Success();
         }

@@ -13,7 +13,7 @@ public class Payment : BaseEntity<long>
 
     public DateTime? DeletedAt { get; set; }
 
-    public ErrorOr<Success> Delete(string note)
+    public ErrorOr<Success> Delete()
     {
         if (IsDeleted)
         {
@@ -22,7 +22,6 @@ public class Payment : BaseEntity<long>
 
         IsDeleted = true;
         DeletedAt = DateTime.UtcNow;
-        Notes = note;
 
         return new Success();
     }

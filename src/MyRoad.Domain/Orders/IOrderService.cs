@@ -11,9 +11,9 @@ public interface IOrderService
     
     Task<ErrorOr<Success>> UpdateAsync(Order order);
     
-    Task<ErrorOr<Success>> DeleteAsync(long id, string note);
+    Task<ErrorOr<Success>> DeleteAsync(long id);
     
-    Task<ErrorOr<Success>> RestoreAsync(long id, string note);
+    Task<ErrorOr<Success>> RestoreAsync(long id);
     
     Task<ErrorOr<Order>> GetByIdAsync(long id);
     

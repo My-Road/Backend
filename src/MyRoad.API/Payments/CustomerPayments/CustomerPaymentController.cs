@@ -21,9 +21,9 @@ public class CustomerPaymentController(
     }
 
     [HttpDelete("{id:long}")]
-    public async Task<IActionResult> DeleteAsync(long id, [FromBody] string note)
+    public async Task<IActionResult> DeleteAsync(long id)
     {
-        var response = await customerPaymentService.DeleteAsync(id, note);
+        var response = await customerPaymentService.DeleteAsync(id);
         return ResponseHandler.HandleResult(response);
     }
 
