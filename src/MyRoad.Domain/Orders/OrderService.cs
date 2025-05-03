@@ -91,13 +91,18 @@ public class OrderService(
         {
             return OrderErrors.InvalidPrice;
         }
+        
+        var newTotalDueAmount = customer.TotalDueAmount - existingOrder.TotalDueAmount + order.TotalDueAmount;
+        if (customer.TotalPaidAmount > newTotalDueAmount)
+        {
+            return CustomerErrors.CannotUpdateOrder;
+        }
 
         try
         {
             await unitOfWork.BeginTransactionAsync();
 
-            customer.TotalDueAmount -= existingOrder.TotalDueAmount;
-            customer.TotalDueAmount += order.TotalDueAmount;
+            customer.TotalDueAmount = newTotalDueAmount;
             existingOrder.MapUpdatedOrder(order);
 
             await customerRepository.UpdateAsync(customer);
@@ -114,6 +119,7 @@ public class OrderService(
     }
 
 
+
     public async Task<ErrorOr<Success>> DeleteAsync(long orderId)
     {
         var order = await orderRepository.GetByIdAsync(orderId);
@@ -128,6 +134,11 @@ public class OrderService(
             return CustomerErrors.NotFound;
         }
 
+        if (customer.RemainingAmount == 0 || customer.TotalDueAmount - order.TotalDueAmount < customer.TotalPaidAmount)
+        {
+            return CustomerErrors.CannotRemoveOrder;
+        }
+
         var result = order.Delete();
         if (result.IsError)
         {
@@ -140,32 +151,7 @@ public class OrderService(
 
         return new Success();
     }
-
-    public async Task<ErrorOr<Success>> RestoreAsync(long id)
-    {
-        var order = await orderRepository.GetByIdAsync(id);
-        if (order is null)
-        {
-            return CustomerErrors.NotFound;
-        }
-
-        var customer = await customerRepository.GetByIdAsync(order.CustomerId);
-        if (customer is null)
-        {
-            return CustomerErrors.NotFound;
-        }
-
-        var result = order.Restore();
-        if (result.IsError)
-        {
-            return result.Errors;
-        }
-
-        customer.TotalDueAmount += order.TotalDueAmount;
-        await orderRepository.UpdateAsync(order);
-        await customerRepository.UpdateAsync(customer);
-        return new Success();
-    }
+    
 
     public async Task<ErrorOr<Order>> GetByIdAsync(long id)
     {
