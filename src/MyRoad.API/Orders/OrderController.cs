@@ -27,13 +27,6 @@ public class OrderController(
         return ResponseHandler.HandleResult(response);
     }
 
-    [HttpPut("restore/{id:long}")]
-    public async Task<IActionResult> Restore(long id)
-    {
-        var result = await orderService.RestoreAsync(id);
-        return ResponseHandler.HandleResult(result);
-    }
-
     [HttpPost("search")]
     public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
     {

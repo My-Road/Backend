@@ -64,7 +64,7 @@ public class EmployeePaymentService(
                 return new Success();
             }
         }
-        catch (Exception e)
+        catch (Exception)
         {
             await unitOfWork.RollbackTransactionAsync();
             throw;

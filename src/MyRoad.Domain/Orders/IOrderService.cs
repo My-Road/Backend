@@ -13,8 +13,6 @@ public interface IOrderService
     
     Task<ErrorOr<Success>> DeleteAsync(long id);
     
-    Task<ErrorOr<Success>> RestoreAsync(long id);
-    
     Task<ErrorOr<Order>> GetByIdAsync(long id);
     
     Task<ErrorOr<PaginatedResponse<Order>>> GetByCustomerIdAsync(long customerId, SieveModel sieveModel);
