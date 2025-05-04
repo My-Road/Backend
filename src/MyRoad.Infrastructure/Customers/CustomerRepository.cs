@@ -53,4 +53,19 @@ public class CustomerRepository(
             PageSize = sieveModel.PageSize ?? 10,
         };
     }
+
+    public async Task<Customer?> FindByPhoneNumber(string? customerPhoneNumber)
+    {
+        var result = await dbContext.Customers.FirstOrDefaultAsync(x => x.PhoneNumber == customerPhoneNumber);
+        return result;
+    }
+
+    public async Task<Customer?> FindByEmail(string? customerEmail)
+    {
+        if (string.IsNullOrWhiteSpace(customerEmail))
+            return null;
+
+        return await dbContext.Customers
+            .FirstOrDefaultAsync(c => c.Email != null && c.Email.ToLower() == customerEmail.ToLower());
+    }
 }
