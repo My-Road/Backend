@@ -10,4 +10,5 @@ public interface IEmployeeRepository
     Task<Employee?> GetByIdAsync(long id);
     Task<ErrorOr<PaginatedResponse<Employee>>> GetAsync(SieveModel sieveModel);
 
+    Task<Employee?> FindByPhoneNumberAsync(string? employeePhoneNumber);
 }

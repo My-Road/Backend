@@ -36,7 +36,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options)
             .Property(u => u.Role)
             .HasConversion<string>();
         modelBuilder.ApplyConfiguration(new UserConfiguration());
-        modelBuilder.ApplyConfiguration(new RoleConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeePaymentConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeLogsConfiguration());

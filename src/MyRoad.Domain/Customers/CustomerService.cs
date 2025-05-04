@@ -19,6 +19,20 @@ public class CustomerService(
             return validate.ExtractErrors();
         }
 
+        var result = await customerRepository.FindByPhoneNumber(customer.PhoneNumber);
+
+        if (result is not null && result.Id != customer.Id)
+        {
+            return CustomerErrors.PhoneNumberAlreadyExists;
+        }
+
+        result = await customerRepository.FindByEmail(customer.Email);
+
+        if (result is not null && result.Id != customer.Id)
+        {
+            return CustomerErrors.EmailAlreadyExists;
+        }
+
         var isCreated = await customerRepository.CreateAsync(customer);
 
         return isCreated ? new Success() : new ErrorOr<Success>();
@@ -32,7 +46,21 @@ public class CustomerService(
             return validate.ExtractErrors();
         }
 
-        var result = await customerRepository.GetByIdAsync(customer.Id);
+        var result = await customerRepository.FindByPhoneNumber(customer.PhoneNumber);
+
+        if (result is not null && result.Id != customer.Id)
+        {
+            return CustomerErrors.PhoneNumberAlreadyExists;
+        }
+
+        result = await customerRepository.FindByEmail(customer.Email);
+
+        if (result is not null && result.Id != customer.Id)
+        {
+            return CustomerErrors.EmailAlreadyExists;
+        }
+
+        result = await customerRepository.GetByIdAsync(customer.Id);
         if (result is null || result.IsDeleted)
         {
             return CustomerErrors.NotFound;

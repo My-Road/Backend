@@ -13,4 +13,7 @@ public interface ICustomerRepository
     Task<Customer?> GetByIdAsync(long customerId);
 
     Task<ErrorOr<PaginatedResponse<Customer>>> GetAsync(SieveModel sieveModel);
+    
+    Task<Customer?> FindByPhoneNumber(string? customerPhoneNumber);
+    Task<Customer?> FindByEmail(string? customerEmail);
 }

@@ -30,4 +30,14 @@ public static class CustomerErrors
             code: "Customer.CannotUpdateOrder",
             description:
             "Cannot update the order because the customer's paid amount would exceed their total due amount.");
+
+    public static Error PhoneNumberAlreadyExists => Error.Conflict(
+        code: "Customer.PhoneNumberExists",
+        description: "Customer with phone number already exists"
+    );
+
+    public static Error EmailAlreadyExists => Error.Conflict(
+        code: "Customer.EmailExists",
+        description: "Customer with email already exists"
+    );
 }

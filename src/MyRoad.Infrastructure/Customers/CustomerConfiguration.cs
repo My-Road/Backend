@@ -16,8 +16,7 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .IsRequired();
 
         builder.Property(x => x.Email)
-            .HasMaxLength(200)
-            .IsRequired();
+            .HasMaxLength(200);
 
         builder.Property(x => x.PhoneNumber)
             .HasMaxLength(15)
@@ -31,6 +30,11 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
 
         builder.Property(x => x.TotalPaidAmount)
             .HasColumnType("decimal(10,2)");
+
+        builder.HasIndex(x => x.Email)
+            .IsUnique();
+        builder.HasIndex(x => x.PhoneNumber)
+            .IsUnique();
 
         builder.HasMany(x => x.Orders)
             .WithOne(x => x.Customer)

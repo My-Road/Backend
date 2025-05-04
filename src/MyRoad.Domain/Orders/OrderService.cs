@@ -91,7 +91,7 @@ public class OrderService(
         {
             return OrderErrors.InvalidPrice;
         }
-        
+
         var newTotalDueAmount = customer.TotalDueAmount - existingOrder.TotalDueAmount + order.TotalDueAmount;
         if (customer.TotalPaidAmount > newTotalDueAmount)
         {
@@ -117,7 +117,6 @@ public class OrderService(
             throw;
         }
     }
-
 
 
     public async Task<ErrorOr<Success>> DeleteAsync(long orderId)
@@ -151,7 +150,7 @@ public class OrderService(
 
         return new Success();
     }
-    
+
 
     public async Task<ErrorOr<Order>> GetByIdAsync(long id)
     {

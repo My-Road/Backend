@@ -18,4 +18,10 @@ public static class EmployeeErrors
     public static Error CreationFailed => Error.Failure(
           code: "Employee.CreationFailed",
           description: "Something went wrong. Please verify the information you entered.");
+
+    public static Error PhoneNumberAlreadyExists => Error.Conflict(
+        code: "Employee.PhoneNumberExists",
+        description: "Employee with phone number already exists"
+    );
+
 }

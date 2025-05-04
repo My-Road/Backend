@@ -15,5 +15,12 @@ public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
         builder.Property(x => x.Id)
             .ValueGeneratedOnAdd()
             .IsRequired();
+        
+        builder.Property(x => x.PhoneNumber)
+            .HasMaxLength(15)
+            .IsRequired();
+        
+        builder.HasIndex(x => x.Email).IsUnique();
+        builder.HasIndex(x => x.PhoneNumber).IsUnique();
     }
 }

@@ -19,6 +19,12 @@ namespace MyRoad.Domain.Employees
                 return validate.ExtractErrors();
             }
 
+            var result = await employeeRepository.FindByPhoneNumberAsync(employee.PhoneNumber);
+            if (result is not null)
+            {
+                return EmployeeErrors.PhoneNumberAlreadyExists;
+            }
+
             employee.StartDate = DateTime.Now;
             var isCreated = await employeeRepository.CreateAsync(employee);
 
@@ -31,9 +37,16 @@ namespace MyRoad.Domain.Employees
             if (!validate.IsValid)
                 return validate.ExtractErrors();
 
-            var result = await employeeRepository.GetByIdAsync(employee.Id);
+            var result = await employeeRepository.FindByPhoneNumberAsync(employee.PhoneNumber);
+            if (result is not null && result.Id != employee.Id)
+            {
+                return EmployeeErrors.PhoneNumberAlreadyExists;
+            }
+
+            result = await employeeRepository.GetByIdAsync(employee.Id);
             if (result is null || !result.Status)
                 return EmployeeErrors.NotFound;
+
 
             result.MapUpdatedEmployee(employee);
             await employeeRepository.UpdateAsync(result);

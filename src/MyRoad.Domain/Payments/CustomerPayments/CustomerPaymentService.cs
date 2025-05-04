@@ -4,7 +4,6 @@ using MyRoad.Domain.Common;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Customers;
 using MyRoad.Domain.Identity.Interfaces;
-using MyRoad.Domain.Payments.EmployeePayments;
 using Sieve.Models;
 
 namespace MyRoad.Domain.Payments.CustomerPayments;
