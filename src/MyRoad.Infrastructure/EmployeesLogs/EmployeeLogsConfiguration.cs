@@ -11,10 +11,10 @@ public class EmployeeLogsConfiguration : IEntityTypeConfiguration<EmployeeLog>
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).ValueGeneratedOnAdd();
-        builder.Property(x => x.CheckIn).IsRequired(false);
-        builder.Property(x => x.CheckOut).IsRequired(false);
-        builder.Property(x => x.IsWorkingDay).IsRequired();
-        builder.Property(x => x.Notes).HasMaxLength(500).IsRequired(false);
+        builder.Property(x=>x.Date).IsRequired();
+        builder.Property(x => x.CheckIn).IsRequired();
+        builder.Property(x => x.CheckOut).IsRequired();
+        builder.Property(x => x.Notes).HasMaxLength(500);
         builder.Property(x => x.CreatedByUserId).IsRequired();
         builder.Property(x => x.HourlyWage).IsRequired()
             .HasColumnType("decimal(4,2)");
