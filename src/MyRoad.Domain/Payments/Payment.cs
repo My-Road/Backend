@@ -6,12 +6,12 @@ namespace MyRoad.Domain.Payments;
 public class Payment : BaseEntity<long>
 {
     public decimal Amount { get; set; }
-    public DateTime PaymentDate { get; set; }
+    public DateOnly PaymentDate { get; set; }
     public string? Notes { get; set; }
 
     public bool IsDeleted { get; set; } = false;
 
-    public DateTime? DeletedAt { get; set; }
+    public DateOnly? DeletedAt { get; set; }
 
     public ErrorOr<Success> Delete()
     {
@@ -21,7 +21,7 @@ public class Payment : BaseEntity<long>
         }
 
         IsDeleted = true;
-        DeletedAt = DateTime.UtcNow;
+        DeletedAt = DateOnly.FromDateTime(DateTime.UtcNow);
 
         return new Success();
     }

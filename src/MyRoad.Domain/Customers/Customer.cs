@@ -16,9 +16,9 @@ public class Customer : BaseEntity<long>
     public decimal TotalPaidAmount { get; set; }
     public decimal TotalDueAmount { get; set; }
     
-    public bool IsDeleted { get; set; } = false;
+    public bool IsDeleted { get; set; }
 
-    public DateTime? DeletedAt { get; set; }
+    public DateOnly? DeletedAt { get; set; }
 
     public decimal RemainingAmount => TotalDueAmount - TotalPaidAmount;
 
@@ -46,7 +46,7 @@ public class Customer : BaseEntity<long>
         }
 
         IsDeleted = true;
-        DeletedAt = DateTime.UtcNow;
+        DeletedAt = DateOnly.FromDateTime(DateTime.UtcNow);
 
         return new Success();
     }

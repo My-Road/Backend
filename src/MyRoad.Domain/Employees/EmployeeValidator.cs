@@ -20,7 +20,7 @@ namespace MyRoad.Domain.Employees
                 .MaximumLength(15);
 
             RuleFor(x => x.StartDate)
-                .LessThanOrEqualTo(DateTime.UtcNow)
+                .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow))
                 .WithMessage("Start date must be in the past or today");
         }
     }

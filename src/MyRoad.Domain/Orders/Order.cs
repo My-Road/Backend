@@ -8,7 +8,7 @@ namespace MyRoad.Domain.Orders
 {
     public class Order : BaseEntity<long>
     {
-        public DateTime OrderDate { get; set; }
+        public DateOnly OrderDate { get; set; }
         public string? RecipientName { get; set; }
         public string? RecipientPhoneNumber { get; set; }
         public long Quantity { get; set; }
