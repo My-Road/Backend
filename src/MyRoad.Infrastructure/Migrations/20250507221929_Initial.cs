@@ -39,7 +39,7 @@ namespace MyRoad.Infrastructure.Migrations
                     TotalPaidAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     TotalDueAmount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    DeletedAt = table.Column<DateOnly>(type: "date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -54,8 +54,8 @@ namespace MyRoad.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FullName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     JobTitle = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    StartDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
@@ -126,10 +126,10 @@ namespace MyRoad.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerId = table.Column<long>(type: "bigint", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    PaymentDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    PaymentDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    DeletedAt = table.Column<DateOnly>(type: "date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -150,10 +150,10 @@ namespace MyRoad.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<long>(type: "bigint", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    PaymentDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    PaymentDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(500)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    DeletedAt = table.Column<DateOnly>(type: "date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -288,7 +288,7 @@ namespace MyRoad.Infrastructure.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderDate = table.Column<DateTime>(type: "datetime", nullable: false),
+                    OrderDate = table.Column<DateOnly>(type: "date", nullable: false),
                     RecipientName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RecipientPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Quantity = table.Column<long>(type: "bigint", nullable: false),
@@ -349,7 +349,7 @@ namespace MyRoad.Infrastructure.Migrations
                 table: "Customer",
                 column: "Email",
                 unique: true,
-                filter: "[Email] IS NOT NULL");
+                filter: "[Email] <> ''");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Customer_PhoneNumber",

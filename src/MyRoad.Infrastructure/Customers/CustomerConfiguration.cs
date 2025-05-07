@@ -32,7 +32,9 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
             .HasColumnType("decimal(10,2)");
 
         builder.HasIndex(x => x.Email)
-            .IsUnique();
+            .IsUnique()
+            .HasFilter("[Email] <> ''");
+        
         builder.HasIndex(x => x.PhoneNumber)
             .IsUnique();
 

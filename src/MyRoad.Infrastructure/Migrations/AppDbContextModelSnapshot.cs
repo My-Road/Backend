@@ -198,7 +198,7 @@ namespace MyRoad.Infrastructure.Migrations
 
                     b.HasIndex("Email")
                         .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
+                        .HasFilter("[Email] <> ''");
 
                     b.HasIndex("PhoneNumber")
                         .IsUnique();

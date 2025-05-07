@@ -12,7 +12,7 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250504115333_Initial")]
+    [Migration("20250507221929_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -170,8 +170,8 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("DeletedAt")
+                        .HasColumnType("date");
 
                     b.Property<string>("Email")
                         .HasMaxLength(200)
@@ -201,7 +201,7 @@ namespace MyRoad.Infrastructure.Migrations
 
                     b.HasIndex("Email")
                         .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
+                        .HasFilter("[Email] <> ''");
 
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
@@ -221,8 +221,8 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("EndDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -240,8 +240,8 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -326,8 +326,8 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime>("OrderDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateOnly>("OrderDate")
+                        .HasColumnType("date");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
@@ -364,8 +364,8 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<long>("CustomerId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("DeletedAt")
+                        .HasColumnType("date");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -374,8 +374,8 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateOnly>("PaymentDate")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
@@ -395,8 +395,8 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly?>("DeletedAt")
+                        .HasColumnType("date");
 
                     b.Property<long>("EmployeeId")
                         .HasColumnType("bigint");
@@ -407,8 +407,8 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime");
+                    b.Property<DateOnly>("PaymentDate")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
