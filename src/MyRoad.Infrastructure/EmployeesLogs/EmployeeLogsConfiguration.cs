@@ -18,8 +18,8 @@ public class EmployeeLogsConfiguration : IEntityTypeConfiguration<EmployeeLog>
         builder.Property(x => x.CreatedByUserId).IsRequired();
         builder.Property(x => x.HourlyWage).IsRequired()
             .HasColumnType("decimal(4,2)");
-
         builder.Ignore(x => x.DailyWage);
+        builder.Ignore(x => x.TotalHours);
 
         builder.HasOne(x => x.Employee)
             .WithMany(e => e.Logs)

@@ -43,8 +43,8 @@ namespace MyRoad.Infrastructure.EmployeesLogs
         public async Task<PaginatedResponse<EmployeeLog>> GetByEmployeeAsync(long employeeId, SieveModel sieveModel)
         {
             var query = dbContext.EmployeeLogs
-           .Where(p => p.EmployeeId == employeeId && !p.IsDeleted)
-           .AsQueryable();
+                .Where(p => p.EmployeeId == employeeId && !p.IsDeleted)
+                .AsQueryable();
 
             var totalItems = await sieveProcessor
                 .Apply(sieveModel, query, applyPagination: false)

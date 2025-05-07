@@ -18,5 +18,10 @@ namespace MyRoad.Domain.EmployeesLogs
         description: "EmployeeLog is already active."
         );
 
+        public static Error InvalidWageUpdate => Error.Conflict(
+        code: "EmployeeLog.InvalidWageUpdate",
+        description: "The update would cause the employee's total paid amount to exceed the total due amount."
+        );
+
     }
 }

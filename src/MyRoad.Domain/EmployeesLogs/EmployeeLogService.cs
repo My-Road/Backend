@@ -61,7 +61,7 @@ namespace MyRoad.Domain.EmployeesLogs
 
                 return new Success();
             }
-            catch (Exception)
+            catch
             {
                 await unitOfWork.RollbackTransactionAsync();
                 throw;
@@ -90,12 +90,16 @@ namespace MyRoad.Domain.EmployeesLogs
 
             var prevDailyWage = existingEmployeeLog.DailyWage;
             var newDailyWage = employeelog.DailyWage;
-
+            var newTotalDueAmount = employee.TotalDueAmount - prevDailyWage + newDailyWage;
+            if (employee.TotalPaidAmount > newTotalDueAmount)
+            {
+                return EmployeeLogErrors.InvalidWageUpdate; 
+            }
 
             try
             {
                 await unitOfWork.BeginTransactionAsync();
-                employee.TotalDueAmount = employee.TotalDueAmount - prevDailyWage + newDailyWage;
+                employee.TotalDueAmount = newTotalDueAmount;
                 existingEmployeeLog.MapUpdateEmployeeLog(employeelog);
 
                 await employeeRepository.UpdateAsync(employee);
@@ -104,7 +108,7 @@ namespace MyRoad.Domain.EmployeesLogs
 
                 return new Success();
             }
-            catch (Exception)
+            catch 
             {
                 await unitOfWork.RollbackTransactionAsync();
                 throw;
@@ -126,7 +130,7 @@ namespace MyRoad.Domain.EmployeesLogs
                 return EmployeeErrors.NotFound;
             }
 
-            if (employee.TotalDueAmount - employeeLog.DailyWage < employee.TotalPaidAmount)
+            if (employee.RemainingAmount==0||employee.TotalDueAmount - employeeLog.DailyWage < employee.TotalPaidAmount)
             {
                 return EmployeeErrors.CannotRemoveEmployeeLog;
             }

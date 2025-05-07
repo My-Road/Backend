@@ -8,8 +8,8 @@ namespace MyRoad.Infrastructure.EmployeesLogs
         public void Configure(SievePropertyMapper mapper)
         {
             mapper.Property<EmployeeLog>(x => x.Date)
-           .CanFilter()
-           .CanSort();
+                .CanFilter()
+                .CanSort();
 
             mapper.Property<EmployeeLog>(x => x.EmployeeId)
                 .CanFilter()
