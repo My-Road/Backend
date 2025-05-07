@@ -18,7 +18,6 @@ public class EmployeePaymentConfiguration : IEntityTypeConfiguration<EmployeePay
             .IsRequired();
 
         builder.Property(x => x.PaymentDate)
-            .HasColumnType("datetime")
             .IsRequired();
         builder.Property(x => x.Notes)
             .HasColumnType("nvarchar(500)");

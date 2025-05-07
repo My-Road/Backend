@@ -24,8 +24,7 @@ namespace MyRoad.Domain.Employees
             {
                 return EmployeeErrors.PhoneNumberAlreadyExists;
             }
-
-            employee.StartDate = DateTime.Now;
+            
             var isCreated = await employeeRepository.CreateAsync(employee);
 
             return isCreated ? new Success() : EmployeeErrors.CreationFailed;
