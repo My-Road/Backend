@@ -3,7 +3,7 @@ namespace MyRoad.API.Orders.RequestDto;
 public class UpdateOrderDto
 {
     public long Id { get; set; }
-    public DateOnly OrderDate { get; set; }
+    public DateTime OrderDate { get; set; }
 
     public string? RecipientName { get; set; }
 
