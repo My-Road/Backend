@@ -83,7 +83,7 @@ namespace MyRoad.Domain.EmployeesLogs
             }
 
             var employee = await employeeRepository.GetByIdAsync(employeelog.EmployeeId);
-            if (employee is null|| !employee.Status)
+            if (employee is null)
             {
                 return EmployeeErrors.NotFound;
             }

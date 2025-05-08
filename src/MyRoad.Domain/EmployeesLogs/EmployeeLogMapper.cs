@@ -11,6 +11,7 @@
             existingEmployeeLog.HourlyWage = updatedEmployeeLog.HourlyWage;
             existingEmployeeLog.Notes = updatedEmployeeLog.Notes;
             existingEmployeeLog.CreatedByUserId = updatedEmployeeLog.CreatedByUserId;
+            existingEmployeeLog.EmployeeId=updatedEmployeeLog.EmployeeId;
         }
     }
 }

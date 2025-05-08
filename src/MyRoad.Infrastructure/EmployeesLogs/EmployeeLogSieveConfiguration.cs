@@ -11,13 +11,14 @@ namespace MyRoad.Infrastructure.EmployeesLogs
                 .CanFilter()
                 .CanSort();
 
-            mapper.Property<EmployeeLog>(x => x.EmployeeId)
-                .CanFilter()
-                .CanSort();
-
             mapper.Property<EmployeeLog>(x => x.Id)
                 .CanFilter()
                 .CanSort();
+
+            mapper.Property<EmployeeLog>(x => x.EmployeeId)
+               .CanFilter()
+               .CanSort();
+
 
             mapper.Property<EmployeeLog>(x => x.CreatedByUserId)
                 .CanFilter()

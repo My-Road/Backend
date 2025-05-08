@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Options;
 using MyRoad.Infrastructure.Customers;
 using MyRoad.Infrastructure.Employees;
+using MyRoad.Infrastructure.EmployeesLogs;
 using MyRoad.Infrastructure.Orders;
 using MyRoad.Infrastructure.Payments.CustomerPayments;
 using MyRoad.Infrastructure.Payments.EmployeePayments;
@@ -18,6 +19,7 @@ public class MyRoadSieveProcessor(IOptions<SieveOptions> options) : SieveProcess
             .ApplyConfiguration<CustomerSieveConfiguration>()
             .ApplyConfiguration<EmployeePaymentSieveConfiguration>()
             .ApplyConfiguration<EmployeeSieveConfiguration>()
-            .ApplyConfiguration<CustomerPaymentSieveConfiguration>();
+            .ApplyConfiguration<CustomerPaymentSieveConfiguration>()
+            .ApplyConfiguration<EmployeeLogSieveConfiguration>();
     }
 }

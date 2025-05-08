@@ -25,7 +25,6 @@ public class EmployeeLogsConfiguration : IEntityTypeConfiguration<EmployeeLog>
             .WithMany(e => e.Logs)
             .HasForeignKey(x => x.EmployeeId);
 
-
         builder.HasOne<ApplicationUser>()
             .WithMany()
             .HasForeignKey(x => x.CreatedByUserId)
