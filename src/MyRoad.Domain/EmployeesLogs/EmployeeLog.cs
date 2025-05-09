@@ -11,11 +11,12 @@ public class EmployeeLog :BaseEntity<long>
     public TimeOnly CheckIn { get; set; }
     public TimeOnly CheckOut { get; set; }
     public bool IsDeleted { get; set; }
+    public bool IsCompleted { get; set; }
     public decimal HourlyWage { get; set; }
     public string? Notes { get; set; }
     public long CreatedByUserId { get; set; }
-    public decimal TotalHours { get; set; }
-    public decimal DailyWage => TotalHours * HourlyWage;
+    public decimal totalHours => (decimal)(CheckOut - CheckIn).TotalHours;
+    public decimal DailyWage => totalHours* HourlyWage;
     public ErrorOr<Success> Delete()
     {
         if (IsDeleted)

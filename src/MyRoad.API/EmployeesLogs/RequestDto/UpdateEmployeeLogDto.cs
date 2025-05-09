@@ -8,7 +8,6 @@
         public TimeOnly CheckOut { get; set; }
         public decimal HourlyWage { get; set; }
         public string? Notes { get; set; }
-        public long CreatedByUserId { get; set; }
         public long EmployeeId {  get; set; }
     }
 }

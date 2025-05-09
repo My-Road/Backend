@@ -12,7 +12,7 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250508204330_initial")]
+    [Migration("20250509145638_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -285,6 +285,9 @@ namespace MyRoad.Infrastructure.Migrations
 
                     b.Property<decimal>("HourlyWage")
                         .HasColumnType("decimal(4,2)");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");

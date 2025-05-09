@@ -39,7 +39,6 @@ namespace MyRoad.Domain.EmployeesLogs
                 return UserErrors.NotFound;
             }
 
-
             await unitOfWork.BeginTransactionAsync();
 
             try
@@ -48,8 +47,10 @@ namespace MyRoad.Domain.EmployeesLogs
                 {
                     case UserRole.Admin when userContext.Role == UserRole.Admin:
                         employee.TotalDueAmount += employeelog.DailyWage;
+                        employeelog.IsCompleted = true;
                         break;
                     case UserRole.Manager when userContext.Role == UserRole.Manager:
+                        employeelog.IsCompleted = false;
                         break;
                     default:
                         return UserErrors.UnauthorizedUser;

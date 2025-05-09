@@ -262,6 +262,7 @@ namespace MyRoad.Infrastructure.Migrations
                     CheckIn = table.Column<TimeOnly>(type: "time", nullable: false),
                     CheckOut = table.Column<TimeOnly>(type: "time", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false),
                     HourlyWage = table.Column<decimal>(type: "decimal(4,2)", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     CreatedByUserId = table.Column<long>(type: "bigint", nullable: false)

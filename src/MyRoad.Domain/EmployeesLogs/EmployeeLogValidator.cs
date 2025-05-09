@@ -10,10 +10,6 @@ namespace MyRoad.Domain.EmployeesLogs
                 .NotEmpty()
                 .WithMessage("Employee ID Cannot be empty!");
 
-            RuleFor(x => x.CreatedByUserId)
-           .NotEmpty()
-           .WithMessage("Created by user ID cannot be empty");
-
             RuleFor(x=>x.Date)
                 .NotEmpty()
                 .WithMessage("Date cannot be empty");

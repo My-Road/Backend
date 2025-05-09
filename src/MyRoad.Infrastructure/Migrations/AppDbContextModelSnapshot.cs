@@ -283,6 +283,9 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<decimal>("HourlyWage")
                         .HasColumnType("decimal(4,2)");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
