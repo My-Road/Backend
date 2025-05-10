@@ -12,7 +12,7 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250507221929_Initial")]
+    [Migration("20250510145548_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -268,14 +268,17 @@ namespace MyRoad.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<DateTime?>("CheckIn")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeOnly>("CheckIn")
+                        .HasColumnType("time");
 
-                    b.Property<DateTime?>("CheckOut")
-                        .HasColumnType("datetime2");
+                    b.Property<TimeOnly>("CheckOut")
+                        .HasColumnType("time");
 
                     b.Property<long>("CreatedByUserId")
                         .HasColumnType("bigint");
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
 
                     b.Property<long>("EmployeeId")
                         .HasColumnType("bigint");
@@ -283,7 +286,10 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<decimal>("HourlyWage")
                         .HasColumnType("decimal(4,2)");
 
-                    b.Property<bool>("IsWorkingDay")
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Notes")

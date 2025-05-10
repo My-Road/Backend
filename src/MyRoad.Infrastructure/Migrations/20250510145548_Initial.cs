@@ -258,9 +258,11 @@ namespace MyRoad.Infrastructure.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<long>(type: "bigint", nullable: false),
-                    CheckIn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CheckOut = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsWorkingDay = table.Column<bool>(type: "bit", nullable: false),
+                    Date = table.Column<DateOnly>(type: "date", nullable: false),
+                    CheckIn = table.Column<TimeOnly>(type: "time", nullable: false),
+                    CheckOut = table.Column<TimeOnly>(type: "time", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false),
                     HourlyWage = table.Column<decimal>(type: "decimal(4,2)", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     CreatedByUserId = table.Column<long>(type: "bigint", nullable: false)
