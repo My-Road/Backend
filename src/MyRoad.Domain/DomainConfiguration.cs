@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MyRoad.Domain.Employees;
 using MyRoad.Domain.Customers;
+using MyRoad.Domain.EmployeesLogs;
 using MyRoad.Domain.Identity;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Orders;
@@ -21,6 +22,7 @@ public static class DomainConfiguration
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<ICustomerPaymentService, CustomerPaymentService>();
+        services.AddScoped<IEmployeeLogService, EmployeeLogService>();
 
         return services;
     }

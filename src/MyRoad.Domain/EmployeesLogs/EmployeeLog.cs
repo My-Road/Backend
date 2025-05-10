@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
+using ErrorOr;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Employees;
 
@@ -7,21 +7,24 @@ public class EmployeeLog :BaseEntity<long>
 {
     public long EmployeeId { get; set; }
     public Employee Employee { get; set; } 
-    public DateTime? CheckIn { get; set; }
-    public DateTime? CheckOut { get; set; }
-    public bool IsWorkingDay { get; set; }
+    public DateOnly Date {  get; set; }
+    public TimeOnly CheckIn { get; set; }
+    public TimeOnly CheckOut { get; set; }
+    public bool IsDeleted { get; set; }
+    public bool IsCompleted { get; set; }
     public decimal HourlyWage { get; set; }
     public string? Notes { get; set; }
     public long CreatedByUserId { get; set; }
-    
-    [NotMapped] public double TotalHours
+    public decimal totalHours => (decimal)(CheckOut - CheckIn).TotalHours;
+    public decimal DailyWage => totalHours* HourlyWage;
+    public ErrorOr<Success> Delete()
     {
-        get
+        if (IsDeleted)
         {
-            if (CheckIn.HasValue && CheckOut.HasValue)
-                return (CheckOut.Value - CheckIn.Value).TotalHours;
-            return 0;
+            return EmployeeLogErrors.AlreadyDeleted;
         }
+
+        IsDeleted = true;
+        return new Success();
     }
-    public decimal DailyWage => (decimal)TotalHours * HourlyWage;
 }
