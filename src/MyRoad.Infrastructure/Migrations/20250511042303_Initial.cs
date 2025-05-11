@@ -143,7 +143,7 @@ namespace MyRoad.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmployeePayments",
+                name: "EmployeePayment",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -157,9 +157,9 @@ namespace MyRoad.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmployeePayments", x => x.Id);
+                    table.PrimaryKey("PK_EmployeePayment", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EmployeePayments_Employee_EmployeeId",
+                        name: "FK_EmployeePayment_Employee_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employee",
                         principalColumn: "Id",
@@ -381,8 +381,8 @@ namespace MyRoad.Infrastructure.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeePayments_EmployeeId",
-                table: "EmployeePayments",
+                name: "IX_EmployeePayment_EmployeeId",
+                table: "EmployeePayment",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
@@ -446,7 +446,7 @@ namespace MyRoad.Infrastructure.Migrations
                 name: "EmployeeLog");
 
             migrationBuilder.DropTable(
-                name: "EmployeePayments");
+                name: "EmployeePayment");
 
             migrationBuilder.DropTable(
                 name: "Order");
