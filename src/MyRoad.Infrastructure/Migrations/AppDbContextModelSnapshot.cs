@@ -417,7 +417,7 @@ namespace MyRoad.Infrastructure.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("EmployeePayments", (string)null);
+                    b.ToTable("EmployeePayment", (string)null);
                 });
 
             modelBuilder.Entity("MyRoad.Infrastructure.Identity.Entities.ApplicationUser", b =>

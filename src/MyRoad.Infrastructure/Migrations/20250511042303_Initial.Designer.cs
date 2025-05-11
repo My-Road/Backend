@@ -12,7 +12,7 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250510145548_Initial")]
+    [Migration("20250511042303_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -420,7 +420,7 @@ namespace MyRoad.Infrastructure.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.ToTable("EmployeePayments", (string)null);
+                    b.ToTable("EmployeePayment", (string)null);
                 });
 
             modelBuilder.Entity("MyRoad.Infrastructure.Identity.Entities.ApplicationUser", b =>
