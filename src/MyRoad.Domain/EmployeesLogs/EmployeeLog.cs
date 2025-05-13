@@ -15,8 +15,8 @@ public class EmployeeLog :BaseEntity<long>
     public decimal HourlyWage { get; set; }
     public string? Notes { get; set; }
     public long CreatedByUserId { get; set; }
-    public decimal totalHours => (decimal)(CheckOut - CheckIn).TotalHours;
-    public decimal DailyWage => totalHours* HourlyWage;
+    public decimal TotalHours => (decimal)(CheckOut - CheckIn).TotalHours;
+    public decimal DailyWage => TotalHours* HourlyWage;
     public ErrorOr<Success> Delete()
     {
         if (IsDeleted)

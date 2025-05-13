@@ -13,6 +13,11 @@ public class EmployeeSieveConfiguration : ISieveConfiguration
 
         mapper.Property<Employee>(x => x.FullName)
             .CanFilter();
+
+        mapper.Property<Employee>(x => x.Status)
+            .CanFilter()
+            .CanSort();
         
+
     }
 }

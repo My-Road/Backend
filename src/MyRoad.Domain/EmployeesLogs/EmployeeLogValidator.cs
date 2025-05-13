@@ -4,19 +4,19 @@ namespace MyRoad.Domain.EmployeesLogs
 {
     public class EmployeeLogValidator : AbstractValidator<EmployeeLog>
     {
-        public EmployeeLogValidator() 
+        public EmployeeLogValidator()
         {
             RuleFor(x => x.EmployeeId)
                 .NotEmpty()
                 .WithMessage("Employee ID Cannot be empty!");
 
-            RuleFor(x=>x.Date)
-                .NotEmpty()
-                .WithMessage("Date cannot be empty");
+            RuleFor(x => x.Date)
+                .NotNull()
+                .WithMessage("Date cannot be Null");
 
             RuleFor(x => x.CheckIn)
-                .NotEmpty()
-                .WithMessage("CheckIn cannot be empty");
+                .NotNull()
+                .WithMessage("CheckIn cannot be Null");
 
             RuleFor(x => x.CheckOut)
                 .NotEmpty()
@@ -27,8 +27,8 @@ namespace MyRoad.Domain.EmployeesLogs
                 .WithMessage("HourlyWage must be greater than 0");
 
             RuleFor(x => x.DailyWage)
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("DailyWage cannot be negative");
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("DailyWage cannot be negative");
         }
     }
 }
