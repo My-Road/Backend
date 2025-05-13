@@ -14,14 +14,6 @@ namespace MyRoad.Domain.EmployeesLogs
                 .NotEmpty()
                 .WithMessage("Date cannot be empty");
 
-            RuleFor(x => x.CheckIn)
-                .NotEmpty()
-                .WithMessage("CheckIn cannot be empty");
-
-            RuleFor(x => x.CheckOut)
-                .NotEmpty()
-                .WithMessage("CheckOut cannot be empty");
-
             RuleFor(x => x.HourlyWage)
                 .GreaterThan(0)
                 .WithMessage("HourlyWage must be greater than 0");

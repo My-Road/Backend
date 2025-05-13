@@ -12,8 +12,8 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250511042303_Initial")]
-    partial class Initial
+    [Migration("20250513174626_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
