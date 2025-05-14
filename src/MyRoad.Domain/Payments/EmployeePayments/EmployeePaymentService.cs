@@ -40,10 +40,14 @@ public class EmployeePaymentService(
             return EmployeeErrors.NotFound;
         }
 
+        if (employee.TotalPaidAmount >= employee.TotalDueAmount)
+        {
+            return PaymentErrors.NoDueAmountLeft;
+        }
 
         if (employee.TotalPaidAmount + employeePayment.Amount > employee.TotalDueAmount)
         {
-            return PaymentErrors.InvalidAmount;
+            return PaymentErrors.PaymentExceedsDue;
         }
 
         employee.TotalPaidAmount += employeePayment.Amount;
@@ -110,7 +114,7 @@ public class EmployeePaymentService(
             var newTotalPaidAmount = employee.TotalPaidAmount - existingPayment.Amount + employeePayment.Amount;
             if (newTotalPaidAmount > employee.TotalDueAmount)
             {
-                return PaymentErrors.InvalidAmount;
+                return PaymentErrors.UpdatedPaymentExceedsDue;
             }
 
 
