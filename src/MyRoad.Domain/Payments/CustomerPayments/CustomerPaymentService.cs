@@ -40,9 +40,14 @@ public class CustomerPaymentService(
             return CustomerErrors.NotFound;
         }
 
+        if (customer.TotalPaidAmount >= customer.TotalDueAmount )
+        {
+            return PaymentErrors.NoDueAmountLeft;
+        }
+
         if (customer.TotalPaidAmount + customerPayment.Amount > customer.TotalDueAmount)
         {
-            return PaymentErrors.InvalidAmount;
+            return PaymentErrors.PaymentExceedsDue;
         }
 
         customer.TotalPaidAmount += customerPayment.Amount;
@@ -106,7 +111,7 @@ public class CustomerPaymentService(
             var newTotalPaidAmount = customer.TotalPaidAmount - existingPayment.Amount + customerPayment.Amount;
             if (newTotalPaidAmount > customer.TotalDueAmount)
             {
-                return PaymentErrors.InvalidAmount;
+                return PaymentErrors.UpdatedPaymentExceedsDue;
             }
 
             customer.TotalPaidAmount = newTotalPaidAmount;
