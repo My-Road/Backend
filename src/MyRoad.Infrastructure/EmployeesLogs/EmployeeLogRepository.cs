@@ -10,13 +10,12 @@ namespace MyRoad.Infrastructure.EmployeesLogs
     public class EmployeeLogRepository(
         AppDbContext dbContext,
         ISieveProcessor sieveProcessor
-        ) : IEmployeeLogRepository
+    ) : IEmployeeLogRepository
     {
         public async Task<bool> CreateAsync(EmployeeLog employeelog)
         {
             await dbContext.EmployeeLogs.AddAsync(employeelog);
             return await dbContext.SaveChangesAsync() > 0;
-
         }
 
         public async Task<PaginatedResponse<EmployeeLog>> GetAsync(SieveModel sieveModel)
@@ -38,6 +37,13 @@ namespace MyRoad.Infrastructure.EmployeesLogs
                 Page = sieveModel.Page ?? 1,
                 PageSize = sieveModel.PageSize ?? 10,
             };
+        }
+
+        public async Task<IEnumerable<EmployeeLog>> GetLogsByDateAsync(long id, DateOnly date)
+        {
+            return await dbContext.EmployeeLogs
+                .Where(log => !log.IsDeleted && log.EmployeeId == id && log.Date == date)
+                .ToListAsync();
         }
 
         public async Task<PaginatedResponse<EmployeeLog>> GetByEmployeeAsync(long employeeId, SieveModel sieveModel)
@@ -67,7 +73,6 @@ namespace MyRoad.Infrastructure.EmployeesLogs
         {
             var employeeLog = await dbContext.EmployeeLogs.FindAsync(id);
             return employeeLog;
-            
         }
 
         public async Task<bool> UpdateAsync(EmployeeLog employeelog)

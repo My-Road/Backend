@@ -23,5 +23,10 @@ namespace MyRoad.Domain.EmployeesLogs
         description: "The update would cause the employee's total paid amount to exceed the total due amount."
         );
 
+        public static Error TimeOverlapError => Error.Conflict(
+            code: "EmployeeLog.TimeOverlapError",
+            description: "The employee has overlapping this day."
+        );
+
     }
 }
