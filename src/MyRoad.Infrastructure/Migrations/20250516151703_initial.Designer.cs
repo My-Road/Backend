@@ -12,8 +12,8 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250511042303_Initial")]
-    partial class Initial
+    [Migration("20250516151703_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -423,6 +423,142 @@ namespace MyRoad.Infrastructure.Migrations
                     b.ToTable("EmployeePayment", (string)null);
                 });
 
+            modelBuilder.Entity("MyRoad.Domain.Payments.SupplierPayments.SupplierPayment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<DateOnly?>("DeletedAt")
+                        .HasColumnType("date");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateOnly>("PaymentDate")
+                        .HasColumnType("date");
+
+                    b.Property<long>("SupplierId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("SupplierPayment", (string)null);
+                });
+
+            modelBuilder.Entity("MyRoad.Domain.Purchases.Purchase", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CreatedByUserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GoodsDeliverer")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("GoodsDelivererPhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<DateTime>("PurchasesDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<long>("SupplierId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("Purchase", (string)null);
+                });
+
+            modelBuilder.Entity("MyRoad.Domain.Suppliers.Supplier", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar");
+
+                    b.Property<string>("SupplierName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar");
+
+                    b.Property<decimal>("TotalDueAmount")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<decimal>("TotalPaidAmount")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
+
+                    b.ToTable("Supplier", (string)null);
+                });
+
             modelBuilder.Entity("MyRoad.Infrastructure.Identity.Entities.ApplicationUser", b =>
                 {
                     b.Property<long>("Id")
@@ -622,6 +758,34 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("MyRoad.Domain.Payments.SupplierPayments.SupplierPayment", b =>
+                {
+                    b.HasOne("MyRoad.Domain.Suppliers.Supplier", "Supplier")
+                        .WithMany("SupplierPayments")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("MyRoad.Domain.Purchases.Purchase", b =>
+                {
+                    b.HasOne("MyRoad.Infrastructure.Identity.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyRoad.Domain.Suppliers.Supplier", "Supplier")
+                        .WithMany("Purchases")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Supplier");
+                });
+
             modelBuilder.Entity("MyRoad.Domain.Customers.Customer", b =>
                 {
                     b.Navigation("CustomerPayments");
@@ -634,6 +798,13 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Navigation("Logs");
 
                     b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("MyRoad.Domain.Suppliers.Supplier", b =>
+                {
+                    b.Navigation("Purchases");
+
+                    b.Navigation("SupplierPayments");
                 });
 #pragma warning restore 612, 618
         }
