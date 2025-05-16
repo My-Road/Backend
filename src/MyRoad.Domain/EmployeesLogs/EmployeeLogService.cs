@@ -1,4 +1,5 @@
 ﻿using ErrorOr;
+using Microsoft.Extensions.Logging;
 using MyRoad.Domain.Common;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Employees;
@@ -14,10 +15,11 @@ namespace MyRoad.Domain.EmployeesLogs
         IEmployeeLogRepository employeeLogRepository,
         IEmployeeRepository employeeRepository,
         IUserRepository userRepository,
-        IUnitOfWork unitOfWork
-        ) : IEmployeeLogService
+        IUnitOfWork unitOfWork,
+        ILogger<EmployeeLogService> logger
+    ) : IEmployeeLogService
     {
-        private readonly EmployeeLogValidator _employeeLogValidator=new();
+        private readonly EmployeeLogValidator _employeeLogValidator = new();
 
         public async Task<ErrorOr<Success>> CreateAsync(EmployeeLog employeelog)
         {
@@ -37,6 +39,16 @@ namespace MyRoad.Domain.EmployeesLogs
             if (user is null)
             {
                 return UserErrors.NotFound;
+            }
+
+            var employeeLogs = await employeeLogRepository
+                .GetLogsByDateAsync(employee.Id, employeelog.Date);
+
+            var hasOverLap = LogsOverlapChecker.HasOverlap(employeelog, employeeLogs);
+
+            if (hasOverLap)
+            {
+                return EmployeeLogErrors.TimeOverlapError;
             }
 
             await unitOfWork.BeginTransactionAsync();
@@ -89,12 +101,22 @@ namespace MyRoad.Domain.EmployeesLogs
                 return EmployeeErrors.NotFound;
             }
 
+            var employeeLogs = await employeeLogRepository
+                .GetLogsByDateAsync(employee.Id, employeelog.Date);
+
+            var hasOverLap = LogsOverlapChecker.HasOverlap(employeelog, employeeLogs);
+
+            if (hasOverLap)
+            {
+                return EmployeeLogErrors.TimeOverlapError;
+            }
+
             var prevDailyWage = existingEmployeeLog.DailyWage;
             var newDailyWage = employeelog.DailyWage;
             var newTotalDueAmount = employee.TotalDueAmount - prevDailyWage + newDailyWage;
             if (employee.TotalPaidAmount > newTotalDueAmount)
             {
-                return EmployeeLogErrors.InvalidWageUpdate; 
+                return EmployeeLogErrors.InvalidWageUpdate;
             }
 
             try
@@ -109,12 +131,11 @@ namespace MyRoad.Domain.EmployeesLogs
 
                 return new Success();
             }
-            catch 
+            catch
             {
                 await unitOfWork.RollbackTransactionAsync();
                 throw;
             }
-
         }
 
         public async Task<ErrorOr<Success>> DeleteAsync(long id)
@@ -131,7 +152,8 @@ namespace MyRoad.Domain.EmployeesLogs
                 return EmployeeErrors.NotFound;
             }
 
-            if (employee.RemainingAmount==0||employee.TotalDueAmount - employeeLog.DailyWage < employee.TotalPaidAmount)
+            if (employee.RemainingAmount == 0 ||
+                employee.TotalDueAmount - employeeLog.DailyWage < employee.TotalPaidAmount)
             {
                 return EmployeeErrors.CannotRemoveEmployeeLog;
             }
@@ -156,7 +178,8 @@ namespace MyRoad.Domain.EmployeesLogs
             return result;
         }
 
-        public async Task<ErrorOr<PaginatedResponse<EmployeeLog>>> GetByEmployeeIdAsync(long employeeId, SieveModel sieveModel)
+        public async Task<ErrorOr<PaginatedResponse<EmployeeLog>>> GetByEmployeeIdAsync(long employeeId,
+            SieveModel sieveModel)
         {
             var result = await employeeLogRepository.GetByEmployeeAsync(employeeId, sieveModel);
             return result;
