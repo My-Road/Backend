@@ -21,5 +21,9 @@ public class PaymentValidator : AbstractValidator<Payment>
         RuleFor(x => x.Notes)
             .NotEmpty().When(x => x.Amount > 10_000)
             .WithMessage("Note is required for large payments");
+
+        RuleFor(x => x.PaymentDate)
+            .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow))
+            .WithMessage("Payment date must be in the past or today");
     }
 }
