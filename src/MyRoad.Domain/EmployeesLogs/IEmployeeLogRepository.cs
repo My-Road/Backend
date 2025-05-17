@@ -11,6 +11,6 @@ namespace MyRoad.Domain.EmployeesLogs
         Task<PaginatedResponse<EmployeeLog>> GetByEmployeeAsync(long employeeId, SieveModel sieveModel);
         Task<PaginatedResponse<EmployeeLog>> GetAsync(SieveModel sieveModel);
 
-        Task<IEnumerable<EmployeeLog>> GetLogsByDateAsync(long id, DateOnly date);
+        Task<IEnumerable<EmployeeLog>> GetLogsByDateAsync(long employeeId, DateOnly date);
     }
 }

@@ -39,10 +39,10 @@ namespace MyRoad.Infrastructure.EmployeesLogs
             };
         }
 
-        public async Task<IEnumerable<EmployeeLog>> GetLogsByDateAsync(long id, DateOnly date)
+        public async Task<IEnumerable<EmployeeLog>> GetLogsByDateAsync(long employeeId, DateOnly date)
         {
             return await dbContext.EmployeeLogs
-                .Where(log => !log.IsDeleted && log.EmployeeId == id && log.Date == date)
+                .Where(log => !log.IsDeleted && log.EmployeeId == employeeId && log.Date == date)
                 .ToListAsync();
         }
 

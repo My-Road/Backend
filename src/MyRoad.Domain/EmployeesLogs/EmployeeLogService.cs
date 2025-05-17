@@ -1,5 +1,4 @@
 ﻿using ErrorOr;
-using Microsoft.Extensions.Logging;
 using MyRoad.Domain.Common;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Employees;
@@ -15,8 +14,7 @@ namespace MyRoad.Domain.EmployeesLogs
         IEmployeeLogRepository employeeLogRepository,
         IEmployeeRepository employeeRepository,
         IUserRepository userRepository,
-        IUnitOfWork unitOfWork,
-        ILogger<EmployeeLogService> logger
+        IUnitOfWork unitOfWork
     ) : IEmployeeLogService
     {
         private readonly EmployeeLogValidator _employeeLogValidator = new();

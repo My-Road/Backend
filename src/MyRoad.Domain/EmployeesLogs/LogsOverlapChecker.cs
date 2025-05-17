@@ -9,14 +9,15 @@ public static class LogsOverlapChecker
             ? newLog.Date.ToDateTime(newLog.CheckOut)
             : newLog.Date.AddDays(1).ToDateTime(newLog.CheckOut);
 
-        return (from existingLog in existingLogs
-            where existingLog.Id != newLog.Id 
-            let existingCheckIn = existingLog.Date.ToDateTime(existingLog.CheckIn)
-            let existingCheckOut = existingLog.CheckOut > existingLog.CheckIn
+        return existingLogs.Where(existingLog =>
+        {
+            var existingCheckIn = existingLog.Date.ToDateTime(existingLog.CheckIn);
+            var existingCheckOut = existingLog.CheckOut > existingLog.CheckIn
                 ? existingLog.Date.ToDateTime(existingLog.CheckOut)
-                : existingLog.Date.AddDays(1).ToDateTime(existingLog.CheckOut)
-            where newCheckIn < existingCheckOut && newCheckOut > existingCheckIn
-            select existingCheckIn).Any();
+                : existingLog.Date.AddDays(1).ToDateTime(existingLog.CheckOut);
+
+            return newCheckIn < existingCheckOut && newCheckOut > existingCheckIn;
+        }).Any();
     }
 }
 
