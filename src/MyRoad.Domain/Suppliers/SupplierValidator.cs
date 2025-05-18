@@ -6,7 +6,7 @@ namespace MyRoad.Domain.Suppliers
     {
         public SupplierValidator() 
         {
-            RuleFor(x => x.SupplierName)
+            RuleFor(x => x.FullName)
                 .NotEmpty()
                 .WithMessage("Full name cannot be empty");
 

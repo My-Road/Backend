@@ -11,7 +11,7 @@ namespace MyRoad.Infrastructure.Suppliers
                 .CanFilter()
                 .CanSort();
 
-            mapper.Property<Supplier>(x => x.SupplierName)
+            mapper.Property<Supplier>(x => x.FullName)
                 .CanFilter();
 
             mapper.Property<Supplier>(x => x.IsDeleted)
