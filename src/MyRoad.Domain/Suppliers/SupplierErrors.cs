@@ -2,7 +2,7 @@
 
 namespace MyRoad.Domain.Suppliers
 {
-    public class SupplierErrors
+    public static class SupplierErrors
     {
         public static Error NotFound => Error.NotFound(
             code: "Supplier.NotFound",
@@ -15,23 +15,18 @@ namespace MyRoad.Domain.Suppliers
         );
 
         public static Error PhoneNumberAlreadyExists => Error.Conflict(
-            code: "Supplier .PhoneNumberExists",
+            code: "Supplier.PhoneNumberExists",
             description: "Supplier with phone number already exists"
         );
 
         public static Error EmailAlreadyExists => Error.Conflict(
-            code: "Supplier .EmailExists",
+            code: "Supplier.EmailExists",
             description: "Supplier  with email already exists"
         );
-
-        public static Error CannotUpdatePurchase => Error.Conflict(
-            code: "Customer.CannotUpdatePurchase",
-            description:"Cannot update the purchase because the customer's paid amount would exceed their total due amount."
-        );
-
+        
         public static Error NotDeleted => Error.Validation(
-            code: "Suppleir.NotDeleted",
-            description: "Suppleir is already active."
+            code: "Supplier.NotDeleted",
+            description: "Supplier is already active."
         );
     }
 }

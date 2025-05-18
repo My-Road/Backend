@@ -133,7 +133,7 @@ namespace MyRoad.Domain.EmployeesLogs
 
             if (employee.RemainingAmount==0||employee.TotalDueAmount - employeeLog.DailyWage < employee.TotalPaidAmount)
             {
-                return EmployeeErrors.CannotRemoveEmployeeLog;
+                return EmployeeLogErrors.CannotRemoveEmployeeLog;
             }
 
             var result = employeeLog.Delete();

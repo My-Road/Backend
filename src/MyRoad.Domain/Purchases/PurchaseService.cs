@@ -16,11 +16,11 @@ namespace MyRoad.Domain.Purchases
         IUserRepository userRepository,
         IUnitOfWork unitOfWork) : IPurchaseService
     {
-        private readonly PurchaseVaildator _purchaseVaildator = new();
+        private readonly PurchaseValidator _purchaseValidator = new();
 
         public async Task<ErrorOr<Success>> CreateAsync(Purchase purchase)
         {
-            var result = await _purchaseVaildator.ValidateAsync(purchase);
+            var result = await _purchaseValidator.ValidateAsync(purchase);
             if (!result.IsValid)
             {
                 return result.ExtractErrors();
@@ -83,7 +83,7 @@ namespace MyRoad.Domain.Purchases
 
             if (supplier.RemainingAmount == 0 || supplier.TotalDueAmount - purchase.TotalDueAmount < supplier.TotalPaidAmount)
             {
-                return SupplierErrors.CannotUpdatePurchase;
+                return PurchaseErrors.CannotRemovePurchase;
             }
 
             var result = purchase.Delete();
@@ -126,7 +126,7 @@ namespace MyRoad.Domain.Purchases
 
         public async Task<ErrorOr<Success>> UpdateAsync(Purchase purchase)
         {
-            var validationResult = await _purchaseVaildator.ValidateAsync(purchase);
+            var validationResult = await _purchaseValidator.ValidateAsync(purchase);
             if (!validationResult.IsValid)
             {
                 return validationResult.ExtractErrors();
@@ -152,7 +152,7 @@ namespace MyRoad.Domain.Purchases
             var newTotalDueAmount = supplier.TotalDueAmount - existingPurchase.TotalDueAmount + purchase.TotalDueAmount;
             if (supplier.TotalPaidAmount > newTotalDueAmount)
             {
-                return SupplierErrors.CannotUpdatePurchase;
+                return PurchaseErrors.CannotUpdatePurchase;
             }
 
             try

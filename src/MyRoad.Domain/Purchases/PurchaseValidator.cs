@@ -2,9 +2,9 @@
 
 namespace MyRoad.Domain.Purchases
 {
-    public class PurchaseVaildator : AbstractValidator<Purchase>
+    public class PurchaseValidator : AbstractValidator<Purchase>
     {
-        public PurchaseVaildator()
+        public PurchaseValidator()
         {
             RuleFor(x => x.SupplierId)
                 .NotEmpty()

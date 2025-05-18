@@ -12,8 +12,8 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250518144310_initial")]
-    partial class initial
+    [Migration("20250518192245_General Purchase Features")]
+    partial class GeneralPurchaseFeatures
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

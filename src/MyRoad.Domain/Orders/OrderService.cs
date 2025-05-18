@@ -95,7 +95,7 @@ public class OrderService(
         var newTotalDueAmount = customer.TotalDueAmount - existingOrder.TotalDueAmount + order.TotalDueAmount;
         if (customer.TotalPaidAmount > newTotalDueAmount)
         {
-            return CustomerErrors.CannotUpdateOrder;
+            return OrderErrors.CannotUpdateOrder;
         }
 
         try
@@ -135,7 +135,7 @@ public class OrderService(
 
         if (customer.RemainingAmount == 0 || customer.TotalDueAmount - order.TotalDueAmount < customer.TotalPaidAmount)
         {
-            return CustomerErrors.CannotRemoveOrder;
+            return OrderErrors.CannotRemoveOrder;
         }
 
         var result = order.Delete();
