@@ -22,4 +22,16 @@ public static class OrderErrors
     public static Error IsDeleted => Error.Validation(
         code: "Order.AlreadyDeleted",
         description: "The order has already been deleted.");
+    
+    public static Error CannotRemoveOrder => Error.Conflict(
+        code: "Order.CannotRemoveOrder",
+        description:
+        "Cannot remove this order because it would result in overpayment or the customer has already fully paid."
+    );
+
+    public static Error CannotUpdateOrder =>
+        Error.Conflict(
+            code: "Order.CannotUpdateOrder",
+            description:
+            "Cannot update the order because the customer's paid amount would exceed their total due amount.");
 }

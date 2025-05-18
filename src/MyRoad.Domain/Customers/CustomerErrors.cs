@@ -18,19 +18,7 @@ public static class CustomerErrors
         code: "Customer.AlreadyDeleted",
         description: "Customer is already deleted."
     );
-
-    public static Error CannotRemoveOrder => Error.Conflict(
-        code: "Customer.CannotRemoveOrder",
-        description:
-        "Cannot remove this order because it would result in overpayment or the customer has already fully paid."
-    );
-
-    public static Error CannotUpdateOrder =>
-        Error.Conflict(
-            code: "Customer.CannotUpdateOrder",
-            description:
-            "Cannot update the order because the customer's paid amount would exceed their total due amount.");
-
+    
     public static Error PhoneNumberAlreadyExists => Error.Conflict(
         code: "Customer.PhoneNumberExists",
         description: "Customer with phone number already exists"

@@ -30,7 +30,7 @@ namespace MyRoad.Domain.EmployeesLogs
             }
 
             var employee = await employeeRepository.GetByIdAsync(employeelog.EmployeeId);
-            if (employee == null)
+            if (employee == null || !employee.Status)
             {
                 return EmployeeErrors.NotFound;
             }
@@ -96,7 +96,7 @@ namespace MyRoad.Domain.EmployeesLogs
             }
 
             var employee = await employeeRepository.GetByIdAsync(employeelog.EmployeeId);
-            if (employee is null)
+            if (employee is null || !employee.Status)
             {
                 return EmployeeErrors.NotFound;
             }
@@ -122,7 +122,7 @@ namespace MyRoad.Domain.EmployeesLogs
             try
             {
                 await unitOfWork.BeginTransactionAsync();
-                employee.TotalDueAmount = newTotalDueAmount;
+                employee.TotalDueAmount = Math.Round(newTotalDueAmount,2);
                 existingEmployeeLog.MapUpdateEmployeeLog(employeelog);
 
                 await employeeRepository.UpdateAsync(employee);
@@ -155,7 +155,7 @@ namespace MyRoad.Domain.EmployeesLogs
             if (employee.RemainingAmount == 0 ||
                 employee.TotalDueAmount - employeeLog.DailyWage < employee.TotalPaidAmount)
             {
-                return EmployeeErrors.CannotRemoveEmployeeLog;
+                return EmployeeLogErrors.CannotRemoveEmployeeLog;
             }
 
             var result = employeeLog.Delete();
@@ -191,6 +191,11 @@ namespace MyRoad.Domain.EmployeesLogs
             if (employeeLog is null)
             {
                 return EmployeeLogErrors.NotFound;
+            }
+            var employee = await employeeRepository.GetByIdAsync(employeeLog.EmployeeId);
+            if (employee == null || !employee.Status)
+            {
+                return EmployeeErrors.NotFound;
             }
 
             return employeeLog;

@@ -23,10 +23,5 @@ public static class EmployeeErrors
         code: "Employee.PhoneNumberExists",
         description: "Employee with phone number already exists"
     );
-
-    public static Error CannotRemoveEmployeeLog => Error.Conflict(
-     code: "Employee.CannotRemoveEmployeeLog",
-     description:
-     "Cannot remove this employee log because it would result in an overpayment — the paid amount would exceed the due amount."
-     );
+    
 }

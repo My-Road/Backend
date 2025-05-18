@@ -8,6 +8,9 @@ using MyRoad.Domain.Orders;
 using MyRoad.Domain.Payments.CustomerPayments;
 using MyRoad.Domain.Payments.EmployeePayments;
 using MyRoad.Domain.Users;
+using MyRoad.Domain.Suppliers;
+using MyRoad.Domain.Payments.SupplierPayments;
+using MyRoad.Domain.Purchases;
 
 namespace MyRoad.Domain;
 
@@ -23,6 +26,9 @@ public static class DomainConfiguration
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<ICustomerPaymentService, CustomerPaymentService>();
         services.AddScoped<IEmployeeLogService, EmployeeLogService>();
+        services.AddScoped<ISupplierService, SupplierService>();
+        services.AddScoped<IPurchaseService, PurchaseService>();
+        services.AddScoped<ISupplierPaymentService, SupplierPaymentService>();
 
         return services;
     }
