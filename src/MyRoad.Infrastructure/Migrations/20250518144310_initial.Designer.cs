@@ -12,7 +12,7 @@ using MyRoad.Infrastructure.Persistence;
 namespace MyRoad.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250518071545_initial")]
+    [Migration("20250518144310_initial")]
     partial class initial
     {
         /// <inheritdoc />
