@@ -1,3 +1,6 @@
+using System.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Infrastructure.Persistence;
 
@@ -5,18 +8,30 @@ namespace MyRoad.Infrastructure.Identity;
 
 public class UnitOfWork(AppDbContext context) : IUnitOfWork
 {
-    public async Task BeginTransactionAsync()
+    private IDbContextTransaction? _transaction;
+
+    public async Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        await context.Database.BeginTransactionAsync();
+        _transaction = await context.Database.BeginTransactionAsync(isolationLevel);
+
+        await Task.CompletedTask;
     }
 
     public async Task CommitTransactionAsync()
     {
-        await context.Database.CommitTransactionAsync();
+        if (_transaction is null)
+            throw new InvalidOperationException("Transaction has not been started.");
+
+        await _transaction.CommitAsync();
+        await _transaction.DisposeAsync();
     }
 
     public async Task RollbackTransactionAsync()
     {
-        await context.Database.RollbackTransactionAsync();
+        if (_transaction is null)
+            throw new InvalidOperationException("Transaction has not been started.");
+        
+        await _transaction.RollbackAsync();
+        await _transaction.DisposeAsync();
     }
 }

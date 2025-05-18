@@ -18,11 +18,12 @@ public static class DomainConfiguration
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IUserContext, UserContext>();
         services.AddScoped<IEmployeePaymentService, EmployeePaymentService>();
-        services.AddScoped<IEmployeeService,EmployeeService>();
+        services.AddScoped<IEmployeeService, EmployeeService>();
         services.AddScoped<ICustomerService, CustomerService>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddScoped<ICustomerPaymentService, CustomerPaymentService>();
         services.AddScoped<IEmployeeLogService, EmployeeLogService>();
+        services.AddScoped<ITimeOverlapValidator, TimeOverlapValidator>();
 
         return services;
     }
