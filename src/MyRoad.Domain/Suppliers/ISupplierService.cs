@@ -16,5 +16,7 @@ namespace MyRoad.Domain.Suppliers
         Task<ErrorOr<Supplier>> GetByIdAsync(long id);
 
         Task<ErrorOr<PaginatedResponse<Supplier>>> GetAsync(SieveModel sieveModel);
+
+        Task<ErrorOr<Success>> RestoreAsync(long id);
     }
 }

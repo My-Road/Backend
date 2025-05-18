@@ -26,7 +26,6 @@ public static class EmployeeErrors
 
     public static Error CannotRemoveEmployeeLog => Error.Conflict(
      code: "Employee.CannotRemoveEmployeeLog",
-     description:
-     "Cannot remove this employee log because it would result in an overpayment — the paid amount would exceed the due amount."
-     );
+     description: "Cannot remove this employee log because it would result in an overpayment — the paid amount would exceed the due amount."
+    );
 }

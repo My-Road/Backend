@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using MyRoad.Domain.Common;
 using MyRoad.Domain.Common.Entities;
+using MyRoad.Domain.Employees;
 using Sieve.Models;
 
 namespace MyRoad.Domain.Suppliers
@@ -32,6 +33,7 @@ namespace MyRoad.Domain.Suppliers
             {
                 return SupplierErrors.EmailAlreadyExists;
             }
+            supplier.TotalDueAmount = Math.Round(supplier.TotalDueAmount, 2);
 
             var isCreated = await supplierRepository.CreateAsync(supplier);
 
@@ -74,6 +76,24 @@ namespace MyRoad.Domain.Suppliers
             return supplier;
         }
 
+        public async Task<ErrorOr<Success>> RestoreAsync(long id)
+        {
+            var supplier = await supplierRepository.GetByIdAsync(id);
+            if (supplier is null)
+            {
+                return SupplierErrors.NotFound;
+            }
+
+            var result = supplier.Restore();
+            if (result.IsError)
+            {
+                return result.Errors;
+            }
+
+            await supplierRepository.UpdateAsync(supplier);
+            return new Success();
+        }
+
         public async Task<ErrorOr<Success>> UpdateAsync(Supplier supplier)
         {
             var validate = await _supplierValidator.ValidateAsync(supplier);
@@ -101,7 +121,8 @@ namespace MyRoad.Domain.Suppliers
             {
                 return SupplierErrors.NotFound;
             }
-    
+
+            supplier.TotalDueAmount = Math.Round(supplier.TotalDueAmount, 2);
             result.MapUpdatedSupplier(supplier);
             await supplierRepository.UpdateAsync(result);
             return new Success();

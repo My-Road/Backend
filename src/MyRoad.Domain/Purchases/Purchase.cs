@@ -1,18 +1,17 @@
 ﻿using ErrorOr;
 using MyRoad.Domain.Common.Entities;
-using MyRoad.Domain.Orders;
 using MyRoad.Domain.Suppliers;
 
 namespace MyRoad.Domain.Purchases
 {
     public class Purchase : BaseEntity<long>
     {
-        public DateTime PurchasesDate { get; set; }
+        public DateOnly PurchasesDate { get; set; }
         public string GoodsDeliverer { get; set; }
         public string GoodsDelivererPhoneNumber { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public decimal TotalDueAmount => Quantity * Price;
+        public decimal TotalDueAmount => Math.Round(Quantity * Price, 2);
         public string Notes { get; set; }
         public bool IsCompleted { get; set; }
         public long CreatedByUserId { get; set; }

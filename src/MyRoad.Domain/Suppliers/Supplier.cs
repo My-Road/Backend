@@ -1,7 +1,5 @@
 ﻿using ErrorOr;
 using MyRoad.Domain.Common.Entities;
-using MyRoad.Domain.Customers;
-using MyRoad.Domain.Payments;
 using MyRoad.Domain.Payments.SupplierPayments;
 using MyRoad.Domain.Purchases;
 
@@ -33,6 +31,18 @@ namespace MyRoad.Domain.Suppliers
 
             return new Success();
         }
-    }
-        
+
+        public ErrorOr<Success> Restore()
+        {
+            if (!IsDeleted)
+            {
+                return SupplierErrors.NotDeleted;
+            }
+
+            IsDeleted = false;
+            DeletedAt = null;
+
+            return new Success();
+        }
+    }      
 }

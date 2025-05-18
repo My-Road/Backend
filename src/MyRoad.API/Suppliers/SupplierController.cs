@@ -27,6 +27,13 @@ namespace MyRoad.API.Suppliers
             return ResponseHandler.HandleResult(response);
         }
 
+        [HttpPut("restore/{id:long}")]
+        public async Task<IActionResult> Restore(long id)
+        {
+            var result = await supplierService.RestoreAsync(id);
+            return ResponseHandler.HandleResult(result);
+        }
+
         [HttpPost("search")]
         public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
         {
@@ -41,7 +48,6 @@ namespace MyRoad.API.Suppliers
             var response = await supplierService.UpdateAsync(dto.ToDomainSupplier());
             return ResponseHandler.HandleResult(response);
         }
-
 
         [HttpGet("{id:long}")]
         public async Task<IActionResult> GetById(long id)

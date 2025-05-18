@@ -25,8 +25,13 @@ namespace MyRoad.Domain.Suppliers
         );
 
         public static Error CannotUpdatePurchase => Error.Conflict(
-           code: "Customer.CannotUpdatePurchase",
-           description:"Cannot update the purchase because the customer's paid amount would exceed their total due amount."
+            code: "Customer.CannotUpdatePurchase",
+            description:"Cannot update the purchase because the customer's paid amount would exceed their total due amount."
+        );
+
+        public static Error NotDeleted => Error.Validation(
+            code: "Suppleir.NotDeleted",
+            description: "Suppleir is already active."
         );
     }
 }

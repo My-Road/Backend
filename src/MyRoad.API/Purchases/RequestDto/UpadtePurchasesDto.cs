@@ -3,7 +3,7 @@
     public class UpdatePurchasesDto
     {
         public long Id { get; set; }
-        public DateTime PurchasesDate { get; set; }
+        public DateOnly PurchasesDate { get; set; }
         public string? GoodsDeliverer { get; set; }
         public string? GoodsDelivererPhoneNumber { get; set; }
         public long Quantity { get; set; }

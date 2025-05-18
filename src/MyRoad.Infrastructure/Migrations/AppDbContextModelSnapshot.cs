@@ -492,8 +492,8 @@ namespace MyRoad.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<DateTime>("PurchasesDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("PurchasesDate")
+                        .HasColumnType("date");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");

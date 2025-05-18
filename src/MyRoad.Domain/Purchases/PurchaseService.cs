@@ -44,12 +44,11 @@ namespace MyRoad.Domain.Purchases
                 switch (user.Role)
                 {
                     case UserRole.Admin when userContext.Role == UserRole.Admin:
+                    case UserRole.Manager when userContext.Role == UserRole.Manager:
                         supplier.TotalDueAmount += purchase.TotalDueAmount;
                         purchase.IsCompleted = true;
                         break;
-                    case UserRole.Manager when userContext.Role == UserRole.Manager:
-                        purchase.IsCompleted = false;
-                        break;
+
                     default:
                         return UserErrors.UnauthorizedUser;
                 }
@@ -111,7 +110,7 @@ namespace MyRoad.Domain.Purchases
         public async Task<ErrorOr<Purchase>> GetByIdAsync(long id)
         {
             var purchase = await purchaseRepository.GetByIdAsync(id);
-            if (purchase is null)
+            if (purchase is null ||purchase.IsDeleted)
             {
                 return PurchaseErrors.NotFound;
             }

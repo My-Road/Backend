@@ -35,7 +35,7 @@ public class CustomerPaymentService(
         }
 
         var customer = await customerRepository.GetByIdAsync(customerPayment.CustomerId);
-        if (customer is null)
+        if (customer is null || customer.IsDeleted)
         {
             return CustomerErrors.NotFound;
         }
@@ -100,7 +100,7 @@ public class CustomerPaymentService(
         }
 
         var customer = await customerRepository.GetByIdAsync(customerPayment.CustomerId);
-        if (customer is null)
+        if (customer is null ||customer.IsDeleted)
         {
             return CustomerErrors.NotFound;
         }
@@ -141,13 +141,13 @@ public class CustomerPaymentService(
             return PaymentErrors.NotFound;
         }
 
-        var employee = await customerRepository.GetByIdAsync(payment.CustomerId);
-        if (employee is null)
+        var customer = await customerRepository.GetByIdAsync(payment.CustomerId);
+        if (customer is null || customer.IsDeleted)
         {
             return CustomerErrors.NotFound;
         }
 
-        employee.TotalPaidAmount -= payment.Amount;
+        customer.TotalPaidAmount -= payment.Amount;
 
         var result = payment.Delete();
 
@@ -156,7 +156,7 @@ public class CustomerPaymentService(
             return result.Errors;
         }
 
-        await customerRepository.UpdateAsync(employee);
+        await customerRepository.UpdateAsync(customer);
 
         return new Success();
     }
@@ -164,9 +164,15 @@ public class CustomerPaymentService(
     public async Task<ErrorOr<CustomerPayment>> GetByIdAsync(long id)
     {
         var payment = await customerPaymentRepository.GetByIdAsync(id);
-        if (payment is null)
+        if (payment is null || payment.IsDeleted)
         {
             return PaymentErrors.NotFound;
+        }
+
+        var customer = await customerRepository.GetByIdAsync(payment.CustomerId);
+        if (customer is null || customer.IsDeleted)
+        {
+            return CustomerErrors.NotFound;
         }
 
         return payment;

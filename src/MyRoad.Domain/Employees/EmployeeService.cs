@@ -24,7 +24,9 @@ namespace MyRoad.Domain.Employees
             {
                 return EmployeeErrors.PhoneNumberAlreadyExists;
             }
-            
+
+            employee.TotalDueAmount = Math.Round(employee.TotalDueAmount, 2);
+
             var isCreated = await employeeRepository.CreateAsync(employee);
 
             return isCreated ? new Success() : EmployeeErrors.CreationFailed;
@@ -46,6 +48,7 @@ namespace MyRoad.Domain.Employees
             if (result is null || !result.Status)
                 return EmployeeErrors.NotFound;
 
+            employee.TotalDueAmount = Math.Round(employee.TotalDueAmount, 2);
 
             result.MapUpdatedEmployee(employee);
             await employeeRepository.UpdateAsync(result);

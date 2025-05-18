@@ -369,7 +369,7 @@ namespace MyRoad.Infrastructure.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PurchasesDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PurchasesDate = table.Column<DateOnly>(type: "date", nullable: false),
                     GoodsDeliverer = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     GoodsDelivererPhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),

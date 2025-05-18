@@ -8,7 +8,7 @@ namespace MyRoad.Domain.Purchases
         {
             RuleFor(x => x.SupplierId)
                 .NotEmpty()
-                .WithMessage("SupplierId");
+                .WithMessage("Supplier Id Cannot be empty!");
 
             RuleFor(x => x.PurchasesDate)
                 .NotEmpty()
