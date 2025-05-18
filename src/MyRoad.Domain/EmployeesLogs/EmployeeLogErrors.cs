@@ -27,5 +27,10 @@ namespace MyRoad.Domain.EmployeesLogs
             code: "EmployeeLog.CannotRemoveEmployeeLog",
             description: "Cannot remove this employee log because it would result in an overpayment - the paid amount would exceed the due amount."
         );
+
+        public static Error TimeOverlapError => Error.Conflict(
+            code: "EmployeeLog.TimeOverlapError",
+            description: "The employee has overlapping this day."
+        );
     }
 }
