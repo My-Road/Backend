@@ -48,7 +48,7 @@ namespace MyRoad.API.Purchases
             return ResponseHandler.HandleResult(response);
         }
 
-        [HttpPost("by-purchase/{supplierId:long}")]
+        [HttpPost("by-supplier/{supplierId:long}")]
         public async Task<IActionResult> GetBySupplierId(long supplierId, [FromBody] RetrievalRequest request)
         {
             var response = await purchaseService.GetBySupplierIdAsync(supplierId, request.ToSieveModel());

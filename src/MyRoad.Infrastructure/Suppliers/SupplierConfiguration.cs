@@ -11,7 +11,7 @@ namespace MyRoad.Infrastructure.Suppliers
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.Property(x => x.SupplierName).
+            builder.Property(x => x.FullName).
                 HasMaxLength(50).
                 HasColumnType("nvarchar").
                 IsRequired();

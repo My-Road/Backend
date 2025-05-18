@@ -6,7 +6,7 @@ using MyRoad.Domain.Payments.SupplierPayments;
 
 namespace MyRoad.API.Payments.SupplierPayments
 {
-    [Route("api/v{version:apiVersion}/supplier-payment")]
+    [Route("api/v{version:apiVersion}/supplier-payments")]
     [ApiVersion("1.0")]
     [ApiController]
     public class SupplierPaymentController(

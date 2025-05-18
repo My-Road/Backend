@@ -537,7 +537,7 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar");
 
-                    b.Property<string>("SupplierName")
+                    b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar");
