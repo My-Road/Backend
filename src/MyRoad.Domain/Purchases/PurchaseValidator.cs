@@ -20,10 +20,6 @@ namespace MyRoad.Domain.Purchases
                 .GreaterThan(0)
                 .WithMessage("Quantity must be greater than 0");
 
-            RuleFor(x => x.CreatedByUserId)
-                .NotEmpty()
-                .WithMessage("Created by user ID cannot be empty");
-
             RuleFor(x => x.Price)
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("Price cannot be negative");
