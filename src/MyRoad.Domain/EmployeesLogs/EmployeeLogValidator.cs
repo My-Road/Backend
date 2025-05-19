@@ -19,8 +19,8 @@ namespace MyRoad.Domain.EmployeesLogs
                 .WithMessage("CheckIn cannot be Null");
 
             RuleFor(x => x.CheckOut)
-                .NotEmpty()
-                .WithMessage("CheckOut cannot be empty");
+                .NotNull()
+                .WithMessage("CheckOut cannot be Null");
 
             RuleFor(x => x.HourlyWage)
                 .GreaterThan(0)

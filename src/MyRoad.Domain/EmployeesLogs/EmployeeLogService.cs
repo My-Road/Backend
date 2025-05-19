@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using ErrorOr;
 using MyRoad.Domain.Common;
 using MyRoad.Domain.Common.Entities;

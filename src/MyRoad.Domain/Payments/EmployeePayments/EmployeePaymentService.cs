@@ -35,7 +35,7 @@ public class EmployeePaymentService(
         }
 
         var employee = await employeeRepository.GetByIdAsync(employeePayment.EmployeeId);
-        if (employee is null)
+        if (employee is null || !employee.Status)
         {
             return EmployeeErrors.NotFound;
         }
@@ -102,7 +102,7 @@ public class EmployeePaymentService(
         }
 
         var employee = await employeeRepository.GetByIdAsync(employeePayment.EmployeeId);
-        if (employee is null)
+        if (employee is null || !employee.Status)
         {
             return EmployeeErrors.NotFound;
         }
@@ -147,7 +147,7 @@ public class EmployeePaymentService(
         }
 
         var employee = await employeeRepository.GetByIdAsync(payment.EmployeeId);
-        if (employee is null)
+        if (employee is null || !employee.Status)
         {
             return EmployeeErrors.NotFound;
         }
@@ -171,6 +171,12 @@ public class EmployeePaymentService(
         if (payment is null)
         {
             return PaymentErrors.NotFound;
+        }
+
+        var employee = await employeeRepository.GetByIdAsync(payment.EmployeeId);
+        if (employee is null || !employee.Status)
+        {
+            return EmployeeErrors.NotFound;
         }
 
         return payment;
