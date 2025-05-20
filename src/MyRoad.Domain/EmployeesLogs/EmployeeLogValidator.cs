@@ -29,6 +29,10 @@ namespace MyRoad.Domain.EmployeesLogs
             RuleFor(x => x.DailyWage)
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("DailyWage cannot be negative");
+            
+            RuleFor(x => x.Date)
+                .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow))
+                .WithMessage("Date must be in the past or today");
         }
     }
 }

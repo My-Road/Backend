@@ -9,7 +9,6 @@ public static class OrderMapper
         existingOrder.Quantity = updatedOrder.Quantity;
         existingOrder.RecipientName = updatedOrder.RecipientName;
         existingOrder.RecipientPhoneNumber = updatedOrder.RecipientPhoneNumber;
-        existingOrder.CreatedByUserId = updatedOrder.CreatedByUserId;
         existingOrder.Notes = updatedOrder.Notes;
         existingOrder.CustomerId = updatedOrder.CustomerId;
     }

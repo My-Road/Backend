@@ -23,9 +23,13 @@ public class OrderValidator : AbstractValidator<Order>
         RuleFor(x => x.Price)
             .GreaterThanOrEqualTo(0)
             .WithMessage("Price cannot be negative");
-        
+
         RuleFor(x => x.Notes)
             .NotEmpty().When(x => x.TotalDueAmount > 10_000)
             .WithMessage("Notes is required for large orders");
+
+        RuleFor(x => x.OrderDate)
+            .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow))
+            .WithMessage("Order date must be in the past or today");
     }
 }
