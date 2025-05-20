@@ -48,7 +48,7 @@ namespace MyRoad.Domain.EmployeesLogs
                 var employeeLogs = await employeeLogRepository
                     .GetLogsByDateAsync(employee.Id, employeelog.Date);
 
-                var hasOverLap = await timeOverlapValidator.HasOverlapAsync(employeelog, employeeLogs);
+                var hasOverLap = timeOverlapValidator.HasOverlapAsync(employeelog, employeeLogs);
 
                 if (hasOverLap)
                 {
@@ -110,7 +110,7 @@ namespace MyRoad.Domain.EmployeesLogs
                 var employeeLogs = await employeeLogRepository
                     .GetLogsByDateAsync(employee.Id, employeelog.Date);
 
-                var hasOverLap = await timeOverlapValidator.HasOverlapAsync(employeelog, employeeLogs);
+                var hasOverLap = timeOverlapValidator.HasOverlapAsync(employeelog, employeeLogs);
                 if (hasOverLap)
                 {
                     await unitOfWork.RollbackTransactionAsync();

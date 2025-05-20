@@ -9,7 +9,6 @@
             existingPurchase.GoodsDelivererPhoneNumber = updatedPurchase.GoodsDelivererPhoneNumber;
             existingPurchase.Price = updatedPurchase.Price;
             existingPurchase.Quantity = updatedPurchase.Quantity;
-            existingPurchase.CreatedByUserId = updatedPurchase.CreatedByUserId;
             existingPurchase.SupplierId = updatedPurchase.SupplierId;
             existingPurchase.Notes = updatedPurchase.Notes;
         }
