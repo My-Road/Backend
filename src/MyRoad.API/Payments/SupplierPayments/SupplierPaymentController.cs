@@ -48,8 +48,8 @@ namespace MyRoad.API.Payments.SupplierPayments
             return ResponseHandler.HandleResult(response);
         }
 
-        [HttpPost("by-supplier/{supplierId:long}")]
-        public async Task<IActionResult> GetByCustomerId(long supplierId, [FromBody] RetrievalRequest request)
+        [HttpPost("supplier/{supplierId:long}")]
+        public async Task<IActionResult> GetBySupplierId(long supplierId, [FromBody] RetrievalRequest request)
         {
             var response = await supplierPaymentService.GetBySupplierIdAsync(supplierId, request.ToSieveModel());
             return ResponseHandler.HandleResult(response);
