@@ -6,7 +6,7 @@ using MyRoad.Domain.Purchases;
 
 namespace MyRoad.API.Purchases
 {
-    [Route("api/v{version:apiVersion}/purchase")]
+    [Route("api/v{version:apiVersion}/purchases")]
     [ApiVersion("1.0")]
     [ApiController]
     public class PurchaseController (IPurchaseService purchaseService)
