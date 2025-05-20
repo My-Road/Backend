@@ -45,7 +45,7 @@ namespace MyRoad.Domain.Employees
             }
 
             result = await employeeRepository.GetByIdAsync(employee.Id);
-            if (result is null || !result.Status)
+            if (result is null || !result.IsAcitve)
                 return EmployeeErrors.NotFound;
 
             employee.TotalDueAmount = Math.Round(employee.TotalDueAmount, 2);
@@ -72,7 +72,7 @@ namespace MyRoad.Domain.Employees
         public async Task<ErrorOr<Employee>> GetByIdAsync(long id)
         {
             var employee = await employeeRepository.GetByIdAsync(id);
-            return (employee is null || !employee.Status) ? EmployeeErrors.NotFound : employee;
+            return (employee is null || !employee.IsAcitve) ? EmployeeErrors.NotFound : employee;
         }
 
         public async Task<ErrorOr<PaginatedResponse<Employee>>> GetAsync(SieveModel sieveModel)

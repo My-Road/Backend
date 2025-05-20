@@ -6,7 +6,7 @@ using MyRoad.Domain.Suppliers;
 
 namespace MyRoad.API.Suppliers
 {
-    [Route("api/v{version:apiVersion}/supplier")]
+    [Route("api/v{version:apiVersion}/suppliers")]
     [ApiVersion("1.0")]
     [ApiController]
     public class SupplierController (
