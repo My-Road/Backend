@@ -59,12 +59,11 @@ namespace MyRoad.Domain.Purchases
 
                 return new Success();
             }
-            catch 
+            catch
             {
                 await unitOfWork.RollbackTransactionAsync();
                 throw;
             }
-
         }
 
         public async Task<ErrorOr<Success>> DeleteAsync(long id)
@@ -81,7 +80,8 @@ namespace MyRoad.Domain.Purchases
                 return SupplierErrors.NotFound;
             }
 
-            if (supplier.RemainingAmount == 0 || supplier.TotalDueAmount - purchase.TotalDueAmount < supplier.TotalPaidAmount)
+            if (supplier.RemainingAmount == 0 ||
+                supplier.TotalDueAmount - purchase.TotalDueAmount < supplier.TotalPaidAmount)
             {
                 return PurchaseErrors.CannotRemovePurchase;
             }
@@ -97,7 +97,6 @@ namespace MyRoad.Domain.Purchases
             await supplierRepository.UpdateAsync(supplier);
 
             return new Success();
-
         }
 
         public async Task<ErrorOr<PaginatedResponse<Purchase>>> GetAsync(SieveModel sieveModel)
@@ -110,7 +109,7 @@ namespace MyRoad.Domain.Purchases
         public async Task<ErrorOr<Purchase>> GetByIdAsync(long id)
         {
             var purchase = await purchaseRepository.GetByIdAsync(id);
-            if (purchase is null ||purchase.IsDeleted)
+            if (purchase is null || purchase.IsDeleted)
             {
                 return PurchaseErrors.NotFound;
             }
@@ -118,7 +117,8 @@ namespace MyRoad.Domain.Purchases
             return purchase;
         }
 
-        public async Task<ErrorOr<PaginatedResponse<Purchase>>> GetBySupplierIdAsync(long supplierId, SieveModel sieveModel)
+        public async Task<ErrorOr<PaginatedResponse<Purchase>>> GetBySupplierIdAsync(long supplierId,
+            SieveModel sieveModel)
         {
             var result = await purchaseRepository.GetBySupplierAsync(supplierId, sieveModel);
             return result;
@@ -176,5 +176,3 @@ namespace MyRoad.Domain.Purchases
         }
     }
 }
-
-

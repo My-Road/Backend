@@ -33,6 +33,7 @@ namespace MyRoad.Domain.Suppliers
             {
                 return SupplierErrors.EmailAlreadyExists;
             }
+
             supplier.TotalDueAmount = Math.Round(supplier.TotalDueAmount, 2);
 
             var isCreated = await supplierRepository.CreateAsync(supplier);
@@ -102,29 +103,30 @@ namespace MyRoad.Domain.Suppliers
                 return validate.ExtractErrors();
             }
 
-            var result = await supplierRepository.FindByPhoneNumber(supplier.PhoneNumber);
+            var existingSupplier = await supplierRepository.GetByIdAsync(supplier.Id);
 
-            if (result is not null && result.Id != supplier.Id)
-            {
-                return SupplierErrors.PhoneNumberAlreadyExists;
-            }
-
-            result = await supplierRepository.FindByEmail(supplier.Email);
-
-            if (result is not null && result.Id != supplier.Id)
-            {
-                return SupplierErrors.EmailAlreadyExists;
-            }
-
-            result = await supplierRepository.GetByIdAsync(supplier.Id);
-            if (result is null || result.IsDeleted)
+            if (existingSupplier is null || existingSupplier.IsDeleted)
             {
                 return SupplierErrors.NotFound;
             }
 
+            var supplierWithSamePhone = await supplierRepository.FindByPhoneNumber(supplier.PhoneNumber);
+            if (supplierWithSamePhone is not null && supplierWithSamePhone.Id != supplier.Id)
+            {
+                return SupplierErrors.PhoneNumberAlreadyExists;
+            }
+
+            var supplierWithSameEmail = await supplierRepository.FindByEmail(supplier.Email);
+            if (supplierWithSameEmail is not null && supplierWithSameEmail.Id != supplier.Id)
+            {
+                return SupplierErrors.EmailAlreadyExists;
+            }
+
             supplier.TotalDueAmount = Math.Round(supplier.TotalDueAmount, 2);
-            result.MapUpdatedSupplier(supplier);
-            await supplierRepository.UpdateAsync(result);
+
+            existingSupplier.MapUpdatedSupplier(supplier);
+            await supplierRepository.UpdateAsync(existingSupplier);
+
             return new Success();
         }
     }

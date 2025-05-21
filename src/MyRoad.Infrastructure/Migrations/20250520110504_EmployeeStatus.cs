@@ -13,14 +13,14 @@ namespace MyRoad.Infrastructure.Migrations
             migrationBuilder.RenameColumn(
                 name: "Status",
                 table: "Employee",
-                newName: "IsAcitve");
+                newName: "IsActive");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.RenameColumn(
-                name: "IsAcitve",
+                name: "IsActive",
                 table: "Employee",
                 newName: "Status");
         }

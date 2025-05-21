@@ -227,7 +227,7 @@ namespace MyRoad.Infrastructure.Migrations
                         .HasColumnType("nvarchar")
                         .HasAnnotation("Relational:JsonPropertyName", "employeeName");
 
-                    b.Property<bool>("IsAcitve")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("JobTitle")

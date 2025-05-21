@@ -2,7 +2,7 @@
 {
     public static class PurchaseMapper
     {
-        public static void MapUpdatedPurchase(this Purchase existingPurchase , Purchase updatedPurchase)
+        public static void MapUpdatedPurchase(this Purchase existingPurchase, Purchase updatedPurchase)
         {
             existingPurchase.PurchasesDate = updatedPurchase.PurchasesDate;
             existingPurchase.GoodsDeliverer = updatedPurchase.GoodsDeliverer;
@@ -12,6 +12,5 @@
             existingPurchase.SupplierId = updatedPurchase.SupplierId;
             existingPurchase.Notes = updatedPurchase.Notes;
         }
-       
     }
 }

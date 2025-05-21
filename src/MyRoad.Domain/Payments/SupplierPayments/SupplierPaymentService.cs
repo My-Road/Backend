@@ -67,14 +67,13 @@ namespace MyRoad.Domain.Payments.SupplierPayments
                     return new Success();
                 }
             }
-            catch 
+            catch
             {
                 await unitOfWork.RollbackTransactionAsync();
                 throw;
             }
 
             return new Success();
-
         }
 
         public async Task<ErrorOr<Success>> DeleteAsync(long id)
@@ -104,7 +103,6 @@ namespace MyRoad.Domain.Payments.SupplierPayments
             await supplierRepository.UpdateAsync(supplier);
 
             return new Success();
-
         }
 
         public async Task<ErrorOr<PaginatedResponse<SupplierPayment>>> GetAsync(SieveModel sieveModel)
@@ -125,7 +123,8 @@ namespace MyRoad.Domain.Payments.SupplierPayments
             return payment;
         }
 
-        public async Task<ErrorOr<PaginatedResponse<SupplierPayment>>> GetBySupplierIdAsync(long supplierId, SieveModel sieveModel)
+        public async Task<ErrorOr<PaginatedResponse<SupplierPayment>>> GetBySupplierIdAsync(long supplierId,
+            SieveModel sieveModel)
         {
             var result = await supplierPaymentRepository.GetBySupplierIdAsync(supplierId, sieveModel);
             return result;
@@ -188,8 +187,3 @@ namespace MyRoad.Domain.Payments.SupplierPayments
         }
     }
 }
-
-
-
-
-

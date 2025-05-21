@@ -14,30 +14,30 @@ namespace MyRoad.Domain.Employees
         public DateOnly? EndDate { get; set; }
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
-        public bool IsAcitve { get; set; } = true;
+        public bool IsActive { get; set; } = true;
         public decimal TotalDueAmount { get; set; }
         public decimal TotalPaidAmount { get; set; }
         public decimal RemainingAmount => TotalDueAmount - TotalPaidAmount;
 
         public ErrorOr<Success> Restore()
         {
-            if (IsAcitve)
+            if (IsActive)
             {
                 return EmployeeErrors.NotDeleted;
             }
 
-            IsAcitve = true;
+            IsActive = true;
             return new Success();
         }
 
         public ErrorOr<Success> Delete()
         {
-            if (!IsAcitve)
+            if (!IsActive)
             {
                 return EmployeeErrors.AlreadyDeleted;
             }
 
-            IsAcitve = false;
+            IsActive = false;
             EndDate = DateOnly.FromDateTime(DateTime.UtcNow);
 
             return new Success();

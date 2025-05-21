@@ -32,5 +32,4 @@ public static class EmployeeErrors
         description:
         "Cannot remove this employee log because it would result in an overpayment - the paid amount would exceed the due amount."
     );
-
 }
