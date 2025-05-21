@@ -14,7 +14,7 @@ public class EmployeeSieveConfiguration : ISieveConfiguration
         mapper.Property<Employee>(x => x.FullName)
             .CanFilter();
 
-        mapper.Property<Employee>(x => x.Status)
+        mapper.Property<Employee>(x => x.IsActive)
             .CanFilter()
             .CanSort();
         

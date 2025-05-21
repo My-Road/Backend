@@ -38,20 +38,24 @@ namespace MyRoad.Domain.Employees
             if (!validate.IsValid)
                 return validate.ExtractErrors();
 
-            var result = await employeeRepository.FindByPhoneNumberAsync(employee.PhoneNumber);
-            if (result is not null && result.Id != employee.Id)
+            var existingEmployee = await employeeRepository.GetByIdAsync(employee.Id);
+
+            if (existingEmployee is null || !existingEmployee.IsActive)
+            {
+                return EmployeeErrors.NotFound;
+            }
+
+            var employeeWithSamePhone = await employeeRepository.FindByPhoneNumberAsync(employee.PhoneNumber);
+
+            if (employeeWithSamePhone is not null && employeeWithSamePhone.Id != employee.Id)
             {
                 return EmployeeErrors.PhoneNumberAlreadyExists;
             }
 
-            result = await employeeRepository.GetByIdAsync(employee.Id);
-            if (result is null || !result.Status)
-                return EmployeeErrors.NotFound;
-
             employee.TotalDueAmount = Math.Round(employee.TotalDueAmount, 2);
 
-            result.MapUpdatedEmployee(employee);
-            await employeeRepository.UpdateAsync(result);
+            existingEmployee.MapUpdatedEmployee(employee);
+            await employeeRepository.UpdateAsync(existingEmployee);
             return new Success();
         }
 
@@ -72,7 +76,7 @@ namespace MyRoad.Domain.Employees
         public async Task<ErrorOr<Employee>> GetByIdAsync(long id)
         {
             var employee = await employeeRepository.GetByIdAsync(id);
-            return (employee is null || !employee.Status) ? EmployeeErrors.NotFound : employee;
+            return (employee is null || !employee.IsActive) ? EmployeeErrors.NotFound : employee;
         }
 
         public async Task<ErrorOr<PaginatedResponse<Employee>>> GetAsync(SieveModel sieveModel)

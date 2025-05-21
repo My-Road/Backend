@@ -18,8 +18,8 @@ namespace MyRoad.Domain.Purchases
         public static Error IsDeleted => Error.Validation(
             code: "Purchase.AlreadyDeleted",
             description: "The Purchase has already been deleted.");
-        
-        
+
+
         public static Error CannotUpdatePurchase => Error.Conflict(
             code: "Purchase.CannotUpdatePurchase",
             description:
@@ -31,6 +31,5 @@ namespace MyRoad.Domain.Purchases
             description:
             "This Purchase cannot be removed because it will result in an overpayment or the full amount has already been paid."
         );
-
     }
 }

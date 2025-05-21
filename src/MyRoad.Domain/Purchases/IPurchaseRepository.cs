@@ -12,6 +12,7 @@ namespace MyRoad.Domain.Purchases
         Task<Purchase?> GetByIdAsync(long id);
 
         Task<PaginatedResponse<Purchase>> GetAsync(SieveModel sieveModel);
+
         Task<PaginatedResponse<Purchase>> GetBySupplierAsync(long supplierId, SieveModel sieveModel);
     }
 }

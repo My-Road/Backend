@@ -13,5 +13,6 @@ public interface IOrderRepository
     Task<Order?> GetByIdAsync(long id);
 
     Task<PaginatedResponse<Order>> GetAsync(SieveModel sieveModel);
+    
     Task<PaginatedResponse<Order>>GetByCustomerAsync(long customerId, SieveModel sieveModel);
 }

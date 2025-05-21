@@ -46,28 +46,26 @@ public class CustomerService(
             return validate.ExtractErrors();
         }
 
-        var result = await customerRepository.FindByPhoneNumber(customer.PhoneNumber);
-
-        if (result is not null && result.Id != customer.Id)
-        {
-            return CustomerErrors.PhoneNumberAlreadyExists;
-        }
-
-        result = await customerRepository.FindByEmail(customer.Email);
-
-        if (result is not null && result.Id != customer.Id)
-        {
-            return CustomerErrors.EmailAlreadyExists;
-        }
-
-        result = await customerRepository.GetByIdAsync(customer.Id);
-        if (result is null || result.IsDeleted)
+        var existingCustomer = await customerRepository.GetByIdAsync(customer.Id);
+        if (existingCustomer is null || existingCustomer.IsDeleted)
         {
             return CustomerErrors.NotFound;
         }
 
-        result.MapUpdatedCustomer(customer);
-        await customerRepository.UpdateAsync(result);
+        var customerWithSamePhone = await customerRepository.FindByPhoneNumber(customer.PhoneNumber);
+        if (customerWithSamePhone is not null && customerWithSamePhone.Id != customer.Id)
+        {
+            return CustomerErrors.PhoneNumberAlreadyExists;
+        }
+
+        var customerWithSameEmail = await customerRepository.FindByEmail(customer.Email);
+        if (customerWithSameEmail is not null && customerWithSameEmail.Id != customer.Id)
+        {
+            return CustomerErrors.EmailAlreadyExists;
+        }
+
+        existingCustomer.MapUpdatedCustomer(customer);
+        await customerRepository.UpdateAsync(existingCustomer);
         return new Success();
     }
 

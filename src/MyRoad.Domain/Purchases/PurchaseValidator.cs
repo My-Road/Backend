@@ -23,6 +23,10 @@ namespace MyRoad.Domain.Purchases
             RuleFor(x => x.Price)
                 .GreaterThanOrEqualTo(0)
                 .WithMessage("Price cannot be negative");
+
+            RuleFor(x => x.PurchasesDate)
+                .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow))
+                .WithMessage("Purchase date must be in the past or today");
         }
     }
 }

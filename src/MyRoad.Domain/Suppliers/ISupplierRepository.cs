@@ -15,6 +15,7 @@ namespace MyRoad.Domain.Suppliers
         Task<ErrorOr<PaginatedResponse<Supplier>>> GetAsync(SieveModel sieveModel);
 
         Task<Supplier?> FindByPhoneNumber(string? supplierPhoneNumber);
+        
         Task<Supplier?> FindByEmail(string? supplierEmail);
     }
 }

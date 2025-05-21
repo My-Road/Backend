@@ -82,7 +82,7 @@ public class OrderService(
         }
 
         var customer = await customerRepository.GetByIdAsync(order.CustomerId);
-        if (customer is null ||customer.IsDeleted)
+        if (customer is null || customer.IsDeleted)
         {
             return CustomerErrors.NotFound;
         }

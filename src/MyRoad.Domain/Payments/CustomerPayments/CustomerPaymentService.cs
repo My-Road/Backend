@@ -40,7 +40,7 @@ public class CustomerPaymentService(
             return CustomerErrors.NotFound;
         }
 
-        if (customer.TotalPaidAmount >= customer.TotalDueAmount )
+        if (customer.TotalPaidAmount >= customer.TotalDueAmount)
         {
             return PaymentErrors.NoDueAmountLeft;
         }
@@ -100,7 +100,7 @@ public class CustomerPaymentService(
         }
 
         var customer = await customerRepository.GetByIdAsync(customerPayment.CustomerId);
-        if (customer is null ||customer.IsDeleted)
+        if (customer is null || customer.IsDeleted)
         {
             return CustomerErrors.NotFound;
         }
