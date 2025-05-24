@@ -1,5 +1,4 @@
 using ErrorOr;
-using Microsoft.Extensions.Logging;
 using MyRoad.Domain.Common;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Identity.Enums;
@@ -10,8 +9,7 @@ using Sieve.Models;
 namespace MyRoad.Domain.Users;
 
 public class UserService(
-    IUserRepository userRepository,
-    ILogger<UserService> logger) : IUserService
+    IUserRepository userRepository) : IUserService
 {
     private readonly RegisterValidator _registerValidator = new();
 
@@ -68,7 +66,6 @@ public class UserService(
         }
 
         user.Role = role;
-        logger.LogInformation($"gg ==> {user.Role}");
         var validator = await _registerValidator.ValidateAsync(user);
         if (!validator.IsValid)
         {
