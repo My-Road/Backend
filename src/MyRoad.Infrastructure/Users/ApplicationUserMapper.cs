@@ -10,7 +10,7 @@ public static class ApplicationUserMapper
     {
         applicationUser.Email = user.Email;
         applicationUser.NormalizedEmail = user.Email?.ToUpper();
-        applicationUser.Role = Enum.Parse<UserRole>(applicationUser.Role.ToString());;
+        applicationUser.Role = Enum.Parse<UserRole>(user.Role.ToString());;
         applicationUser.FirstName = user.FirstName;
         applicationUser.LastName = user.LastName;
         applicationUser.IsActive = user.IsActive;

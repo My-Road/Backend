@@ -8,6 +8,11 @@ public static class UserErrors
         code: "User.NotFound",
         description: "Not Found User with this Email");
 
+    public static Error NotFoundId => Error.NotFound(
+        code: "User.NotFoundId",
+        description: "Not Found User with this Id"
+    );
+
     public static Error EmailExists => Error.Conflict(
         "User.EmailExists",
         "User Email Already Exists"

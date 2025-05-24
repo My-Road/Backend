@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
+using MyRoad.Domain.Identity.Enums;
 using MyRoad.Domain.Users;
 
 namespace MyRoad.API.Users;
@@ -25,6 +26,15 @@ public class UserController(IUserService userService)
     public async Task<IActionResult> ToggleStatus(long id)
     {
         var response = await userService.ToggleStatus(id);
+
+        return ResponseHandler.HandleResult(response);
+    }
+
+    [HttpPatch("{id:long}/change-role")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwner)]
+    public async Task<IActionResult> ChangeRole(long id, UserRole role)
+    {
+        var response = await userService.ChangeRole(id, role);
 
         return ResponseHandler.HandleResult(response);
     }
