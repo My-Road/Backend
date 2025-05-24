@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
 using MyRoad.API.Suppliers.RequestDto;
@@ -14,6 +15,7 @@ namespace MyRoad.API.Suppliers
         ) : ControllerBase
     {
         [HttpPost]
+        [Authorize(Policy = AuthorizationPolicies.AdminOrManager)]
         public async Task<IActionResult> Create([FromBody] CreateSuppliersDto dto)
         {
             var response = await supplierService.CreateAsync(dto.ToDomainSupplier());
@@ -21,6 +23,7 @@ namespace MyRoad.API.Suppliers
         }
 
         [HttpDelete("{id:long}")]
+        [Authorize(Policy = AuthorizationPolicies.Admin)]
         public async Task<IActionResult> Delete(long id)
         {
             var response = await supplierService.DeleteAsync(id);
@@ -28,6 +31,7 @@ namespace MyRoad.API.Suppliers
         }
 
         [HttpPut("restore/{id:long}")]
+        [Authorize(Policy = AuthorizationPolicies.Admin)]
         public async Task<IActionResult> Restore(long id)
         {
             var result = await supplierService.RestoreAsync(id);
@@ -43,6 +47,7 @@ namespace MyRoad.API.Suppliers
         }
 
         [HttpPut]
+        [Authorize(Policy = AuthorizationPolicies.Admin)]
         public async Task<IActionResult> Update([FromBody] UpdateSuppliersDto dto)
         {
             var response = await supplierService.UpdateAsync(dto.ToDomainSupplier());
@@ -50,6 +55,7 @@ namespace MyRoad.API.Suppliers
         }
 
         [HttpGet("{id:long}")]
+        [Authorize(Policy = AuthorizationPolicies.Admin)]
         public async Task<IActionResult> GetById(long id)
         {
             var response = await supplierService.GetByIdAsync(id);

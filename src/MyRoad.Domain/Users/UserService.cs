@@ -1,5 +1,8 @@
 using ErrorOr;
+using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Identity.Interfaces;
+using MyRoad.Domain.Suppliers;
+using Sieve.Models;
 
 namespace MyRoad.Domain.Users;
 
@@ -29,5 +32,11 @@ public class UserService(
             return UserErrors.NotFound;
         }
         return user;
+    }
+    
+    public async Task<ErrorOr<PaginatedResponse<User>>> GetAsync(SieveModel sieveModel)
+    {
+        var result = await userRepository.GetAsync(sieveModel);
+        return result;
     }
 }

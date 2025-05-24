@@ -1,17 +1,20 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
 using MyRoad.API.Employees.RequestsDto;
 using MyRoad.Domain.Employees;
+
 namespace MyRoad.API.Employees
 {
     [Route("api/v{version:apiVersion}/employee")]
     [ApiVersion("1.0")]
     [ApiController]
-    public class EmployeeController (IEmployeeService employeeService) : ControllerBase
+    public class EmployeeController(IEmployeeService employeeService) : ControllerBase
     {
         [HttpPost]
+        [Authorize(Policy = AuthorizationPolicies.AdminOrManager)]
         public async Task<IActionResult> Create([FromBody] CreateEmployeeDto dto)
         {
             var response = await employeeService.CreateAsync(dto.ToDomainEmployee());
@@ -19,6 +22,7 @@ namespace MyRoad.API.Employees
         }
 
         [HttpPut]
+        [Authorize(Policy = AuthorizationPolicies.Admin)]
         public async Task<IActionResult> Update([FromBody] UpdateEmployeeDto dto)
         {
             var response = await employeeService.UpdateAsync(dto.ToDomainEmployee());
@@ -26,13 +30,15 @@ namespace MyRoad.API.Employees
         }
 
         [HttpDelete("{id:long}")]
-        public async Task<IActionResult> Delete(long id )
+        [Authorize(Policy = AuthorizationPolicies.Admin)]
+        public async Task<IActionResult> Delete(long id)
         {
             var response = await employeeService.DeleteAsync(id);
             return ResponseHandler.HandleResult(response);
         }
 
         [HttpPut("restore/{id:long}")]
+        [Authorize(Policy = AuthorizationPolicies.Admin)]
         public async Task<IActionResult> Restore(long id)
         {
             var result = await employeeService.RestoreAsync(id);
@@ -40,6 +46,7 @@ namespace MyRoad.API.Employees
         }
 
         [HttpGet("{id:long}")]
+        [Authorize(Policy = AuthorizationPolicies.AdminOrManager)]
         public async Task<IActionResult> GetById(long id)
         {
             var response = await employeeService.GetByIdAsync(id);
@@ -47,6 +54,7 @@ namespace MyRoad.API.Employees
         }
 
         [HttpPost("search")]
+        [Authorize(Policy = AuthorizationPolicies.AdminOrManager)]
         public async Task<IActionResult> GetAll([FromBody] RetrievalRequest request)
         {
             var response = await employeeService.GetAsync(request.ToSieveModel());
