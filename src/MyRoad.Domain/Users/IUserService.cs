@@ -1,9 +1,20 @@
+using MyRoad.Domain.Common.Entities;
+using MyRoad.Domain.Identity.Enums;
+using Sieve.Models;
+
 namespace MyRoad.Domain.Users;
 
 using ErrorOr;
 
 public interface IUserService
 {
-    public Task<ErrorOr<User>> GetByIdAsync(long id);
-    public Task<ErrorOr<User>> GetByEmailAsync(string email);
+    Task<ErrorOr<User>> GetByIdAsync(long id);
+
+    Task<ErrorOr<User>> GetByEmailAsync(string email);
+
+    Task<ErrorOr<PaginatedResponse<User>>> GetAsync(SieveModel sieveModel);
+
+    Task<ErrorOr<Success>> ToggleStatus(long id);
+
+    Task<ErrorOr<Success>> ChangeRole(long id, UserRole role);
 }

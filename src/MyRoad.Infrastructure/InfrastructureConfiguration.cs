@@ -31,6 +31,7 @@ using MyRoad.Infrastructure.Persistence;
 using MyRoad.Infrastructure.Persistence.config;
 using MyRoad.Infrastructure.Purchases;
 using MyRoad.Infrastructure.Suppliers;
+using MyRoad.Infrastructure.Users;
 using Sieve.Models;
 using Sieve.Services;
 

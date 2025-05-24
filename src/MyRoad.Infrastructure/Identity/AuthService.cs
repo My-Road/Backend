@@ -11,10 +11,10 @@ namespace MyRoad.Infrastructure.Identity;
 public class AuthService(UserManager<ApplicationUser> userManager)
     : IAuthService
 {
-    public async Task<ErrorOr<User>> AuthenticateAsync(string email ,string password)
+    public async Task<ErrorOr<User>> AuthenticateAsync(string email, string password)
     {
         var userApplication = await userManager.FindByEmailAsync(email);
-        if (userApplication is null)
+        if (userApplication is null || !userApplication.IsActive)
             return UserErrors.InvalidCredentials;
 
         var isPasswordValid = await userManager.CheckPasswordAsync(userApplication, password);
@@ -45,7 +45,8 @@ public class AuthService(UserManager<ApplicationUser> userManager)
             PhoneNumber = user.PhoneNumber,
             FirstName = user.FirstName,
             LastName = user.LastName,
-            Role = user.Role
+            Role = user.Role,
+            IsActive = true
         };
 
         var result = await userManager.CreateAsync(applicationUser, password);

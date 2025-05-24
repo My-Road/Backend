@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
 using MyRoad.API.EmployeesLogs.RequestDto;
@@ -11,9 +12,10 @@ namespace MyRoad.API.EmployeesLogs
     [ApiController]
     public class EmployeeLogController(
         IEmployeeLogService employeeLogService
-        ) : ControllerBase
+    ) : ControllerBase
     {
         [HttpPost]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
         public async Task<IActionResult> CreateAsync([FromBody] CreateEmployeeLogDto dto)
         {
             var response = await employeeLogService.CreateAsync(dto.ToDomainEmployeeLog());
@@ -21,6 +23,7 @@ namespace MyRoad.API.EmployeesLogs
         }
 
         [HttpDelete("{id:long}")]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> DeleteAsync(long id)
         {
             var response = await employeeLogService.DeleteAsync(id);
@@ -28,6 +31,7 @@ namespace MyRoad.API.EmployeesLogs
         }
 
         [HttpPost("search")]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
         public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
         {
             var response = await employeeLogService.GetAsync(request.ToSieveModel());
@@ -36,6 +40,7 @@ namespace MyRoad.API.EmployeesLogs
         }
 
         [HttpPut]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> Update([FromBody] UpdateEmployeeLogDto dto)
         {
             var response = await employeeLogService.UpdateAsync(dto.ToDomainEmployeeLog());
@@ -43,6 +48,7 @@ namespace MyRoad.API.EmployeesLogs
         }
 
         [HttpGet("{id:long}")]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
         public async Task<IActionResult> GetById(long id)
         {
             var response = await employeeLogService.GetByIdAsync(id);
@@ -50,12 +56,11 @@ namespace MyRoad.API.EmployeesLogs
         }
 
         [HttpPost("by-employee/{employeeId:long}")]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> GetByEmployeeId(long employeeId, [FromBody] RetrievalRequest request)
         {
             var response = await employeeLogService.GetByEmployeeIdAsync(employeeId, request.ToSieveModel());
             return ResponseHandler.HandleResult(response);
         }
-
     }
 }
-

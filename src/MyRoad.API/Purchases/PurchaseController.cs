@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
 using MyRoad.API.Purchases.RequestDto;
@@ -13,6 +14,7 @@ namespace MyRoad.API.Purchases
         : ControllerBase
     {
         [HttpPost]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
         public async Task<IActionResult> CreateAsync([FromBody] CreatePurchasesDto dto)
         {
             var response = await purchaseService.CreateAsync(dto.ToDomainPurchase());
@@ -20,6 +22,7 @@ namespace MyRoad.API.Purchases
         }
 
         [HttpDelete("{id:long}")]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> DeleteAsync(long id)
         {
             var response = await purchaseService.DeleteAsync(id);
@@ -27,6 +30,7 @@ namespace MyRoad.API.Purchases
         }
 
         [HttpPost("search")]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
         {
             var response = await purchaseService.GetAsync(request.ToSieveModel());
@@ -35,6 +39,7 @@ namespace MyRoad.API.Purchases
         }
 
         [HttpPut]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> Update([FromBody] UpdatePurchasesDto dto)
         {
             var response = await purchaseService.UpdateAsync(dto.ToDomainPurchase());
@@ -42,6 +47,7 @@ namespace MyRoad.API.Purchases
         }
 
         [HttpGet("{id:long}")]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> GetById(long id)
         {
             var response = await purchaseService.GetByIdAsync(id);
@@ -49,6 +55,7 @@ namespace MyRoad.API.Purchases
         }
 
         [HttpPost("by-supplier/{supplierId:long}")]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> GetBySupplierId(long supplierId, [FromBody] RetrievalRequest request)
         {
             var response = await purchaseService.GetBySupplierIdAsync(supplierId, request.ToSieveModel());

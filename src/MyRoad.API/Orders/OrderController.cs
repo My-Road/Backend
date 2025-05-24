@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
 using MyRoad.API.Orders.RequestDto;
@@ -14,6 +15,7 @@ public class OrderController(
 ) : ControllerBase
 {
     [HttpPost]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
     public async Task<IActionResult> CreateAsync([FromBody] CreateOrderDto dto)
     {
         var response = await orderService.CreateAsync(dto.ToDomainOrder());
@@ -21,6 +23,7 @@ public class OrderController(
     }
 
     [HttpDelete("{id:long}")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> DeleteAsync(long id)
     {
         var response = await orderService.DeleteAsync(id);
@@ -28,6 +31,7 @@ public class OrderController(
     }
 
     [HttpPost("search")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
     public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
     {
         var response = await orderService.GetAsync(request.ToSieveModel());
@@ -36,6 +40,7 @@ public class OrderController(
     }
 
     [HttpPut]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> Update([FromBody] UpdateOrderDto dto)
     {
         var response = await orderService.UpdateAsync(dto.ToDomainOrder());
@@ -43,6 +48,7 @@ public class OrderController(
     }
 
     [HttpGet("{id:long}")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> GetById(long id)
     {
         var response = await orderService.GetByIdAsync(id);
@@ -50,6 +56,7 @@ public class OrderController(
     }
 
     [HttpPost("by-customer/{customerId:long}")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> GetByCustomerId(long customerId, [FromBody] RetrievalRequest request)
     {
         var response = await orderService.GetByCustomerIdAsync(customerId, request.ToSieveModel());
