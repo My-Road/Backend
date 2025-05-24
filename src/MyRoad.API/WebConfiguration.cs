@@ -69,14 +69,22 @@ public static class WebConfiguration
     private static void AddAuthorizationPolicy(this IServiceCollection services)
     {
         services.AddAuthorizationBuilder()
-            .AddPolicy(AuthorizationPolicies.SuperAdmin,
-                policy => policy.RequireClaim("userRole", UserRole.SuperAdmin.ToString()))
+            .AddPolicy(AuthorizationPolicies.FactoryOwner,
+                policy => policy.RequireClaim("userRole", UserRole.FactoryOwner.ToString()))
+            
             .AddPolicy(AuthorizationPolicies.Admin,
                 policy => policy.RequireClaim("userRole", UserRole.Admin.ToString()))
+            
             .AddPolicy(AuthorizationPolicies.Manager,
                 policy => policy.RequireClaim("userRole", UserRole.Manager.ToString()))
-            .AddPolicy(AuthorizationPolicies.AdminOrManager,
-                policy => policy.RequireClaim("userRole", UserRole.Admin.ToString(),
+            
+            .AddPolicy(AuthorizationPolicies.FactoryOwnerOrAdmin,
+                policy => policy.RequireClaim("userRole", UserRole.FactoryOwner.ToString(),
+                    UserRole.Admin.ToString()))
+            
+            .AddPolicy(AuthorizationPolicies.FactoryOwnerOrAdminOrManager,
+                policy => policy.RequireClaim("userRole", UserRole.FactoryOwner.ToString(),
+                    UserRole.Admin.ToString(),
                     UserRole.Manager.ToString()));
     }
 }

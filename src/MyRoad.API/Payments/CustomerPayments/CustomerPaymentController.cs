@@ -15,7 +15,7 @@ public class CustomerPaymentController(
 ) : ControllerBase
 {
     [HttpPost]
-    [Authorize(Policy = AuthorizationPolicies.Admin)]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> CreateAsync([FromBody] CreateCustomerPaymentDto dto)
     {
         var response = await customerPaymentService.CreateAsync(dto.ToCustomerPayment());
@@ -23,7 +23,7 @@ public class CustomerPaymentController(
     }
 
     [HttpDelete("{id:long}")]
-    [Authorize(Policy = AuthorizationPolicies.Admin)]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> DeleteAsync(long id)
     {
         var response = await customerPaymentService.DeleteAsync(id);
@@ -31,7 +31,7 @@ public class CustomerPaymentController(
     }
 
     [HttpPost("search")]
-    [Authorize(Policy = AuthorizationPolicies.Admin)]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
     {
         var response = await customerPaymentService.GetAsync(request.ToSieveModel());
@@ -39,7 +39,7 @@ public class CustomerPaymentController(
     }
 
     [HttpPut]
-    [Authorize(Policy = AuthorizationPolicies.Admin)]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> Update([FromBody] UpdateCustomerPaymentDto dto)
     {
         var response = await customerPaymentService.UpdateAsync(dto.ToCustomerPayment());
@@ -47,7 +47,7 @@ public class CustomerPaymentController(
     }
 
     [HttpGet("{id:long}")]
-    [Authorize(Policy = AuthorizationPolicies.Admin)]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> GetById(long id)
     {
         var response = await customerPaymentService.GetByIdAsync(id);
@@ -55,7 +55,7 @@ public class CustomerPaymentController(
     }
 
     [HttpPost("by-customer/{customerId:long}")]
-    [Authorize(Policy = AuthorizationPolicies.Admin)]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> GetByCustomerId(long customerId, [FromBody] RetrievalRequest request)
     {
         var response = await customerPaymentService.GetByCustomerIdAsync(customerId, request.ToSieveModel());

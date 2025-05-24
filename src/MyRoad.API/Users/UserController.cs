@@ -12,7 +12,7 @@ namespace MyRoad.API.Users;
 public class UserController(IUserService userService)
 {
     [HttpPost("search")]
-    [Authorize(Policy = AuthorizationPolicies.Admin)]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwner)]
     public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
     {
         var response = await userService.GetAsync(request.ToSieveModel());
@@ -21,7 +21,7 @@ public class UserController(IUserService userService)
     }
 
     [HttpPatch("{id:long}/toggle-status")]
-    [Authorize(Policy = AuthorizationPolicies.Admin)]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwner)]
     public async Task<IActionResult> ToggleStatus(long id)
     {
         var response = await userService.ToggleStatus(id);
