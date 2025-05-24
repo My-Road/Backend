@@ -41,7 +41,7 @@ public class UserRepository(
         query = sieveProcessor.Apply(sieveModel, query);
 
         var result = await query.AsNoTracking().ToListAsync();
-        
+
         return new PaginatedResponse<User>
         {
             Items = result.Select(user => user.ToDomain()).ToList(),
@@ -49,5 +49,18 @@ public class UserRepository(
             Page = sieveModel.Page ?? 1,
             PageSize = sieveModel.PageSize ?? 10,
         };
+    }
+
+    public async Task UpdateAsync(User user)
+    {
+        var userToUpdate = await userManager.FindByIdAsync(user.Id.ToString());
+        if (userToUpdate is null)
+        {
+            return;
+        }
+
+        userToUpdate.MapUpdatedApplicationUser(user);
+        await userManager.UpdateAsync(userToUpdate);
+        await dbContext.SaveChangesAsync();
     }
 }

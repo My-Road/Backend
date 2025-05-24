@@ -12,4 +12,6 @@ public interface IUserRepository
     Task<User?> GetByEmailAsync(string email);
     
     Task<ErrorOr<PaginatedResponse<User>>> GetAsync(SieveModel sieveModel);
+    
+    Task UpdateAsync(User user);
 }
