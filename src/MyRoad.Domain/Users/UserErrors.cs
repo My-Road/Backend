@@ -5,8 +5,8 @@ namespace MyRoad.Domain.Users;
 public static class UserErrors
 {
     public static Error NotFound => Error.NotFound(
-        "User.NotFound",
-        "Not Found User with this Email");
+        code: "User.NotFound",
+        description: "Not Found this User");
 
     public static Error EmailExists => Error.Conflict(
         "User.EmailExists",
@@ -22,9 +22,5 @@ public static class UserErrors
         code: "User.Unauthorized",
         description: "this user Unauthorized"
     );
-
-    public static Error GenericError(string details) => Error.Failure(
-        code: "User.GenericError",
-        description: details
-    );
+    
 }

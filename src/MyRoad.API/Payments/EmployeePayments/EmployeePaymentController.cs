@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
 using MyRoad.API.Payments.EmployeePayments.RequestsDto;
@@ -13,6 +14,7 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
     : ControllerBase
 {
     [HttpPost]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> Create([FromBody] CreateEmployeePaymentDto dto)
     {
         var response = await employeePaymentService.CreateAsync(dto.ToDomainEmployeePayment());
@@ -21,6 +23,7 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
     }
 
     [HttpDelete("{id:long}")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> Delete(long id)
     {
         var response = await employeePaymentService.DeleteAsync(id);
@@ -29,6 +32,7 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
     }
 
     [HttpGet("{id:long}")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> GetById(long id)
     {
         var response = await employeePaymentService.GetByIdAsync(id);
@@ -36,6 +40,7 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
     }
 
     [HttpPost("search")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
     {
         var response = await employeePaymentService.GetAsync(request.ToSieveModel());
@@ -44,6 +49,7 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
     }
 
     [HttpPut]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> Update([FromBody] UpdateEmployeePaymentDto dto)
     {
         var response = await employeePaymentService.UpdateAsync(dto.ToDomainEmployeePayment());
@@ -51,6 +57,7 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
     }
 
     [HttpPost("by-employee/{employeeId:long}")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> GetByEmployeeIdAsync(long employeeId, [FromBody] RetrievalRequest request)
     {
         var response = await employeePaymentService.GetByEmployeeIdAsync(employeeId, request.ToSieveModel());

@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
 using MyRoad.API.Payments.SupplierPayments.RequestDto;
@@ -14,6 +15,7 @@ namespace MyRoad.API.Payments.SupplierPayments
         ) : ControllerBase
     {
         [HttpPost]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> CreateAsync([FromBody] CreateSupplierPaymentDto dto)
         {
             var response = await supplierPaymentService.CreateAsync(dto.ToSupplierPayment());
@@ -21,6 +23,7 @@ namespace MyRoad.API.Payments.SupplierPayments
         }
 
         [HttpDelete("{id:long}")]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> DeleteAsync(long id)
         {
             var response = await supplierPaymentService.DeleteAsync(id);
@@ -28,6 +31,7 @@ namespace MyRoad.API.Payments.SupplierPayments
         }
 
         [HttpPost("search")]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
         {
             var response = await supplierPaymentService.GetAsync(request.ToSieveModel());
@@ -35,6 +39,7 @@ namespace MyRoad.API.Payments.SupplierPayments
         }
 
         [HttpPut]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> Update([FromBody] UpdateSupplierPaymentDto dto)
         {
             var response = await supplierPaymentService.UpdateAsync(dto.ToSupplierPayment());
@@ -42,6 +47,7 @@ namespace MyRoad.API.Payments.SupplierPayments
         }
 
         [HttpGet("{id:long}")]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> GetById(long id)
         {
             var response = await supplierPaymentService.GetByIdAsync(id);
@@ -49,6 +55,7 @@ namespace MyRoad.API.Payments.SupplierPayments
         }
 
         [HttpPost("supplier/{supplierId:long}")]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> GetBySupplierId(long supplierId, [FromBody] RetrievalRequest request)
         {
             var response = await supplierPaymentService.GetBySupplierIdAsync(supplierId, request.ToSieveModel());

@@ -8,6 +8,7 @@ using MyRoad.Infrastructure.Payments.EmployeePayments;
 using MyRoad.Infrastructure.Payments.SupplierPayments;
 using MyRoad.Infrastructure.Purchases;
 using MyRoad.Infrastructure.Suppliers;
+using MyRoad.Infrastructure.Users;
 using Sieve.Models;
 using Sieve.Services;
 
@@ -26,6 +27,7 @@ public class MyRoadSieveProcessor(IOptions<SieveOptions> options) : SieveProcess
             .ApplyConfiguration<EmployeeLogSieveConfiguration>()
             .ApplyConfiguration<SupplierSieveConfiguration>()
             .ApplyConfiguration<PurchaseSieveConfiguration>()
-            .ApplyConfiguration<SupplierPaymentSieveConfiguration>();
+            .ApplyConfiguration<SupplierPaymentSieveConfiguration>()
+            .ApplyConfiguration<UserSieveConfiguration>();
     }
 }

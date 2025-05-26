@@ -25,7 +25,7 @@ public class IdentityController(IIdentityService identityService) : ControllerBa
         return ResponseHandler.HandleResult(response);
     }
 
-    [Authorize(Policy = "SuperAdmin")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwner)]
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterRequestDto dto)
     {

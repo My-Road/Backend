@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
 using MyRoad.API.Customers.RequestDto;
@@ -13,13 +14,15 @@ public class CustomerController(ICustomerService customerService)
     : ControllerBase
 {
     [HttpPost]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
     public async Task<IActionResult> Create([FromBody] CreateCustomerDto dto)
     {
         var response = await customerService.CreateAsync(dto.ToDomainCustomer());
         return ResponseHandler.HandleResult(response);
     }
-
+    
     [HttpDelete("{id:long}")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> Delete(long id)
     {
         var response = await customerService.DeleteAsync(id);
@@ -27,21 +30,24 @@ public class CustomerController(ICustomerService customerService)
     }
 
     [HttpPut("restore/{id:long}")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> Restore(long id)
     {
         var result = await customerService.RestoreAsync(id);
         return ResponseHandler.HandleResult(result);
     }
-
+    
     [HttpPost("search")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
     public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
     {
         var response = await customerService.GetAsync(request.ToSieveModel());
 
         return ResponseHandler.HandleResult(response);
     }
-
+    
     [HttpPut]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> Update([FromBody] UpdateCustomerDto dto)
     {
         var response = await customerService.UpdateAsync(dto.ToDomainCustomer());
@@ -50,6 +56,7 @@ public class CustomerController(ICustomerService customerService)
 
 
     [HttpGet("{id:long}")]
+    [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
     public async Task<IActionResult> GetById(long id)
     {
         var response = await customerService.GetByIdAsync(id);
