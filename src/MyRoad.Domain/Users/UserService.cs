@@ -9,7 +9,8 @@ using Sieve.Models;
 namespace MyRoad.Domain.Users;
 
 public class UserService(
-    IUserRepository userRepository) : IUserService
+    IUserRepository userRepository,
+    IUserContext userContext) : IUserService
 {
     private readonly RegisterValidator _registerValidator = new();
 
@@ -17,7 +18,7 @@ public class UserService(
     {
         var user = await userRepository.GetByIdAsync(id);
 
-        if (user is null)
+        if (user is null || !user.IsActive)
         {
             return UserErrors.NotFound;
         }
@@ -29,7 +30,7 @@ public class UserService(
     {
         var user = await userRepository.GetByEmailAsync(email);
 
-        if (user is null)
+        if (user is null || !user.IsActive)
         {
             return UserErrors.NotFound;
         }
@@ -45,6 +46,11 @@ public class UserService(
 
     public async Task<ErrorOr<Success>> ToggleStatus(long id)
     {
+        if (id == userContext.Id)
+        {
+            return UserErrors.CannotToggleOwnStatus;
+        }
+        
         var user = await userRepository.GetByIdAsync(id);
 
         if (user is null)
@@ -59,6 +65,11 @@ public class UserService(
 
     public async Task<ErrorOr<Success>> ChangeRole(long id, UserRole role)
     {
+        if (id == userContext.Id)
+        {
+            return UserErrors.CannotChangeOwnRole;
+        }
+        
         var user = await userRepository.GetByIdAsync(id);
         if (user is null)
         {

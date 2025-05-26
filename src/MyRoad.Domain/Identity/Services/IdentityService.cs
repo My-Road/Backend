@@ -96,7 +96,7 @@ public class IdentityService(
         var userReturnResult = await userService.GetByIdAsync(userId);
         if (userReturnResult.IsError)
         {
-            return UserErrors.NotFound;
+            return userReturnResult.Errors;
         }
 
         if (!await authService.IsOwnPasswordAsync(userId, currentPassword))

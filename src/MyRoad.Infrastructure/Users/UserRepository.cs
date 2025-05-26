@@ -15,7 +15,8 @@ namespace MyRoad.Infrastructure.Users;
 public class UserRepository(
     UserManager<ApplicationUser> userManager,
     AppDbContext dbContext,
-    ISieveProcessor sieveProcessor) : IUserRepository
+    ISieveProcessor sieveProcessor,
+    IUserContext userContext) : IUserRepository
 {
     public async Task<User?> GetByIdAsync(long id)
     {
@@ -32,7 +33,9 @@ public class UserRepository(
 
     public async Task<ErrorOr<PaginatedResponse<User>>> GetAsync(SieveModel sieveModel)
     {
-        var query = dbContext.Users.AsQueryable();
+        var query = dbContext.Users
+            .Where(user => user.Id != userContext.Id)
+            .AsQueryable();
 
         var totalItems = await sieveProcessor
             .Apply(sieveModel, query, applyPagination: false)

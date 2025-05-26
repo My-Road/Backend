@@ -23,4 +23,11 @@ public static class UserErrors
         description: "this user Unauthorized"
     );
     
+    public static readonly Error CannotToggleOwnStatus = Error.Forbidden(
+        code: "User.CannotToggleOwnStatus",
+        description: "You cannot toggle your own account status.");
+    
+    public static readonly Error CannotChangeOwnRole = Error.Forbidden(
+        code: "User.CannotChangeOwnRole",
+        description: "You cannot change your own role.");
 }
