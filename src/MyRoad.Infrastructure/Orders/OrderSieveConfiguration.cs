@@ -22,5 +22,9 @@ public class OrderSieveConfiguration : ISieveConfiguration
         mapper.Property<Order>(x => x.CreatedByUserId)
             .CanFilter()
             .CanSort();
+
+        mapper.Property<Order>(x => x.RecipientName)
+            .CanFilter()
+            .CanSort();
     }
 }
