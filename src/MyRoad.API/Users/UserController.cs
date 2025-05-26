@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
 using MyRoad.Domain.Identity.Enums;
+using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Users;
 
 namespace MyRoad.API.Users;
@@ -10,7 +11,8 @@ namespace MyRoad.API.Users;
 [Route("api/v{version:apiVersion}/Users")]
 [ApiVersion("1.0")]
 [ApiController]
-public class UserController(IUserService userService)
+public class UserController(IUserService userService,
+     IUserContext userContext)
 {
     [HttpPost("search")]
     [Authorize(Policy = AuthorizationPolicies.FactoryOwner)]

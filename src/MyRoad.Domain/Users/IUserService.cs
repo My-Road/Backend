@@ -12,6 +12,8 @@ public interface IUserService
 
     Task<ErrorOr<User>> GetByEmailAsync(string email);
 
+    Task<ErrorOr<Success>> UpdateAsync(long Id, User user);
+
     Task<ErrorOr<PaginatedResponse<User>>> GetAsync(SieveModel sieveModel);
 
     Task<ErrorOr<Success>> ToggleStatus(long id);
