@@ -6,12 +6,7 @@ public static class UserErrors
 {
     public static Error NotFound => Error.NotFound(
         code: "User.NotFound",
-        description: "Not Found User with this Email");
-
-    public static Error NotFoundId => Error.NotFound(
-        code: "User.NotFoundId",
-        description: "Not Found User with this Id"
-    );
+        description: "Not Found this User");
 
     public static Error EmailExists => Error.Conflict(
         "User.EmailExists",

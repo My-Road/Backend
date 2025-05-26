@@ -20,8 +20,7 @@ public class CustomerController(ICustomerService customerService)
         var response = await customerService.CreateAsync(dto.ToDomainCustomer());
         return ResponseHandler.HandleResult(response);
     }
-
-
+    
     [HttpDelete("{id:long}")]
     [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> Delete(long id)
@@ -37,8 +36,7 @@ public class CustomerController(ICustomerService customerService)
         var result = await customerService.RestoreAsync(id);
         return ResponseHandler.HandleResult(result);
     }
-
-
+    
     [HttpPost("search")]
     [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
     public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
@@ -47,8 +45,7 @@ public class CustomerController(ICustomerService customerService)
 
         return ResponseHandler.HandleResult(response);
     }
-
-
+    
     [HttpPut]
     [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
     public async Task<IActionResult> Update([FromBody] UpdateCustomerDto dto)

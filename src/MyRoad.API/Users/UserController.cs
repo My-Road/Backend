@@ -30,7 +30,7 @@ public class UserController(IUserService userService)
         return ResponseHandler.HandleResult(response);
     }
 
-    [HttpPatch("{id:long}/change-role")]
+    [HttpPatch("{id:long}/role")]
     [Authorize(Policy = AuthorizationPolicies.FactoryOwner)]
     public async Task<IActionResult> ChangeRole(long id, UserRole role)
     {

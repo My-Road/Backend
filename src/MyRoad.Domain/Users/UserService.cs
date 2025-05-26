@@ -49,7 +49,7 @@ public class UserService(
 
         if (user is null)
         {
-            return UserErrors.NotFoundId;
+            return UserErrors.NotFound;
         }
 
         user.IsActive = !user.IsActive;
@@ -62,7 +62,7 @@ public class UserService(
         var user = await userRepository.GetByIdAsync(id);
         if (user is null)
         {
-            return UserErrors.NotFoundId;
+            return UserErrors.NotFound;
         }
 
         user.Role = role;
