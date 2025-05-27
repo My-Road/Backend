@@ -84,12 +84,11 @@ public class UserService(
         if (existingUser is null || !existingUser.IsActive)
             return UserErrors.NotFound;
 
+        var validationResult = await _userValidator.ValidateAsync(existingUser);
+        if (!validationResult.IsValid)
+            return validationResult.ExtractErrors();
+
         existingUser.MapUpdatedUser(user);
-
-        var validate = await _userValidator.ValidateAsync(existingUser);
-        if (!validate.IsValid)
-            return validate.ExtractErrors();
-
         await userRepository.UpdateAsync(existingUser);
         return new Success();
     }
