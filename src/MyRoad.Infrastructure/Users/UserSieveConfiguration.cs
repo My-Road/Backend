@@ -18,5 +18,9 @@ public class UserSieveConfiguration : ISieveConfiguration
         mapper.Property<ApplicationUser>(x => x.Email)
             .CanFilter()
             .CanSort();
+
+        mapper.Property<ApplicationUser>(x => x.IsActive)
+            .CanFilter()
+            .CanSort();
     }
 }
