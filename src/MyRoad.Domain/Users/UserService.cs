@@ -12,6 +12,7 @@ public class UserService(
     IUserRepository userRepository) : IUserService
 {
     private readonly RegisterValidator _registerValidator = new();
+    private readonly UserValidator _userValidator = new();
 
     public async Task<ErrorOr<User>> GetByIdAsync(long id)
     {
@@ -73,6 +74,22 @@ public class UserService(
         }
 
         await userRepository.UpdateAsync(user);
+        return new Success();
+    }
+
+    public async Task<ErrorOr<Success>> UpdateAsync(long id, User user)
+    {
+        var existingUser = await userRepository.GetByIdAsync(id);
+
+        if (existingUser is null || !existingUser.IsActive)
+            return UserErrors.NotFound;
+
+        var validationResult = await _userValidator.ValidateAsync(existingUser);
+        if (!validationResult.IsValid)
+            return validationResult.ExtractErrors();
+
+        existingUser.MapUpdatedUser(user);
+        await userRepository.UpdateAsync(existingUser);
         return new Success();
     }
 }

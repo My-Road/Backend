@@ -22,5 +22,4 @@ public static class UserErrors
         code: "User.Unauthorized",
         description: "this user Unauthorized"
     );
-    
 }

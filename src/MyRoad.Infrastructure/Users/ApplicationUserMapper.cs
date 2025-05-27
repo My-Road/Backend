@@ -15,6 +15,6 @@ public static class ApplicationUserMapper
         applicationUser.LastName = user.LastName;
         applicationUser.IsActive = user.IsActive;
         applicationUser.PhoneNumber = user.PhoneNumber;
-        applicationUser.UserName = user.Username;
+        applicationUser.UserName = user.Email;
     }
 }
