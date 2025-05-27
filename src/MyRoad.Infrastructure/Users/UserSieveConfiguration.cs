@@ -10,8 +10,8 @@ public class UserSieveConfiguration : ISieveConfiguration
         mapper.Property<ApplicationUser>(x => x.Id)
             .CanFilter()
             .CanSort();
-
-        mapper.Property<ApplicationUser>(x => x.UserName)
+        
+        mapper.Property<ApplicationUser>(x => x.FirstName)
             .CanFilter()
             .CanSort();
 
