@@ -22,7 +22,7 @@ public static class UserErrors
         code: "User.Unauthorized",
         description: "this user Unauthorized"
     );
-    
+ 
     public static readonly Error CannotToggleOwnStatus = Error.Forbidden(
         code: "User.CannotToggleOwnStatus",
         description: "You cannot toggle your own account status.");
