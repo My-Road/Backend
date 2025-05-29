@@ -34,7 +34,9 @@ public class OrderRepository(
 
     public async Task<PaginatedResponse<Order>> GetAsync(SieveModel sieveModel)
     {
-        var query = dbContext.Orders.AsQueryable();
+        var query = dbContext.Orders
+            .Include(o => o.Customer)
+            .AsQueryable();
 
         var totalItems = await sieveProcessor
             .Apply(sieveModel, query, applyPagination: false)
