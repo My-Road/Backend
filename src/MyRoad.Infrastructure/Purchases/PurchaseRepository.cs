@@ -10,7 +10,7 @@ namespace MyRoad.Infrastructure.Purchases
     public class PurchaseRepository(
         AppDbContext dbContext,
         ISieveProcessor sieveProcessor
-        ) : IPurchaseRepository
+    ) : IPurchaseRepository
     {
         public async Task<bool> CreateAsync(Purchase purchase)
         {
@@ -20,7 +20,9 @@ namespace MyRoad.Infrastructure.Purchases
 
         public async Task<PaginatedResponse<Purchase>> GetAsync(SieveModel sieveModel)
         {
-            var query = dbContext.Purchases.AsQueryable();
+            var query = dbContext.Purchases
+                .Include(s => s.Supplier)
+                .AsQueryable();
 
             var totalItems = await sieveProcessor
                 .Apply(sieveModel, query, applyPagination: false)
@@ -48,8 +50,8 @@ namespace MyRoad.Infrastructure.Purchases
         public async Task<PaginatedResponse<Purchase>> GetBySupplierAsync(long supplierId, SieveModel sieveModel)
         {
             var query = dbContext.Purchases
-           .Where(p => p.SupplierId == supplierId && !p.IsDeleted)
-           .AsQueryable();
+                .Where(p => p.SupplierId == supplierId && !p.IsDeleted)
+                .AsQueryable();
 
             var totalItems = await sieveProcessor
                 .Apply(sieveModel, query, applyPagination: false)
@@ -75,5 +77,3 @@ namespace MyRoad.Infrastructure.Purchases
         }
     }
 }
-
-

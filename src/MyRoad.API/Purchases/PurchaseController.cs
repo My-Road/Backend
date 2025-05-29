@@ -10,7 +10,7 @@ namespace MyRoad.API.Purchases
     [Route("api/v{version:apiVersion}/purchases")]
     [ApiVersion("1.0")]
     [ApiController]
-    public class PurchaseController (IPurchaseService purchaseService)
+    public class PurchaseController(IPurchaseService purchaseService)
         : ControllerBase
     {
         [HttpPost]
@@ -35,7 +35,9 @@ namespace MyRoad.API.Purchases
         {
             var response = await purchaseService.GetAsync(request.ToSieveModel());
 
-            return ResponseHandler.HandleResult(response);
+            return ResponseHandler.HandleResult(
+                response.ToContractPaginatedList(PurchaseMapper.ToSearchResponseDto)
+            );
         }
 
         [HttpPut]
@@ -51,7 +53,9 @@ namespace MyRoad.API.Purchases
         public async Task<IActionResult> GetById(long id)
         {
             var response = await purchaseService.GetByIdAsync(id);
-            return ResponseHandler.HandleResult(response);
+            return ResponseHandler.HandleResult(
+                response.ToContract(PurchaseMapper.ToPurchaseResponseDto)
+            );
         }
 
         [HttpPost("by-supplier/{supplierId:long}")]
@@ -59,7 +63,9 @@ namespace MyRoad.API.Purchases
         public async Task<IActionResult> GetBySupplierId(long supplierId, [FromBody] RetrievalRequest request)
         {
             var response = await purchaseService.GetBySupplierIdAsync(supplierId, request.ToSieveModel());
-            return ResponseHandler.HandleResult(response);
+            return ResponseHandler.HandleResult(
+                response.ToContractPaginatedList(PurchaseMapper.ToPurchaseResponseDto)
+            );
         }
     }
 }
