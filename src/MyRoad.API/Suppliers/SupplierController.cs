@@ -10,9 +10,9 @@ namespace MyRoad.API.Suppliers
     [Route("api/v{version:apiVersion}/suppliers")]
     [ApiVersion("1.0")]
     [ApiController]
-    public class SupplierController (
+    public class SupplierController(
         ISupplierService supplierService
-        ) : ControllerBase
+    ) : ControllerBase
     {
         [HttpPost]
         [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
@@ -39,12 +39,14 @@ namespace MyRoad.API.Suppliers
         }
 
         [HttpPost("search")]
-        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
         public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
         {
             var response = await supplierService.GetAsync(request.ToSieveModel());
 
-            return ResponseHandler.HandleResult(response);
+            return ResponseHandler.HandleResult(
+                response.ToContractPaginatedList(SupplierMapper.ToSupplierResponseDto)
+            );
         }
 
         [HttpPut]
@@ -60,7 +62,7 @@ namespace MyRoad.API.Suppliers
         public async Task<IActionResult> GetById(long id)
         {
             var response = await supplierService.GetByIdAsync(id);
-            return ResponseHandler.HandleResult(response);
+            return ResponseHandler.HandleResult(response.ToContract(SupplierMapper.ToSupplierResponseDto));
         }
     }
 }
