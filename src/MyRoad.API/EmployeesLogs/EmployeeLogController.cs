@@ -35,9 +35,12 @@ namespace MyRoad.API.EmployeesLogs
         public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
         {
             var response = await employeeLogService.GetAsync(request.ToSieveModel());
-
-            return ResponseHandler.HandleResult(response);
+            
+            return ResponseHandler.HandleResult(
+                response.ToContractPaginatedList(EmployeeLogMapper.ToSearchResponseDto)
+            );
         }
+
 
         [HttpPut]
         [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
@@ -52,7 +55,9 @@ namespace MyRoad.API.EmployeesLogs
         public async Task<IActionResult> GetById(long id)
         {
             var response = await employeeLogService.GetByIdAsync(id);
-            return ResponseHandler.HandleResult(response);
+            return ResponseHandler.HandleResult(
+                response.ToContract(EmployeeLogMapper.ToDomainEmployeeLogResponseDto)
+            );
         }
 
         [HttpPost("by-employee/{employeeId:long}")]
@@ -60,7 +65,9 @@ namespace MyRoad.API.EmployeesLogs
         public async Task<IActionResult> GetByEmployeeId(long employeeId, [FromBody] RetrievalRequest request)
         {
             var response = await employeeLogService.GetByEmployeeIdAsync(employeeId, request.ToSieveModel());
-            return ResponseHandler.HandleResult(response);
+            return ResponseHandler.HandleResult(
+                response.ToContractPaginatedList(EmployeeLogMapper.ToDomainEmployeeLogResponseDto)
+            );
         }
     }
 }

@@ -36,7 +36,9 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
     public async Task<IActionResult> GetById(long id)
     {
         var response = await employeePaymentService.GetByIdAsync(id);
-        return ResponseHandler.HandleResult(response);
+        return ResponseHandler.HandleResult(
+            response.ToContract(PaymentMapper.ToPaymentResponseDto)
+        );
     }
 
     [HttpPost("search")]
@@ -45,7 +47,9 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
     {
         var response = await employeePaymentService.GetAsync(request.ToSieveModel());
 
-        return ResponseHandler.HandleResult(response);
+        return ResponseHandler.HandleResult(
+            response.ToContractPaginatedList(EmployeePaymentMapper.ToEmployeePaymentResponseDto)
+        );
     }
 
     [HttpPut]
@@ -61,6 +65,8 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
     public async Task<IActionResult> GetByEmployeeIdAsync(long employeeId, [FromBody] RetrievalRequest request)
     {
         var response = await employeePaymentService.GetByEmployeeIdAsync(employeeId, request.ToSieveModel());
-        return ResponseHandler.HandleResult(response);
+        return ResponseHandler.HandleResult(
+            response.ToContractPaginatedList(PaymentMapper.ToPaymentResponseDto)
+        );
     }
 }

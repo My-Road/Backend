@@ -20,7 +20,9 @@ namespace MyRoad.Infrastructure.EmployeesLogs
 
         public async Task<PaginatedResponse<EmployeeLog>> GetAsync(SieveModel sieveModel)
         {
-            var query = dbContext.EmployeeLogs.AsQueryable();
+            var query = dbContext.EmployeeLogs
+                .Include(log => log.Employee) 
+                .AsQueryable();
 
             var totalItems = await sieveProcessor
                 .Apply(sieveModel, query, applyPagination: false)
@@ -38,6 +40,7 @@ namespace MyRoad.Infrastructure.EmployeesLogs
                 PageSize = sieveModel.PageSize ?? 10,
             };
         }
+
 
         public async Task<IEnumerable<EmployeeLog>> GetLogsByDateAsync(long employeeId, DateOnly date)
         {

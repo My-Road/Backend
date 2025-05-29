@@ -36,7 +36,9 @@ public class EmployeePaymentRepository(
 
     public async Task<PaginatedResponse<EmployeePayment>> GetAsync(SieveModel sieveModel)
     {
-        var query = dbContext.EmployeePayments.AsQueryable();
+        var query = dbContext.EmployeePayments
+            .Include(o => o.Employee)
+            .AsQueryable();
 
         var totalItems = await sieveProcessor
             .Apply(sieveModel, query, applyPagination: false)
