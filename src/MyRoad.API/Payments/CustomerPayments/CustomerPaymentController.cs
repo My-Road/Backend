@@ -35,7 +35,9 @@ public class CustomerPaymentController(
     public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
     {
         var response = await customerPaymentService.GetAsync(request.ToSieveModel());
-        return ResponseHandler.HandleResult(response);
+        return ResponseHandler.HandleResult(
+            response.ToContractPaginatedList(CustomerPaymentMapper.ToCustomerPaymentResponseDto)
+        );
     }
 
     [HttpPut]
@@ -51,7 +53,9 @@ public class CustomerPaymentController(
     public async Task<IActionResult> GetById(long id)
     {
         var response = await customerPaymentService.GetByIdAsync(id);
-        return ResponseHandler.HandleResult(response);
+        return ResponseHandler.HandleResult(
+            response.ToContract(PaymentMapper.ToPaymentResponseDto)
+        );
     }
 
     [HttpPost("by-customer/{customerId:long}")]
@@ -59,6 +63,8 @@ public class CustomerPaymentController(
     public async Task<IActionResult> GetByCustomerId(long customerId, [FromBody] RetrievalRequest request)
     {
         var response = await customerPaymentService.GetByCustomerIdAsync(customerId, request.ToSieveModel());
-        return ResponseHandler.HandleResult(response);
+        return ResponseHandler.HandleResult(
+            response.ToContractPaginatedList(PaymentMapper.ToPaymentResponseDto)
+        );
     }
 }
