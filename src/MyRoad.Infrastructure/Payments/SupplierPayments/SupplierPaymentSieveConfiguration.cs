@@ -7,15 +7,19 @@ namespace MyRoad.Infrastructure.Payments.SupplierPayments
     {
         public void Configure(SievePropertyMapper mapper)
         {
-            mapper.Property<SupplierPayment>(x => x.SupplierId)
-                .CanFilter()
-                .CanSort();
-
             mapper.Property<SupplierPayment>(x => x.PaymentDate)
                 .CanFilter()
                 .CanSort();
 
             mapper.Property<SupplierPayment>(x => x.Id)
+                .CanFilter()
+                .CanSort();
+            
+            mapper.Property<SupplierPayment>(x => x.Supplier.FullName)
+                .CanFilter()
+                .CanSort();
+            
+            mapper.Property<SupplierPayment>(x => x.Supplier.Address)
                 .CanFilter()
                 .CanSort();
         }

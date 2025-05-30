@@ -11,10 +11,6 @@ public class OrderSieveConfiguration : ISieveConfiguration
             .CanFilter()
             .CanSort();
 
-        mapper.Property<Order>(x => x.CustomerId)
-            .CanFilter()
-            .CanSort();
-
         mapper.Property<Order>(x => x.Id)
             .CanFilter()
             .CanSort();
@@ -24,6 +20,14 @@ public class OrderSieveConfiguration : ISieveConfiguration
             .CanSort();
 
         mapper.Property<Order>(x => x.RecipientName)
+            .CanFilter()
+            .CanSort();
+
+        mapper.Property<Order>(x => x.Customer.FullName)
+            .CanFilter()
+            .CanSort();
+
+        mapper.Property<Order>(x => x.Customer.Address)
             .CanFilter()
             .CanSort();
     }
