@@ -6,4 +6,5 @@ namespace MyRoad.API.Customers.ResponseDto;
 public class CustomerDto : BaseEntity<long>
 {
     [JsonPropertyName("customerName")] public string? FullName { get; set; }
+    public string Address { get; set; } = string.Empty;
 }

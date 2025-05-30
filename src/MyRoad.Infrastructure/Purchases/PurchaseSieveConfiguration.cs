@@ -22,6 +22,14 @@ namespace MyRoad.Infrastructure.Purchases
             mapper.Property<Purchase>(x => x.CreatedByUserId)
                 .CanFilter()
                 .CanSort();
+
+            mapper.Property<Purchase>(x => x.Supplier.FullName)
+                .CanFilter()
+                .CanSort();
+            
+            mapper.Property<Purchase>(x => x.Supplier.Address)
+                            .CanFilter()
+                            .CanSort();
         }
     }
 }
