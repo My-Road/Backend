@@ -36,7 +36,9 @@ public class OrderController(
     {
         var response = await orderService.GetAsync(request.ToSieveModel());
 
-        return ResponseHandler.HandleResult(response);
+        return ResponseHandler.HandleResult(
+            response.ToContractPaginatedList(OrderMapper.ToSearchResponseDto)
+        );
     }
 
     [HttpPut]
@@ -52,7 +54,9 @@ public class OrderController(
     public async Task<IActionResult> GetById(long id)
     {
         var response = await orderService.GetByIdAsync(id);
-        return ResponseHandler.HandleResult(response);
+        return ResponseHandler.HandleResult(
+            response.ToContract(OrderMapper.ToDomainOrderResponseDto)
+        );
     }
 
     [HttpPost("by-customer/{customerId:long}")]
@@ -60,6 +64,8 @@ public class OrderController(
     public async Task<IActionResult> GetByCustomerId(long customerId, [FromBody] RetrievalRequest request)
     {
         var response = await orderService.GetByCustomerIdAsync(customerId, request.ToSieveModel());
-        return ResponseHandler.HandleResult(response);
+        return ResponseHandler.HandleResult(
+            response.ToContractPaginatedList(OrderMapper.ToDomainOrderResponseDto)
+        );
     }
 }

@@ -1,8 +1,6 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using ErrorOr;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Customers;
-using MyRoad.Domain.Users;
 
 namespace MyRoad.Domain.Orders
 {

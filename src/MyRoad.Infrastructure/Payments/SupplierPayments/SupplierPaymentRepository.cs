@@ -20,7 +20,9 @@ namespace MyRoad.Infrastructure.Payments.SupplierPayments
 
         public async Task<PaginatedResponse<SupplierPayment>> GetAsync(SieveModel sieveModel)
         {
-            var query = dbContext.SupplierPayments.AsQueryable();
+            var query = dbContext.SupplierPayments
+                .Include(o => o.Supplier)
+                .AsQueryable();
 
             var totalItems = await sieveProcessor
                 .Apply(sieveModel, query, applyPagination: false)

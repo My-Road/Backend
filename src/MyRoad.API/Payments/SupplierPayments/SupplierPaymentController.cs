@@ -12,7 +12,7 @@ namespace MyRoad.API.Payments.SupplierPayments
     [ApiController]
     public class SupplierPaymentController(
         ISupplierPaymentService supplierPaymentService
-        ) : ControllerBase
+    ) : ControllerBase
     {
         [HttpPost]
         [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
@@ -35,7 +35,9 @@ namespace MyRoad.API.Payments.SupplierPayments
         public async Task<IActionResult> Get([FromBody] RetrievalRequest request)
         {
             var response = await supplierPaymentService.GetAsync(request.ToSieveModel());
-            return ResponseHandler.HandleResult(response);
+            return ResponseHandler.HandleResult(
+                response.ToContractPaginatedList(SupplierPaymentMapper.ToSupplierPaymentResponseDto)
+            );
         }
 
         [HttpPut]
@@ -51,7 +53,9 @@ namespace MyRoad.API.Payments.SupplierPayments
         public async Task<IActionResult> GetById(long id)
         {
             var response = await supplierPaymentService.GetByIdAsync(id);
-            return ResponseHandler.HandleResult(response);
+            return ResponseHandler.HandleResult(
+                response.ToContract(PaymentMapper.ToPaymentResponseDto)
+            );
         }
 
         [HttpPost("supplier/{supplierId:long}")]
@@ -59,7 +63,9 @@ namespace MyRoad.API.Payments.SupplierPayments
         public async Task<IActionResult> GetBySupplierId(long supplierId, [FromBody] RetrievalRequest request)
         {
             var response = await supplierPaymentService.GetBySupplierIdAsync(supplierId, request.ToSieveModel());
-            return ResponseHandler.HandleResult(response);
+            return ResponseHandler.HandleResult(
+                response.ToContractPaginatedList(PaymentMapper.ToPaymentResponseDto)
+            );
         }
     }
 }

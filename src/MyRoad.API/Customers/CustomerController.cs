@@ -43,7 +43,9 @@ public class CustomerController(ICustomerService customerService)
     {
         var response = await customerService.GetAsync(request.ToSieveModel());
 
-        return ResponseHandler.HandleResult(response);
+        return ResponseHandler.HandleResult(
+            response.ToContractPaginatedList(CustomerMapper.ToDomainCustomerResponseDto)
+        );
     }
     
     [HttpPut]
@@ -60,6 +62,9 @@ public class CustomerController(ICustomerService customerService)
     public async Task<IActionResult> GetById(long id)
     {
         var response = await customerService.GetByIdAsync(id);
-        return ResponseHandler.HandleResult(response);
+
+        return ResponseHandler.HandleResult(
+            response.ToContract(CustomerMapper.ToDomainCustomerResponseDto)
+        );
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
 using MyRoad.API.Employees.RequestsDto;
@@ -50,7 +49,9 @@ namespace MyRoad.API.Employees
         public async Task<IActionResult> GetById(long id)
         {
             var response = await employeeService.GetByIdAsync(id);
-            return ResponseHandler.HandleResult(response);
+            return ResponseHandler.HandleResult(
+                response.ToContract(EmployeeMapper.ToDomainEmployeeResponseDto)
+            );
         }
 
         [HttpPost("search")]
@@ -58,7 +59,9 @@ namespace MyRoad.API.Employees
         public async Task<IActionResult> GetAll([FromBody] RetrievalRequest request)
         {
             var response = await employeeService.GetAsync(request.ToSieveModel());
-            return ResponseHandler.HandleResult(response);
+            return ResponseHandler.HandleResult(
+                response.ToContractPaginatedList(EmployeeMapper.ToDomainEmployeeResponseDto)
+            );
         }
     }
 }

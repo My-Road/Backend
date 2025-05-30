@@ -35,7 +35,9 @@ public class CustomerPaymentRepository(
 
     public async Task<PaginatedResponse<CustomerPayment>> GetAsync(SieveModel sieveModel)
     {
-        var query = dbContext.CustomerPayments.AsQueryable();
+        var query = dbContext.CustomerPayments
+            .Include(o => o.Customer)
+            .AsQueryable();
 
         var totalItems = await sieveProcessor
             .Apply(sieveModel, query, applyPagination: false)
