@@ -54,7 +54,7 @@ namespace MyRoad.API.Payments.SupplierPayments
         {
             var response = await supplierPaymentService.GetByIdAsync(id);
             return ResponseHandler.HandleResult(
-                response.ToContract(PaymentMapper.ToPaymentResponseDto)
+                response.ToContract(PaymentMapper.ToSupplierPaymentResponseDto)
             );
         }
 

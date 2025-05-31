@@ -54,7 +54,7 @@ public class CustomerPaymentController(
     {
         var response = await customerPaymentService.GetByIdAsync(id);
         return ResponseHandler.HandleResult(
-            response.ToContract(PaymentMapper.ToPaymentResponseDto)
+            response.ToContract(PaymentMapper.ToCustomerPaymentResponseDto)
         );
     }
 

@@ -1,4 +1,5 @@
 using MyRoad.API.Common.Entities;
+using MyRoad.API.Employees.ResponseDto;
 
 namespace MyRoad.API.EmployeesLogs.ResponseDto;
 
@@ -14,4 +15,6 @@ public class EmployeeLogResponseDto : BaseEntity<long>
     public long CreatedByUserId { get; set; }
     public decimal TotalHours { get; set; }
     public decimal DailyWage { get; set; }
+    
+    public EmployeeDto Employee { get; set; }
 }

@@ -31,7 +31,8 @@ public class EmployeePaymentRepository(
     public async Task<EmployeePayment?> GetByIdAsync(long employeePaymentId)
     {
         return await dbContext.EmployeePayments
-            .FirstOrDefaultAsync(p => p.Id == employeePaymentId);
+            .Include(x => x.Employee)
+            .FirstOrDefaultAsync(x => x.Id == employeePaymentId && !x.IsDeleted);;
     }
 
     public async Task<PaginatedResponse<EmployeePayment>> GetAsync(SieveModel sieveModel)

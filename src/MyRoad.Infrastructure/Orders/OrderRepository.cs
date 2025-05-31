@@ -28,7 +28,9 @@ public class OrderRepository(
 
     public async Task<Order?> GetByIdAsync(long id)
     {
-        var order = await dbContext.Orders.FindAsync(id);
+        var order = await dbContext.Orders
+            .Include(x => x.Customer)
+            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
         return order;
     }
 
