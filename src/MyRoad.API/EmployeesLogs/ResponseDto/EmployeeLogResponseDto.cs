@@ -16,5 +16,4 @@ public class EmployeeLogResponseDto : BaseEntity<long>
     public decimal TotalHours { get; set; }
     public decimal DailyWage { get; set; }
     
-    public EmployeeDto Employee { get; set; }
 }

@@ -55,7 +55,7 @@ public class OrderController(
     {
         var response = await orderService.GetByIdAsync(id);
         return ResponseHandler.HandleResult(
-            response.ToContract(OrderMapper.ToDomainOrderResponseDto)
+            response.ToContract(OrderMapper.ToSearchResponseDto)
         );
     }
 

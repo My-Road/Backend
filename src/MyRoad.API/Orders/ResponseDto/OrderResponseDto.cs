@@ -14,5 +14,4 @@ public class OrderResponseDto : BaseEntity<long>
     public string? Notes { get; set; }
     public bool IsCompleted { get; set; }
     public long CreatedByUserId { get; set; }
-    public CustomerDto Customer { get; set; }
 }

@@ -22,6 +22,7 @@ namespace MyRoad.Infrastructure.EmployeesLogs
         {
             var query = dbContext.EmployeeLogs
                 .Include(log => log.Employee) 
+                .Where(x => !x.IsDeleted)
                 .AsQueryable();
 
             var totalItems = await sieveProcessor

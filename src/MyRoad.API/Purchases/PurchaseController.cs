@@ -54,7 +54,7 @@ namespace MyRoad.API.Purchases
         {
             var response = await purchaseService.GetByIdAsync(id);
             return ResponseHandler.HandleResult(
-                response.ToContract(PurchaseMapper.ToPurchaseResponseDto)
+                response.ToContract(PurchaseMapper.ToSearchResponseDto)
             );
         }
 
