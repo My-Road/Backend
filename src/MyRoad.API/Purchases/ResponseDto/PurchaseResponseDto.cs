@@ -1,4 +1,5 @@
 using MyRoad.API.Common.Entities;
+using MyRoad.API.Suppliers.ResponseDto;
 
 namespace MyRoad.API.Purchases.ResponseDto;
 
@@ -13,4 +14,5 @@ public class PurchaseResponseDto : BaseEntity<long>
     public string Notes { get; set; }
     public bool IsCompleted { get; set; }
     public long CreatedByUserId { get; set; }
+    public SupplierDto Supplier { get; set; }
 }

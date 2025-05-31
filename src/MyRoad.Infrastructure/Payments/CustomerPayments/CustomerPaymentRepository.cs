@@ -29,7 +29,10 @@ public class CustomerPaymentRepository(
 
     public async Task<CustomerPayment?> GetByIdAsync(long id)
     {
-        var payment = await dbContext.CustomerPayments.FindAsync(id);
+        var payment = await dbContext.CustomerPayments
+            .Include(x => x.Customer)
+            .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+        
         return payment;
     }
 

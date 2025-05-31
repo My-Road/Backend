@@ -43,7 +43,9 @@ namespace MyRoad.Infrastructure.Payments.SupplierPayments
 
         public async Task<SupplierPayment?> GetByIdAsync(long supplierPaymentId)
         {
-            var payment = await dbContext.SupplierPayments.FindAsync(supplierPaymentId);
+            var payment = await dbContext.SupplierPayments
+                .Include(x => x.Supplier)
+                .FirstOrDefaultAsync(x => x.Id == supplierPaymentId && !x.IsDeleted);
             return payment;
         }
 

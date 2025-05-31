@@ -37,7 +37,7 @@ public class EmployeePaymentController(IEmployeePaymentService employeePaymentSe
     {
         var response = await employeePaymentService.GetByIdAsync(id);
         return ResponseHandler.HandleResult(
-            response.ToContract(PaymentMapper.ToPaymentResponseDto)
+            response.ToContract(PaymentMapper.ToEmployeePaymentResponseDto)
         );
     }
 

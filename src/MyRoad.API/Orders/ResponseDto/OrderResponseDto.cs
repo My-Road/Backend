@@ -1,6 +1,5 @@
 using MyRoad.API.Common.Entities;
 using MyRoad.API.Customers.ResponseDto;
-using MyRoad.Domain.Customers;
 
 namespace MyRoad.API.Orders.ResponseDto;
 
@@ -15,4 +14,5 @@ public class OrderResponseDto : BaseEntity<long>
     public string? Notes { get; set; }
     public bool IsCompleted { get; set; }
     public long CreatedByUserId { get; set; }
+    public CustomerDto Customer { get; set; }
 }

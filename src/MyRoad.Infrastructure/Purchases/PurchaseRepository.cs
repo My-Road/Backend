@@ -43,7 +43,9 @@ namespace MyRoad.Infrastructure.Purchases
 
         public async Task<Purchase?> GetByIdAsync(long id)
         {
-            var purchase = await dbContext.Purchases.FindAsync(id);
+            var purchase = await dbContext.Purchases
+                .Include(x => x.Supplier)
+                .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
             return purchase;
         }
 

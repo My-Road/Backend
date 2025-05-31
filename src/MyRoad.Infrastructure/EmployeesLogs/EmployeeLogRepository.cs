@@ -71,13 +71,14 @@ namespace MyRoad.Infrastructure.EmployeesLogs
                 PageSize = sieveModel.PageSize ?? 10,
             };
         }
-
+        
         public async Task<EmployeeLog?> GetByIdAsync(long id)
         {
-            var employeeLog = await dbContext.EmployeeLogs.FindAsync(id);
-            return employeeLog;
+            return await dbContext.EmployeeLogs
+                .Include(x => x.Employee)
+                .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
         }
-
+        
         public async Task<bool> UpdateAsync(EmployeeLog employeelog)
         {
             dbContext.EmployeeLogs.Update(employeelog);
