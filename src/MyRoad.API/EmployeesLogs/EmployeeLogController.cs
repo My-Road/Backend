@@ -56,7 +56,7 @@ namespace MyRoad.API.EmployeesLogs
         {
             var response = await employeeLogService.GetByIdAsync(id);
             return ResponseHandler.HandleResult(
-                response.ToContract(EmployeeLogMapper.ToDomainEmployeeLogResponseDto)
+                response.ToContract(EmployeeLogMapper.ToSearchResponseDto)
             );
         }
 

@@ -14,5 +14,4 @@ public class PurchaseResponseDto : BaseEntity<long>
     public string Notes { get; set; }
     public bool IsCompleted { get; set; }
     public long CreatedByUserId { get; set; }
-    public SupplierDto Supplier { get; set; }
 }
