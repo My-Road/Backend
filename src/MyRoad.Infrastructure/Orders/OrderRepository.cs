@@ -38,7 +38,7 @@ public class OrderRepository(
     {
         var query = dbContext.Orders
             .Include(o => o.Customer)
-            .Where(x => !x.IsDeleted)
+            .Where(x => !x.IsDeleted && !x.Customer.IsDeleted)
             .AsQueryable();
 
         var totalItems = await sieveProcessor

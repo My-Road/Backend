@@ -22,7 +22,7 @@ namespace MyRoad.Infrastructure.Purchases
         {
             var query = dbContext.Purchases
                 .Include(s => s.Supplier)
-                .Where(x => !x.IsDeleted)
+                .Where(x => !x.IsDeleted && !x.Supplier.IsDeleted)
                 .AsQueryable();
 
             var totalItems = await sieveProcessor
