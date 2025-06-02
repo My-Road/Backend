@@ -1,7 +1,6 @@
 ﻿using ErrorOr;
 using MyRoad.Domain.Common;
 using MyRoad.Domain.Common.Entities;
-using MyRoad.Domain.Identity.Enums;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Suppliers;
 using MyRoad.Domain.Users;
@@ -10,7 +9,6 @@ using Sieve.Models;
 namespace MyRoad.Domain.Purchases
 {
     public class PurchaseService(
-        IUserContext userContext,
         IPurchaseRepository purchaseRepository,
         ISupplierRepository supplierRepository,
         IUserRepository userRepository,
@@ -41,18 +39,8 @@ namespace MyRoad.Domain.Purchases
             await unitOfWork.BeginTransactionAsync();
             try
             {
-                switch (user.Role)
-                {
-                    case UserRole.Admin when userContext.Role == UserRole.Admin:
-                    case UserRole.Manager when userContext.Role == UserRole.Manager:
-                        supplier.TotalDueAmount += purchase.TotalDueAmount;
-                        purchase.IsCompleted = true;
-                        break;
-
-                    default:
-                        return UserErrors.UnauthorizedUser;
-                }
-
+                supplier.TotalDueAmount += purchase.TotalDueAmount;
+                purchase.IsCompleted = true;
                 await purchaseRepository.CreateAsync(purchase);
                 await supplierRepository.UpdateAsync(supplier);
                 await unitOfWork.CommitTransactionAsync();
