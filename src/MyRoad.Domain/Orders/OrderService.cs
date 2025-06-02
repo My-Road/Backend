@@ -44,6 +44,7 @@ public class OrderService(
             switch (user.Role)
             {
                 case UserRole.Admin when userContext.Role == UserRole.Admin:
+                case UserRole.FactoryOwner when userContext.Role == UserRole.FactoryOwner:    
                     customer.TotalDueAmount += order.TotalDueAmount;
                     order.IsCompleted = true;
                     break;
