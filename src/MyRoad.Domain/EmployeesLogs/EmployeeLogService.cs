@@ -30,13 +30,13 @@ namespace MyRoad.Domain.EmployeesLogs
             }
 
             var employee = await employeeRepository.GetByIdAsync(employeeLog.EmployeeId);
-            if (employee == null)
+            if (employee is null || !employee.IsActive)
             {
                 return EmployeeErrors.NotFound;
             }
 
             var user = await userRepository.GetByIdAsync(employeeLog.CreatedByUserId);
-            if (user is null)
+            if (user is null || !user.IsActive)
             {
                 return UserErrors.NotFound;
             }
@@ -59,6 +59,7 @@ namespace MyRoad.Domain.EmployeesLogs
                 switch (user.Role)
                 {
                     case UserRole.Admin when userContext.Role == UserRole.Admin:
+                    case UserRole.FactoryOwner when userContext.Role == UserRole.FactoryOwner:    
                         employee.TotalDueAmount += employeeLog.DailyWage;
                         employeeLog.IsCompleted = true;
                         break;

@@ -12,6 +12,9 @@ public class TimeOverlapValidator : ITimeOverlapValidator
 
         return existingLogs.Any(existingLog =>
         {
+            if (newLog.Id == existingLog.Id)
+                return false;
+
             var existingCheckIn = existingLog.Date.ToDateTime(existingLog.CheckIn);
             var existingCheckOut = existingLog.CheckOut > existingLog.CheckIn
                 ? existingLog.Date.ToDateTime(existingLog.CheckOut)
