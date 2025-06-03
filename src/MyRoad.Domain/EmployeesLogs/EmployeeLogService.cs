@@ -129,6 +129,8 @@ namespace MyRoad.Domain.EmployeesLogs
                 }
 
                 employee.TotalDueAmount = newTotalDueAmount;
+                employeeLog.IsCompleted = true;
+                
                 existingEmployeeLog.MapUpdateEmployeeLog(employeeLog);
 
                 await employeeRepository.UpdateAsync(employee);

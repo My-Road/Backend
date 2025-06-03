@@ -11,6 +11,7 @@
             existingPurchase.Quantity = updatedPurchase.Quantity;
             existingPurchase.SupplierId = updatedPurchase.SupplierId;
             existingPurchase.Notes = updatedPurchase.Notes;
+            existingPurchase.IsCompleted = updatedPurchase.IsCompleted;
         }
     }
 }

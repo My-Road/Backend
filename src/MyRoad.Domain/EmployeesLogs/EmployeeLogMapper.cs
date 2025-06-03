@@ -2,7 +2,7 @@
 
 public static class EmployeeLogMapper
 {
-    public static void MapUpdateEmployeeLog(this EmployeeLog existingEmployeeLog , EmployeeLog updatedEmployeeLog)
+    public static void MapUpdateEmployeeLog(this EmployeeLog existingEmployeeLog, EmployeeLog updatedEmployeeLog)
     {
         existingEmployeeLog.EmployeeId = updatedEmployeeLog.EmployeeId;
         existingEmployeeLog.Date = updatedEmployeeLog.Date;
@@ -10,5 +10,6 @@ public static class EmployeeLogMapper
         existingEmployeeLog.CheckOut = updatedEmployeeLog.CheckOut;
         existingEmployeeLog.HourlyWage = updatedEmployeeLog.HourlyWage;
         existingEmployeeLog.Notes = updatedEmployeeLog.Notes;
+        existingEmployeeLog.IsCompleted = updatedEmployeeLog.IsCompleted;
     }
 }
