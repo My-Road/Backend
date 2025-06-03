@@ -148,6 +148,8 @@ namespace MyRoad.Domain.Purchases
                 await unitOfWork.BeginTransactionAsync();
 
                 supplier.TotalDueAmount = newTotalDueAmount;
+                purchase.IsCompleted = true;
+                
                 existingPurchase.MapUpdatedPurchase(purchase);
 
                 await supplierRepository.UpdateAsync(supplier);

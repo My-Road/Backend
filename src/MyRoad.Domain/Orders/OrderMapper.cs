@@ -11,5 +11,6 @@ public static class OrderMapper
         existingOrder.RecipientPhoneNumber = updatedOrder.RecipientPhoneNumber;
         existingOrder.Notes = updatedOrder.Notes;
         existingOrder.CustomerId = updatedOrder.CustomerId;
+        existingOrder.IsCompleted = updatedOrder.IsCompleted;
     }
 }
