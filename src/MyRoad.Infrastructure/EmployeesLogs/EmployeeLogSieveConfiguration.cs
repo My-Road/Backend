@@ -26,6 +26,10 @@ namespace MyRoad.Infrastructure.EmployeesLogs
             mapper.Property<EmployeeLog>(x => x.Employee.Address)
                 .CanFilter()
                 .CanSort();
+            
+            mapper.Property<EmployeeLog>(x => x.IsCompleted)
+                .CanFilter()
+                .CanSort();
         }
     }
 }
