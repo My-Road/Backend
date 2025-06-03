@@ -8,19 +8,20 @@ using MyRoad.Domain.Identity;
 
 namespace MyRoad.Infrastructure.Identity;
 
-public class AuthService(UserManager<ApplicationUser> userManager)
+public class AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
     : IAuthService
 {
     public async Task<ErrorOr<User>> AuthenticateAsync(string email, string password)
+{
+    var userApplication = await userManager.FindByEmailAsync(email);
+    if (userApplication is null || !userApplication.IsActive)
+        return UserErrors.InvalidCredentials;
+
+    var result = await signInManager.PasswordSignInAsync(
+        userApplication, password, isPersistent: false, lockoutOnFailure: true);
+
+    if (result.Succeeded)
     {
-        var userApplication = await userManager.FindByEmailAsync(email);
-        if (userApplication is null || !userApplication.IsActive)
-            return UserErrors.InvalidCredentials;
-
-        var isPasswordValid = await userManager.CheckPasswordAsync(userApplication, password);
-        if (!isPasswordValid)
-            return UserErrors.InvalidCredentials;
-
         return new User
         {
             Id = userApplication.Id,
@@ -31,6 +32,10 @@ public class AuthService(UserManager<ApplicationUser> userManager)
             Role = userApplication.Role
         };
     }
+
+    return result.IsLockedOut ? UserErrors.UserLocked : UserErrors.InvalidCredentials;
+}
+
 
     public async Task<ErrorOr<bool>> RegisterUser(User user, string password)
     {

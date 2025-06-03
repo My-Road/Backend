@@ -30,4 +30,9 @@ public static class UserErrors
     public static readonly Error CannotChangeOwnRole = Error.Forbidden(
         code: "User.CannotChangeOwnRole",
         description: "You cannot change your own role.");
+
+    public static Error UserLocked => Error.Conflict(
+        code: "User.Locked",
+        description: "The account has been temporarily locked due to a number of incorrect login attempts."
+    );
 }
