@@ -8,7 +8,6 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 
-
 builder.Services.AddDomain()
     .AddInfrastructure(builder.Configuration, builder.Environment)
     .AddWeb(builder.Configuration);
@@ -26,6 +25,7 @@ app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<RateLimitingMiddleware>();
 app.UseCors();
 app.UseRouting();
 app.UseAuthentication();
