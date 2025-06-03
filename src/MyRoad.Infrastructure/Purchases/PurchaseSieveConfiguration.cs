@@ -26,10 +26,14 @@ namespace MyRoad.Infrastructure.Purchases
             mapper.Property<Purchase>(x => x.Supplier.FullName)
                 .CanFilter()
                 .CanSort();
-            
+
             mapper.Property<Purchase>(x => x.Supplier.Address)
-                            .CanFilter()
-                            .CanSort();
+                .CanFilter()
+                .CanSort();
+            
+            mapper.Property<Purchase>(x => x.IsCompleted)
+                .CanFilter()
+                .CanSort();
         }
     }
 }
