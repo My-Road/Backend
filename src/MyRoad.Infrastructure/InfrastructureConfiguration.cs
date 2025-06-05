@@ -70,7 +70,7 @@ public static class InfrastructureConfiguration
         SieveOption(services);
         return services;
     }
-
+    
     private static void SieveOption(IServiceCollection services)
     {
         services.AddScoped<ISieveProcessor, MyRoadSieveProcessor>();
@@ -94,6 +94,13 @@ public static class InfrastructureConfiguration
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
+        
+        services.Configure<IdentityOptions>(options =>
+        {
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.AllowedForNewUsers = true;
+        });
     }
 
     private static void AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)

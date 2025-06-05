@@ -8,19 +8,20 @@ using MyRoad.Domain.Identity;
 
 namespace MyRoad.Infrastructure.Identity;
 
-public class AuthService(UserManager<ApplicationUser> userManager)
+public class AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
     : IAuthService
 {
     public async Task<ErrorOr<User>> AuthenticateAsync(string email, string password)
+{
+    var userApplication = await userManager.FindByEmailAsync(email);
+    if (userApplication is null || !userApplication.IsActive)
+        return UserErrors.InvalidCredentials;
+
+    var result = await signInManager.PasswordSignInAsync(
+        userApplication, password, isPersistent: false, lockoutOnFailure: true);
+
+    if (result.Succeeded)
     {
-        var userApplication = await userManager.FindByEmailAsync(email);
-        if (userApplication is null || !userApplication.IsActive)
-            return UserErrors.InvalidCredentials;
-
-        var isPasswordValid = await userManager.CheckPasswordAsync(userApplication, password);
-        if (!isPasswordValid)
-            return UserErrors.InvalidCredentials;
-
         return new User
         {
             Id = userApplication.Id,
@@ -32,11 +33,18 @@ public class AuthService(UserManager<ApplicationUser> userManager)
         };
     }
 
+    return result.IsLockedOut ? UserErrors.UserLocked : UserErrors.InvalidCredentials;
+}
+
+
     public async Task<ErrorOr<bool>> RegisterUser(User user, string password)
     {
-        var userApplication = await userManager.FindByEmailAsync(user.Email);
-        if (userApplication is not null)
+        
+        if (await userManager.FindByEmailAsync(user.Email) is not null)
             return UserErrors.EmailExists;
+        
+        if (await userManager.Users.AnyAsync(u => u.PhoneNumber == user.PhoneNumber))
+            return UserErrors.PhoneNumberExists;
 
         var applicationUser = new ApplicationUser
         {
@@ -54,13 +62,13 @@ public class AuthService(UserManager<ApplicationUser> userManager)
         if (result.Succeeded)
             return true;
 
-
         var errors = result.Errors
             .Select(e => IdentityErrors.GenericError(e.Description))
             .ToList();
 
         return errors;
     }
+
 
     public async Task<ErrorOr<bool>> ChangePasswordAsync(long userId, string currentPassword, string newPassword)
     {

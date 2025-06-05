@@ -13,6 +13,11 @@ public static class UserErrors
         "User Email Already Exists"
     );
 
+    public static Error PhoneNumberExists => Error.Conflict(
+        code: "User.PhoneNumberExists",
+        description: "Phone Number Already Exists"
+    );
+
     public static Error InvalidCredentials => Error.Unauthorized(
         code: "User.InvalidCredentials",
         description: "Invalid email or password."
@@ -30,4 +35,9 @@ public static class UserErrors
     public static readonly Error CannotChangeOwnRole = Error.Forbidden(
         code: "User.CannotChangeOwnRole",
         description: "You cannot change your own role.");
+
+    public static Error UserLocked => Error.Conflict(
+        code: "User.Locked",
+        description: "The account has been temporarily locked due to a number of incorrect login attempts."
+    );
 }

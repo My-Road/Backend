@@ -31,7 +31,7 @@ namespace MyRoad.API.Suppliers
         }
 
         [HttpPut("restore/{id:long}")]
-        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
         public async Task<IActionResult> Restore(long id)
         {
             var result = await supplierService.RestoreAsync(id);
