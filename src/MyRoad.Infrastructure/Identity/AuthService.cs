@@ -39,9 +39,12 @@ public class AuthService(UserManager<ApplicationUser> userManager, SignInManager
 
     public async Task<ErrorOr<bool>> RegisterUser(User user, string password)
     {
-        var userApplication = await userManager.FindByEmailAsync(user.Email);
-        if (userApplication is not null)
+        
+        if (await userManager.FindByEmailAsync(user.Email) is not null)
             return UserErrors.EmailExists;
+        
+        if (await userManager.Users.AnyAsync(u => u.PhoneNumber == user.PhoneNumber))
+            return UserErrors.PhoneNumberExists;
 
         var applicationUser = new ApplicationUser
         {
@@ -59,13 +62,13 @@ public class AuthService(UserManager<ApplicationUser> userManager, SignInManager
         if (result.Succeeded)
             return true;
 
-
         var errors = result.Errors
             .Select(e => IdentityErrors.GenericError(e.Description))
             .ToList();
 
         return errors;
     }
+
 
     public async Task<ErrorOr<bool>> ChangePasswordAsync(long userId, string currentPassword, string newPassword)
     {

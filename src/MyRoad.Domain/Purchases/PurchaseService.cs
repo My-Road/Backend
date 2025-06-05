@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using MyRoad.Domain.Common;
 using MyRoad.Domain.Common.Entities;
+using MyRoad.Domain.Identity.Enums;
 using MyRoad.Domain.Identity.Interfaces;
 using MyRoad.Domain.Suppliers;
 using MyRoad.Domain.Users;
@@ -12,7 +13,8 @@ namespace MyRoad.Domain.Purchases
         IPurchaseRepository purchaseRepository,
         ISupplierRepository supplierRepository,
         IUserRepository userRepository,
-        IUnitOfWork unitOfWork) : IPurchaseService
+        IUnitOfWork unitOfWork,
+        IUserContext userContext) : IPurchaseService
     {
         private readonly PurchaseValidator _purchaseValidator = new();
 
@@ -39,8 +41,22 @@ namespace MyRoad.Domain.Purchases
             await unitOfWork.BeginTransactionAsync();
             try
             {
-                supplier.TotalDueAmount += purchase.TotalDueAmount;
-                purchase.IsCompleted = true;
+                
+                switch (user.Role)
+                {
+                    case UserRole.Admin when userContext.Role == UserRole.Admin:
+                    case UserRole.FactoryOwner when userContext.Role == UserRole.FactoryOwner:    
+                        supplier.TotalDueAmount += purchase.TotalDueAmount;
+                        purchase.IsCompleted = true;
+                        break;
+                    case UserRole.Manager when userContext.Role == UserRole.Manager:
+                        purchase.IsCompleted = false;
+                        purchase.Price = 0;
+                        break;
+                    default:
+                        return UserErrors.UnauthorizedUser;
+                }
+                
                 await purchaseRepository.CreateAsync(purchase);
                 await supplierRepository.UpdateAsync(supplier);
                 await unitOfWork.CommitTransactionAsync();

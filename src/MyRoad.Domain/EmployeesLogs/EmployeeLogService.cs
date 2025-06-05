@@ -65,6 +65,7 @@ namespace MyRoad.Domain.EmployeesLogs
                         break;
                     case UserRole.Manager when userContext.Role == UserRole.Manager:
                         employeeLog.IsCompleted = false;
+                        employeeLog.HourlyWage = 0;
                         break;
                     default:
                         await unitOfWork.RollbackTransactionAsync();

@@ -13,6 +13,11 @@ public static class UserErrors
         "User Email Already Exists"
     );
 
+    public static Error PhoneNumberExists => Error.Conflict(
+        code: "User.PhoneNumberExists",
+        description: "Phone Number Already Exists"
+    );
+
     public static Error InvalidCredentials => Error.Unauthorized(
         code: "User.InvalidCredentials",
         description: "Invalid email or password."

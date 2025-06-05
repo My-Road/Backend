@@ -50,6 +50,7 @@ public class OrderService(
                     break;
                 case UserRole.Manager when userContext.Role == UserRole.Manager:
                     order.IsCompleted = false;
+                    order.Price = 0;
                     break;
                 default:
                     return UserErrors.UnauthorizedUser;
