@@ -24,7 +24,7 @@ public class FinancialStatusFilterMethods : ISieveCustomFilterMethods
         };
     }
 
-    public IQueryable<Employee> FilterByRemainingAmount(IQueryable<Employee> source, string op, string[] values)
+    public IQueryable<Employee> RemainingAmount(IQueryable<Employee> source, string op, string[] values)
     {
         if (!decimal.TryParse(values[0], out var targetValue))
             return source;
@@ -41,7 +41,7 @@ public class FinancialStatusFilterMethods : ISieveCustomFilterMethods
         };
     }
 
-    public IQueryable<Supplier> FilterByRemainingAmount(IQueryable<Supplier> source, string op, string[] values)
+    public IQueryable<Supplier> RemainingAmount(IQueryable<Supplier> source, string op, string[] values)
     {
         if (!decimal.TryParse(values[0], out var targetValue))
             return source;
