@@ -58,7 +58,7 @@ namespace MyRoad.API.Suppliers
         }
 
         [HttpGet("{id:long}")]
-        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]
         public async Task<IActionResult> GetById(long id)
         {
             var response = await supplierService.GetByIdAsync(id);

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MyRoad.Domain.Customers;
 using MyRoad.Domain.Employees;
@@ -17,6 +18,7 @@ using MyRoad.Domain.Payments.SupplierPayments;
 using MyRoad.Domain.Purchases;
 using MyRoad.Domain.Suppliers;
 using MyRoad.Domain.Users;
+using MyRoad.Infrastructure.Common;
 using MyRoad.Infrastructure.Customers;
 using MyRoad.Infrastructure.Email;
 using MyRoad.Infrastructure.Employees;
@@ -70,15 +72,28 @@ public static class InfrastructureConfiguration
         SieveOption(services);
         return services;
     }
-    
+
     private static void SieveOption(IServiceCollection services)
     {
-        services.AddScoped<ISieveProcessor, MyRoadSieveProcessor>();
         services.Configure<SieveOptions>(options =>
         {
             options.CaseSensitive = false;
             options.ThrowExceptions = true;
             options.IgnoreNullsOnNotEqual = true;
+        });
+
+        services.AddScoped<ISieveCustomFilterMethods, FinancialStatusFilterMethods>();
+
+        services.AddScoped<ISieveProcessor>(provider =>
+        {
+            var options = provider.GetRequiredService<IOptions<SieveOptions>>();
+            var customFilterMethods = provider.GetRequiredService<ISieveCustomFilterMethods>();
+            var config = provider.GetRequiredService<ISieveConfiguration>();
+            
+
+            var sieveProcessor = new MyRoadSieveProcessor(options, customFilterMethods);
+
+            return sieveProcessor;
         });
     }
 
@@ -94,7 +109,7 @@ public static class InfrastructureConfiguration
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
-        
+
         services.Configure<IdentityOptions>(options =>
         {
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);

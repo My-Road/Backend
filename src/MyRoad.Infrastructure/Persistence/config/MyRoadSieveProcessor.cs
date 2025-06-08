@@ -14,7 +14,7 @@ using Sieve.Services;
 
 namespace MyRoad.Infrastructure.Persistence.config;
 
-public class MyRoadSieveProcessor(IOptions<SieveOptions> options) : SieveProcessor(options)
+public class MyRoadSieveProcessor(IOptions<SieveOptions> options, ISieveCustomFilterMethods filterMethods) : SieveProcessor(options, filterMethods)
 {
     protected override SievePropertyMapper MapProperties(SievePropertyMapper mapper)
     {
