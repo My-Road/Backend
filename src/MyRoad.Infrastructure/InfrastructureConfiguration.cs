@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MyRoad.Domain.Customers;
 using MyRoad.Domain.Employees;
@@ -84,17 +83,7 @@ public static class InfrastructureConfiguration
 
         services.AddScoped<ISieveCustomFilterMethods, FinancialStatusFilterMethods>();
 
-        services.AddScoped<ISieveProcessor>(provider =>
-        {
-            var options = provider.GetRequiredService<IOptions<SieveOptions>>();
-            var customFilterMethods = provider.GetRequiredService<ISieveCustomFilterMethods>();
-            var config = provider.GetRequiredService<ISieveConfiguration>();
-            
-
-            var sieveProcessor = new MyRoadSieveProcessor(options, customFilterMethods);
-
-            return sieveProcessor;
-        });
+        services.AddScoped<ISieveProcessor, MyRoadSieveProcessor>();
     }
 
     private static void UserApplicationOptions(IServiceCollection services)
