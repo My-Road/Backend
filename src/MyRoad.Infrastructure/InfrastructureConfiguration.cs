@@ -17,6 +17,7 @@ using MyRoad.Domain.Payments.SupplierPayments;
 using MyRoad.Domain.Purchases;
 using MyRoad.Domain.Suppliers;
 using MyRoad.Domain.Users;
+using MyRoad.Infrastructure.Common;
 using MyRoad.Infrastructure.Customers;
 using MyRoad.Infrastructure.Email;
 using MyRoad.Infrastructure.Employees;
@@ -70,16 +71,19 @@ public static class InfrastructureConfiguration
         SieveOption(services);
         return services;
     }
-    
+
     private static void SieveOption(IServiceCollection services)
     {
-        services.AddScoped<ISieveProcessor, MyRoadSieveProcessor>();
         services.Configure<SieveOptions>(options =>
         {
             options.CaseSensitive = false;
             options.ThrowExceptions = true;
             options.IgnoreNullsOnNotEqual = true;
         });
+
+        services.AddScoped<ISieveCustomFilterMethods, FinancialStatusFilterMethods>();
+
+        services.AddScoped<ISieveProcessor, MyRoadSieveProcessor>();
     }
 
     private static void UserApplicationOptions(IServiceCollection services)
@@ -94,7 +98,7 @@ public static class InfrastructureConfiguration
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
-        
+
         services.Configure<IdentityOptions>(options =>
         {
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
