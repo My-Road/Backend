@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
 using MyRoad.API.Orders.RequestDto;
 using MyRoad.Domain.Orders;
+using MyRoad.Domain.Reports;
+using MyRoad.Domain.Reports.PDF;
 
 namespace MyRoad.API.Orders;
 
@@ -11,7 +13,10 @@ namespace MyRoad.API.Orders;
 [ApiVersion("1.0")]
 [ApiController]
 public class OrderController(
-    IOrderService orderService
+    IOrderService orderService,
+    IReportBuilderOrdersService reportBuilderOrdersService,
+    IPdfGeneratorService pdfGeneratorService
+
 ) : ControllerBase
 {
     [HttpPost]

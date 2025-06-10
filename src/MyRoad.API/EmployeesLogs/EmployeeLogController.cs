@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyRoad.API.Common;
 using MyRoad.API.EmployeesLogs.RequestDto;
 using MyRoad.Domain.EmployeesLogs;
+using MyRoad.Domain.Reports;
 
 namespace MyRoad.API.EmployeesLogs
 {
@@ -11,7 +12,9 @@ namespace MyRoad.API.EmployeesLogs
     [ApiVersion("1.0")]
     [ApiController]
     public class EmployeeLogController(
-        IEmployeeLogService employeeLogService
+        IEmployeeLogService employeeLogService,
+        IReportBuilderEmployeesLogService reportBuilderEmployeesLogService,
+        IPdfGeneratorService pdfGeneratorService
     ) : ControllerBase
     {
         [HttpPost]

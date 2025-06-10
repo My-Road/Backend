@@ -5,6 +5,7 @@ using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Employees;
 using MyRoad.Domain.Identity.Enums;
 using MyRoad.Domain.Identity.Interfaces;
+using MyRoad.Domain.Reports;
 using MyRoad.Domain.Users;
 using Sieve.Models;
 
@@ -204,6 +205,24 @@ namespace MyRoad.Domain.EmployeesLogs
             }
 
             return employeeLog;
+        }
+
+        public async Task<ErrorOr<List<EmployeeLog>>> GetEmployeesLogForReportAsync(ReportFilter filter)
+        {
+            if (filter.StartDate > filter.EndDate)
+            {
+                return EmployeeLogErrors.InvalidDateRange;
+            }
+
+            var empLog = await employeeLogRepository.GetEmployeesLogForReportAsync(filter);
+
+            if (empLog is null)
+            {
+                return EmployeeErrors.NotFound;
+            }
+
+            return empLog;
+
         }
     }
 }

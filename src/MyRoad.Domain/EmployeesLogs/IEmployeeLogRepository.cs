@@ -1,4 +1,5 @@
 ﻿using MyRoad.Domain.Common.Entities;
+using MyRoad.Domain.Reports;
 using Sieve.Models;
 
 namespace MyRoad.Domain.EmployeesLogs
@@ -16,5 +17,7 @@ namespace MyRoad.Domain.EmployeesLogs
         Task<PaginatedResponse<EmployeeLog>> GetAsync(SieveModel sieveModel);
 
         Task<IEnumerable<EmployeeLog>> GetLogsByDateAsync(long employeeId, DateOnly date);
+
+        Task<List<EmployeeLog>> GetEmployeesLogForReportAsync(ReportFilter filter);
     }
 }

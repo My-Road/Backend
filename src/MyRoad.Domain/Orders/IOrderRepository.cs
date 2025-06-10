@@ -1,6 +1,7 @@
-using MyRoad.Domain.Common.Entities;
-using Sieve.Models;
 using ErrorOr;
+using MyRoad.Domain.Common.Entities;
+using MyRoad.Domain.Reports;
+using Sieve.Models;
 
 namespace MyRoad.Domain.Orders;
 
@@ -15,4 +16,6 @@ public interface IOrderRepository
     Task<PaginatedResponse<Order>> GetAsync(SieveModel sieveModel);
     
     Task<PaginatedResponse<Order>>GetByCustomerAsync(long customerId, SieveModel sieveModel);
+
+    Task<List<Order>> GetOrdersForReportAsync(ReportFilter filter);
 }

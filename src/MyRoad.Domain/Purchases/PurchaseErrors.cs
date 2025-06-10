@@ -31,5 +31,10 @@ namespace MyRoad.Domain.Purchases
             description:
             "This Purchase cannot be removed because it will result in an overpayment or the full amount has already been paid."
         );
+
+        public static Error InvalidDateRange => Error.Validation(
+           code: "Purchase.InvalidDateRange",
+           description: "Start date must be earlier than end date"
+       );
     }
 }

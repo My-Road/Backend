@@ -3,6 +3,7 @@ using MyRoad.Domain.Common;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Identity.Enums;
 using MyRoad.Domain.Identity.Interfaces;
+using MyRoad.Domain.Reports;
 using MyRoad.Domain.Suppliers;
 using MyRoad.Domain.Users;
 using Sieve.Models;
@@ -179,6 +180,23 @@ namespace MyRoad.Domain.Purchases
                 await unitOfWork.RollbackTransactionAsync();
                 throw;
             }
+        }
+
+        public async Task<ErrorOr<List<Purchase>>> GetPurchasesForReportAsync(ReportFilter filter)
+        {
+            if (filter.StartDate > filter.EndDate)
+            {
+                return PurchaseErrors.InvalidDateRange;
+            }
+
+            var purchase = await purchaseRepository.GetPurchaseForReportAsync(filter);
+
+            if (purchase is null)
+            {
+                return PurchaseErrors.NotFound;
+            }
+
+            return purchase;
         }
     }
 }

@@ -4,6 +4,7 @@ using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Customers;
 using MyRoad.Domain.Identity.Enums;
 using MyRoad.Domain.Identity.Interfaces;
+using MyRoad.Domain.Reports;
 using MyRoad.Domain.Users;
 using Sieve.Models;
 
@@ -178,5 +179,22 @@ public class OrderService(
         var result = await orderRepository.GetAsync(sieveModel);
 
         return result;
+    }
+
+    public async Task<ErrorOr<List<Order>>> GetOrdersForReportAsync(ReportFilter filter)
+    {
+        if (filter.StartDate > filter.EndDate)
+        {
+            return OrderErrors.InvalidDateRange;
+        }
+
+        var order = await orderRepository.GetOrdersForReportAsync(filter);
+
+        if (order is null)
+        {
+            return OrderErrors.NotFound;
+        }
+
+        return order;
     }
 }

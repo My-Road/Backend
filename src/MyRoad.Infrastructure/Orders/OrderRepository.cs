@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Orders;
+using MyRoad.Domain.Reports;
 using MyRoad.Infrastructure.Persistence;
 using Sieve.Models;
 using Sieve.Services;
@@ -79,5 +80,29 @@ public class OrderRepository(
             Page = sieveModel.Page ?? 1,
             PageSize = sieveModel.PageSize ?? 10,
         };
+    }
+
+    public async Task<List<Order>> GetOrdersForReportAsync(ReportFilter filter)
+    {
+        var query = dbContext.Orders
+            .Include(o => o.Customer)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(filter.FullName))
+            query = query.Where(o => o.Customer.FullName.Contains(filter.FullName));
+
+        if (!string.IsNullOrEmpty(filter.Address))
+            query = query.Where(o => o.Customer.Address.Contains(filter.Address));
+
+        if (filter.StartDate.HasValue)
+            query = query.Where(o => o.OrderDate >= filter.StartDate.Value);
+
+        if (filter.EndDate.HasValue)
+            query = query.Where(o => o.OrderDate <= filter.EndDate.Value);
+
+        return await query
+            .OrderByDescending(o => o.OrderDate)
+            .AsNoTracking()
+            .ToListAsync();
     }
 }
