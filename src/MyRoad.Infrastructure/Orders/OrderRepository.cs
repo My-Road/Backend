@@ -80,4 +80,16 @@ public class OrderRepository(
             PageSize = sieveModel.PageSize ?? 10,
         };
     }
+
+    public async Task<decimal> GetTotalIncomeAsync(DateOnly? from = null)
+    {
+        from ??= DateOnly.FromDateTime(DateTime.Now.AddDays(-30));
+
+        var orders = await dbContext.Orders
+            .Where(o => !o.IsDeleted && o.OrderDate >= from)
+            .ToListAsync();
+
+        return orders.Sum(o => o.TotalDueAmount);
+    }
+
 }

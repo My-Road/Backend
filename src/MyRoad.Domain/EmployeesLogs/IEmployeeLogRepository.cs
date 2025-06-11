@@ -8,13 +8,15 @@ namespace MyRoad.Domain.EmployeesLogs
         Task<bool> CreateAsync(EmployeeLog employeeLog);
 
         Task<bool> UpdateAsync(EmployeeLog employeeLog);
-        
+
         Task<EmployeeLog?> GetByIdAsync(long id);
-        
+
         Task<PaginatedResponse<EmployeeLog>> GetByEmployeeAsync(long employeeId, SieveModel sieveModel);
-        
+
         Task<PaginatedResponse<EmployeeLog>> GetAsync(SieveModel sieveModel);
 
         Task<IEnumerable<EmployeeLog>> GetLogsByDateAsync(long employeeId, DateOnly date);
+
+        Task<decimal> GetTotalExpensesAsync(DateOnly? from = null);
     }
 }

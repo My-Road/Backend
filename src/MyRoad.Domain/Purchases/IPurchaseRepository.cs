@@ -14,5 +14,7 @@ namespace MyRoad.Domain.Purchases
         Task<PaginatedResponse<Purchase>> GetAsync(SieveModel sieveModel);
 
         Task<PaginatedResponse<Purchase>> GetBySupplierAsync(long supplierId, SieveModel sieveModel);
+
+        Task<decimal> GetTotalExpensesAsync(DateOnly? from = null);
     }
 }

@@ -15,5 +15,7 @@ namespace MyRoad.Domain.Payments.SupplierPayments
         Task<PaginatedResponse<SupplierPayment>> GetAsync(SieveModel sieveModel);
 
         Task<PaginatedResponse<SupplierPayment>> GetBySupplierIdAsync(long supplierId, SieveModel sieveModel);
+        
+        Task<decimal> GetTotalPaymentAsync(DateOnly? from = null);
     }
 }

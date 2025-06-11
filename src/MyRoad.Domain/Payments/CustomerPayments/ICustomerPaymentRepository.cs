@@ -14,4 +14,6 @@ public interface ICustomerPaymentRepository
     Task<PaginatedResponse<CustomerPayment>> GetAsync(SieveModel sieveModel);
 
     Task<PaginatedResponse<CustomerPayment>> GetByCustomerAsync(long id, SieveModel sieveModel);
+    
+    Task<decimal> GetTotalPaymentAsync(DateOnly? from = null);
 }

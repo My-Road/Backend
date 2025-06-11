@@ -16,4 +16,6 @@ public interface ICustomerRepository
     
     Task<Customer?> FindByPhoneNumber(string? customerPhoneNumber);
     Task<Customer?> FindByEmail(string? customerEmail);
+    
+    Task<long> CountAsync();
 }
