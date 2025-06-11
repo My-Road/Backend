@@ -17,5 +17,5 @@ public interface IOrderRepository
     
     Task<PaginatedResponse<Order>>GetByCustomerAsync(long customerId, SieveModel sieveModel);
 
-    Task<List<Order>> GetOrdersForReportAsync(ReportFilter filter);
+    Task<List<Order>> GetOrdersForReportAsync(SieveModel sieveModel);
 }

@@ -87,28 +87,18 @@ namespace MyRoad.Infrastructure.EmployeesLogs
             return await dbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<EmployeeLog>> GetEmployeesLogForReportAsync(ReportFilter filter)
+        public async Task<List<EmployeeLog>> GetEmployeesLogForReportAsync(SieveModel sieveModel)
         {
             var query = dbContext.EmployeeLogs
                 .Include(o => o.Employee)
                 .AsQueryable();
 
-            if (!string.IsNullOrEmpty(filter.FullName))
-                query = query.Where(o => o.Employee.FullName.Contains(filter.FullName));
+            query = sieveProcessor.Apply(sieveModel, query, applyPagination: false);
 
-            if (!string.IsNullOrEmpty(filter.Address))
-                query = query.Where(o => o.Employee.Address.Contains(filter.Address));
+            query = query.OrderByDescending(o => o.Date);
 
-            if (filter.StartDate.HasValue)
-                query = query.Where(o => o.Employee.StartDate >= filter.StartDate.Value);
-
-            if (filter.EndDate.HasValue)
-                query = query.Where(o => o.Employee.EndDate <= filter.EndDate.Value);
-
-            return await query
-                .OrderByDescending(o => o.Date)
-                .AsNoTracking()
-                .ToListAsync();
+            return await query.AsNoTracking().ToListAsync();
         }
+
     }
 }

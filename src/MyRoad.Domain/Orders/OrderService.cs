@@ -181,20 +181,10 @@ public class OrderService(
         return result;
     }
 
-    public async Task<ErrorOr<List<Order>>> GetOrdersForReportAsync(ReportFilter filter)
+    public async Task<ErrorOr<List<Order>>> GetOrdersForReportAsync(SieveModel sieveModel)
     {
-        if (filter.StartDate > filter.EndDate)
-        {
-            return OrderErrors.InvalidDateRange;
-        }
+        var orders = await orderRepository.GetOrdersForReportAsync(sieveModel);
 
-        var order = await orderRepository.GetOrdersForReportAsync(filter);
-
-        if (order is null)
-        {
-            return OrderErrors.NotFound;
-        }
-
-        return order;
+        return orders;
     }
 }

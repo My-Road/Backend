@@ -12,10 +12,8 @@ namespace MyRoad.API.EmployeesLogs
     [ApiVersion("1.0")]
     [ApiController]
     public class EmployeeLogController(
-        IEmployeeLogService employeeLogService,
-        IReportBuilderEmployeesLogService reportBuilderEmployeesLogService,
-        IPdfGeneratorService pdfGeneratorService
-    ) : ControllerBase
+        IEmployeeLogService employeeLogService
+        ) : ControllerBase
     {
         [HttpPost]
         [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]

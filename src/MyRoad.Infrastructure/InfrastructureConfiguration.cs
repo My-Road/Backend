@@ -15,6 +15,7 @@ using MyRoad.Domain.Payments.CustomerPayments;
 using MyRoad.Domain.Payments.EmployeePayments;
 using MyRoad.Domain.Payments.SupplierPayments;
 using MyRoad.Domain.Purchases;
+using MyRoad.Domain.Reports;
 using MyRoad.Domain.Suppliers;
 using MyRoad.Domain.Users;
 using MyRoad.Infrastructure.Common;
@@ -28,6 +29,7 @@ using MyRoad.Infrastructure.Orders;
 using MyRoad.Infrastructure.Payments.CustomerPayments;
 using MyRoad.Infrastructure.Payments.EmployeePayments;
 using MyRoad.Infrastructure.Payments.SupplierPayments;
+using MyRoad.Infrastructure.PDF;
 using MyRoad.Infrastructure.Persistence;
 using MyRoad.Infrastructure.Persistence.config;
 using MyRoad.Infrastructure.Purchases;
@@ -68,6 +70,7 @@ public static class InfrastructureConfiguration
         services.AddScoped<ICustomerPaymentRepository, CustomerPaymentRepository>();
         services.AddScoped<ISupplierPaymentRepository, SupplierPaymentRepository>();
         services.AddScoped<ISieveConfiguration, CustomerSieveConfiguration>();
+        services.AddScoped<IPdfGeneratorService, PdfGeneratorService>();
         SieveOption(services);
         return services;
     }

@@ -10,10 +10,6 @@ using MyRoad.Domain.Payments.EmployeePayments;
 using MyRoad.Domain.Payments.SupplierPayments;
 using MyRoad.Domain.Purchases;
 using MyRoad.Domain.Reports;
-using MyRoad.Domain.Reports.EmployeesReports;
-using MyRoad.Domain.Reports.OrderReport;
-using MyRoad.Domain.Reports.PDF;
-using MyRoad.Domain.Reports.SuppliersReports;
 using MyRoad.Domain.Suppliers;
 using MyRoad.Domain.Users;
 
@@ -35,12 +31,6 @@ public static class DomainConfiguration
         services.AddScoped<ISupplierService, SupplierService>();
         services.AddScoped<IPurchaseService, PurchaseService>();
         services.AddScoped<ISupplierPaymentService, SupplierPaymentService>();
-        services.AddScoped<IPdfGeneratorService, PdfGeneratorService>();
-        services.AddScoped<IReportBuilderOrdersService, ReportBuilderOrderService>();
-        services.AddScoped<IReportBuilderEmployeesLogService, ReportBuilderEmployeeLogService>();
-        services.AddScoped<IReportBuilderPurchaseService, ReportBuilderPurchaseService>();
-
-
         return services;
     }
 }

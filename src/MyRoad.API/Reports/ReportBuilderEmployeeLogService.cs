@@ -1,12 +1,12 @@
 ﻿using System.Text;
-using MyRoad.Domain.Orders;
-using MyRoad.Domain.Reports.PDF;
+using MyRoad.Domain.EmployeesLogs;
+using MyRoad.Domain.Reports;
 
-namespace MyRoad.Domain.Reports.OrderReport
+namespace MyRoad.API.Reports
 {
-    public class ReportBuilderOrderService : IReportBuilderOrdersService
+    public static class ReportBuilderEmployeeLogService 
     {
-        public string BuildOrdersReportHtml(List<Order> orders)
+        public static string BuildEmployeesLogReportHtml(List<EmployeeLog> employeeLogs)
         {
             var sb = new StringBuilder();
 
@@ -25,34 +25,38 @@ namespace MyRoad.Domain.Reports.OrderReport
         </head>
         <body>
             <div class='header'>
-                <h2>تقارير طلبات الزبائن</h2>
+                <h2>تقارير سجلات الموظفين </h2>
             </div>
             <table>
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>التاريخ</th>
-                        <th>اسم الزبون</th>
+                        <th>اسم الموظف</th>
                         <th>العنوان</th>
-                        <th>الكمية</th>
-                        <th>السعر</th>
-                        <th>المبلغ الاجمالي</th>
+                        <th>سعر الساعة </th>
+                        <th>وقت الدخول </th>
+                        <th>وقت الخروج  </th>
+                        <th>ساعات العمل </th>
+                        <th>الاجر اليومي </th>
                     </tr>
                 </thead>
                 <tbody>");
 
-            for (int i = 0; i < orders.Count; i++)
+            for (int i = 0; i < employeeLogs.Count; i++)
             {
-                var order = orders[i];
+                var empLog = employeeLogs[i];
                 sb.Append($@"
                     <tr>
                         <td>{i + 1}</td>
-                        <td>{order.OrderDate:yyyy-MM-dd}</td>
-                        <td>{order.Customer.FullName}</td>
-                        <td>{order.Customer.Address}</td>
-                        <td>{order.Quantity}</td>
-                        <td>{order.Price} شيكل</td>
-                        <td>{order.Price * order.Quantity} شيكل</td>
+                        <td>{empLog.Date:yyyy-MM-dd}</td>
+                        <td>{empLog.Employee.FullName}</td>
+                        <td>{empLog.Employee.Address}</td>
+                        <td>{empLog.HourlyWage} شيكل</td>
+                        <td>{empLog.CheckIn} </td>
+                        <td>{empLog.CheckOut} </td>
+                        <td>{empLog.TotalHours}</td>
+                        <td>{empLog.DailyWage}</td>
                     </tr>");
             }
 
@@ -64,5 +68,6 @@ namespace MyRoad.Domain.Reports.OrderReport
 
             return sb.ToString();
         }
+
     }
 }

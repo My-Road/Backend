@@ -1,11 +1,11 @@
 ﻿using System.Text;
-using MyRoad.Domain.EmployeesLogs;
+using MyRoad.Domain.Purchases;
 
-namespace MyRoad.Domain.Reports.EmployeesReports
+namespace MyRoad.API.Reports
 {
-    public class ReportBuilderEmployeeLogService : IReportBuilderEmployeesLogService
+    public class ReportBuilderPurchaseService
     {
-        public string BuildEmployeesLogReportHtml(List<EmployeeLog> employeeLogs)
+        public static string BuildPurchaseReportHtml(List<Purchase> purchases)
         {
             var sb = new StringBuilder();
 
@@ -24,38 +24,34 @@ namespace MyRoad.Domain.Reports.EmployeesReports
         </head>
         <body>
             <div class='header'>
-                <h2>تقارير سجلات الموظفين </h2>
+                <h2>تقارير عمليات الشراء للمُوَرِّدين</h2>
             </div>
             <table>
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>التاريخ</th>
-                        <th>اسم الموظف</th>
+                        <th>اسم ٱلْمُوَرِّد</th>
                         <th>العنوان</th>
-                        <th>سعر الساعة </th>
-                        <th>وقت الدخول </th>
-                        <th>وقت الخروج  </th>
-                        <th>ساعات العمل </th>
-                        <th>الاجر اليومي </th>
+                        <th>الكمية</th>
+                        <th>السعر</th>
+                        <th>المبلغ الاجمالي</th>
                     </tr>
                 </thead>
                 <tbody>");
 
-            for (int i = 0; i < employeeLogs.Count; i++)
+            for (int i = 0; i < purchases.Count; i++)
             {
-                var empLog = employeeLogs[i];
+                var purchase = purchases[i];
                 sb.Append($@"
                     <tr>
                         <td>{i + 1}</td>
-                        <td>{empLog.Date:yyyy-MM-dd}</td>
-                        <td>{empLog.Employee.FullName}</td>
-                        <td>{empLog.Employee.Address}</td>
-                        <td>{empLog.HourlyWage} شيكل</td>
-                        <td>{empLog.CheckIn} </td>
-                        <td>{empLog.CheckOut} </td>
-                        <td>{empLog.TotalHours}</td>
-                        <td>{empLog.DailyWage}</td>
+                        <td>{purchase.PurchasesDate:yyyy-MM-dd}</td>
+                        <td>{purchase.Supplier.FullName}</td>
+                        <td>{purchase.Supplier.Address}</td>
+                        <td>{purchase.Quantity}</td>
+                        <td>{purchase.Price} شيكل</td>
+                        <td>{purchase.Price * purchase.Quantity} شيكل</td>
                     </tr>");
             }
 
@@ -67,6 +63,5 @@ namespace MyRoad.Domain.Reports.EmployeesReports
 
             return sb.ToString();
         }
-    
     }
 }

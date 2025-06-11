@@ -17,7 +17,8 @@ namespace MyRoad.Domain.EmployeesLogs
         IEmployeeRepository employeeRepository,
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
-        ITimeOverlapValidator timeOverlapValidator
+        ITimeOverlapValidator timeOverlapValidator,
+        IPdfGeneratorService pdfGeneratorService
     ) : IEmployeeLogService
     {
         private readonly EmployeeLogValidator _employeeLogValidator = new();
@@ -207,22 +208,11 @@ namespace MyRoad.Domain.EmployeesLogs
             return employeeLog;
         }
 
-        public async Task<ErrorOr<List<EmployeeLog>>> GetEmployeesLogForReportAsync(ReportFilter filter)
+        public async Task<ErrorOr<List<EmployeeLog>>> GetEmployeesLogForReportAsync(SieveModel sieveModel)
         {
-            if (filter.StartDate > filter.EndDate)
-            {
-                return EmployeeLogErrors.InvalidDateRange;
-            }
-
-            var empLog = await employeeLogRepository.GetEmployeesLogForReportAsync(filter);
-
-            if (empLog is null)
-            {
-                return EmployeeErrors.NotFound;
-            }
+            var empLog = await employeeLogRepository.GetEmployeesLogForReportAsync(sieveModel);
 
             return empLog;
-
         }
     }
 }

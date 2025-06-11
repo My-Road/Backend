@@ -1,11 +1,12 @@
 ﻿using System.Text;
-using MyRoad.Domain.Purchases;
+using MyRoad.Domain.Orders;
+using MyRoad.Domain.Reports;
 
-namespace MyRoad.Domain.Reports.SuppliersReports
+namespace MyRoad.API.Reports
 {
-    public class ReportBuilderPurchaseService : IReportBuilderPurchaseService
+    public class ReportBuilderOrderService 
     {
-        public string BuildPurchaseReportHtml(List<Purchase> purchases)
+        public static string BuildOrdersReportHtml(List<Order> orders)
         {
             var sb = new StringBuilder();
 
@@ -24,14 +25,14 @@ namespace MyRoad.Domain.Reports.SuppliersReports
         </head>
         <body>
             <div class='header'>
-                <h2>تقارير عمليات الشراء للمُوَرِّدين</h2>
+                <h2>تقارير طلبات الزبائن</h2>
             </div>
             <table>
                 <thead>
                     <tr>
                         <th>#</th>
                         <th>التاريخ</th>
-                        <th>اسم ٱلْمُوَرِّد</th>
+                        <th>اسم الزبون</th>
                         <th>العنوان</th>
                         <th>الكمية</th>
                         <th>السعر</th>
@@ -40,18 +41,18 @@ namespace MyRoad.Domain.Reports.SuppliersReports
                 </thead>
                 <tbody>");
 
-            for (int i = 0; i < purchases.Count; i++)
+            for (int i = 0; i < orders.Count; i++)
             {
-                var purchase = purchases[i];
+                var order = orders[i];
                 sb.Append($@"
                     <tr>
                         <td>{i + 1}</td>
-                        <td>{purchase.PurchasesDate:yyyy-MM-dd}</td>
-                        <td>{purchase.Supplier.FullName}</td>
-                        <td>{purchase.Supplier.Address}</td>
-                        <td>{purchase.Quantity}</td>
-                        <td>{purchase.Price} شيكل</td>
-                        <td>{purchase.Price * purchase.Quantity} شيكل</td>
+                        <td>{order.OrderDate:yyyy-MM-dd}</td>
+                        <td>{order.Customer.FullName}</td>
+                        <td>{order.Customer.Address}</td>
+                        <td>{order.Quantity}</td>
+                        <td>{order.Price} شيكل</td>
+                        <td>{order.Price * order.Quantity} شيكل</td>
                     </tr>");
             }
 
@@ -63,8 +64,5 @@ namespace MyRoad.Domain.Reports.SuppliersReports
 
             return sb.ToString();
         }
-
-    
     }
 }
-

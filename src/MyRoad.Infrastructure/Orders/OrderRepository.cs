@@ -82,27 +82,18 @@ public class OrderRepository(
         };
     }
 
-    public async Task<List<Order>> GetOrdersForReportAsync(ReportFilter filter)
+    public async Task<List<Order>> GetOrdersForReportAsync(SieveModel sieveModel)
     {
         var query = dbContext.Orders
             .Include(o => o.Customer)
             .AsQueryable();
 
-        if (!string.IsNullOrEmpty(filter.FullName))
-            query = query.Where(o => o.Customer.FullName.Contains(filter.FullName));
-
-        if (!string.IsNullOrEmpty(filter.Address))
-            query = query.Where(o => o.Customer.Address.Contains(filter.Address));
-
-        if (filter.StartDate.HasValue)
-            query = query.Where(o => o.OrderDate >= filter.StartDate.Value);
-
-        if (filter.EndDate.HasValue)
-            query = query.Where(o => o.OrderDate <= filter.EndDate.Value);
+        query = sieveProcessor.Apply(sieveModel, query, applyPagination: false);
 
         return await query
             .OrderByDescending(o => o.OrderDate)
             .AsNoTracking()
             .ToListAsync();
     }
+
 }

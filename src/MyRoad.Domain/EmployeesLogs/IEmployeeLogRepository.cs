@@ -18,6 +18,6 @@ namespace MyRoad.Domain.EmployeesLogs
 
         Task<IEnumerable<EmployeeLog>> GetLogsByDateAsync(long employeeId, DateOnly date);
 
-        Task<List<EmployeeLog>> GetEmployeesLogForReportAsync(ReportFilter filter);
+        Task<List<EmployeeLog>> GetEmployeesLogForReportAsync(SieveModel sieveModel);
     }
 }

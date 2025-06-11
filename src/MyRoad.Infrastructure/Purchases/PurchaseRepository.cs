@@ -80,23 +80,13 @@ namespace MyRoad.Infrastructure.Purchases
             return await dbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<List<Purchase>> GetPurchaseForReportAsync(ReportFilter filter)
+        public async Task<List<Purchase>> GetPurchaseForReportAsync(SieveModel sieveModel)
         {
             var query = dbContext.Purchases
-            .Include(o => o.Supplier)
-            .AsQueryable();
+                .Include(o => o.Supplier)
+                .AsQueryable();
 
-            if (!string.IsNullOrEmpty(filter.FullName))
-                query = query.Where(o => o.Supplier.FullName.Contains(filter.FullName));
-
-            if (!string.IsNullOrEmpty(filter.Address))
-                query = query.Where(o => o.Supplier.Address.Contains(filter.Address));
-
-            if (filter.StartDate.HasValue)
-                query = query.Where(o => o.PurchasesDate >= filter.StartDate.Value);
-
-            if (filter.EndDate.HasValue)
-                query = query.Where(o => o.PurchasesDate <= filter.EndDate.Value);
+            query = sieveProcessor.Apply(sieveModel, query, applyPagination: false);
 
             return await query
                 .OrderByDescending(o => o.PurchasesDate)

@@ -182,19 +182,9 @@ namespace MyRoad.Domain.Purchases
             }
         }
 
-        public async Task<ErrorOr<List<Purchase>>> GetPurchasesForReportAsync(ReportFilter filter)
+        public async Task<ErrorOr<List<Purchase>>> GetPurchasesForReportAsync(SieveModel sieveModel)
         {
-            if (filter.StartDate > filter.EndDate)
-            {
-                return PurchaseErrors.InvalidDateRange;
-            }
-
-            var purchase = await purchaseRepository.GetPurchaseForReportAsync(filter);
-
-            if (purchase is null)
-            {
-                return PurchaseErrors.NotFound;
-            }
+            var purchase = await purchaseRepository.GetPurchaseForReportAsync(sieveModel);
 
             return purchase;
         }

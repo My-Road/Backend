@@ -1,6 +1,5 @@
 ﻿using ErrorOr;
 using MyRoad.Domain.Common.Entities;
-using MyRoad.Domain.Reports;
 using Sieve.Models;
 
 namespace MyRoad.Domain.Purchases
@@ -19,6 +18,6 @@ namespace MyRoad.Domain.Purchases
 
         Task<ErrorOr<PaginatedResponse<Purchase>>> GetAsync(SieveModel sieveModel);
 
-        Task<ErrorOr<List<Purchase>>> GetPurchasesForReportAsync(ReportFilter filter);
+        Task<ErrorOr<List<Purchase>>> GetPurchasesForReportAsync(SieveModel sieveModel);
     }
 }

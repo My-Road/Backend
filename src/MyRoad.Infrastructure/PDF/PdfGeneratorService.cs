@@ -1,8 +1,9 @@
-﻿using NReco.PdfGenerator;
+﻿using MyRoad.Domain.Reports;
+using NReco.PdfGenerator;
 
-namespace MyRoad.Domain.Reports
+namespace MyRoad.Infrastructure.PDF
 {
-    public class PdfGeneratorService : IPdfGeneratorService
+    internal class PdfGeneratorService : IPdfGeneratorService
     {
         public async Task<byte[]> GeneratePdfFromHtml(string htmlContent)
         {

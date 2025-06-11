@@ -6,8 +6,6 @@ using MyRoad.Domain.EmployeesLogs;
 using MyRoad.Domain.Orders;
 using MyRoad.Domain.Purchases;
 using MyRoad.Domain.Reports;
-using MyRoad.Domain.Reports.PDF;
-using MyRoad.Domain.Reports.SuppliersReports;
 
 namespace MyRoad.API.Reports
 {
@@ -15,21 +13,17 @@ namespace MyRoad.API.Reports
     [ApiVersion("1.0")]
     [ApiController]
     public class ReportsController(IOrderService orderService,
-    IReportBuilderOrdersService reportBuilderOrdersService,
     IPdfGeneratorService pdfGeneratorService,
     IEmployeeLogService employeeLogService,
-    IReportBuilderEmployeesLogService reportBuilderEmployeesLogService,
-    IPurchaseService purchaseService,
-    IReportBuilderPurchaseService reportBuilderPurchaseService
+    IPurchaseService purchaseService
     ) : ControllerBase
     {
-
         [HttpPost("orders-report")]
         [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
-        public async Task<IActionResult> GenerateOrderReport([FromBody] ReportFilter filter)
+        public async Task<IActionResult> GenerateOrderReport([FromBody] RetrievalRequest request)
         {
-            var ordersResult = await orderService.GetOrdersForReportAsync(filter);
-            var htmlContent = reportBuilderOrdersService.BuildOrdersReportHtml(ordersResult.Value);
+            var orderResult = await orderService.GetOrdersForReportAsync(request.ToSieveModel());
+            var htmlContent = ReportBuilderOrderService.BuildOrdersReportHtml(orderResult.Value);
             var pdfBytes = pdfGeneratorService.GeneratePdfFromHtml(htmlContent);
 
             return File(await pdfBytes, "application/pdf",
@@ -38,10 +32,10 @@ namespace MyRoad.API.Reports
 
         [HttpPost("employeesLogs-report")]
         [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
-        public async Task<IActionResult> GenerateEmployeeLogReport([FromBody] ReportFilter filter)
+        public async Task<IActionResult> GenerateEmployeeLogReport([FromBody] RetrievalRequest request)
         {
-            var empLogResult = await employeeLogService.GetEmployeesLogForReportAsync(filter);
-            var htmlContent = reportBuilderEmployeesLogService.BuildEmployeesLogReportHtml(empLogResult.Value);
+            var empLogResult = await employeeLogService.GetEmployeesLogForReportAsync(request.ToSieveModel());
+            var htmlContent = ReportBuilderEmployeeLogService.BuildEmployeesLogReportHtml(empLogResult.Value);
             var pdfBytes = pdfGeneratorService.GeneratePdfFromHtml(htmlContent);
 
             return File(await pdfBytes, "application/pdf",
@@ -50,10 +44,10 @@ namespace MyRoad.API.Reports
 
         [HttpPost("purchase-report")]
         [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
-        public async Task<IActionResult> GeneratePurchaseReport([FromBody] ReportFilter filter)
+        public async Task<IActionResult> GeneratePurchaseReport([FromBody] RetrievalRequest request)
         {
-            var purchaseResult = await purchaseService.GetPurchasesForReportAsync(filter);
-            var htmlContent = reportBuilderPurchaseService.BuildPurchaseReportHtml(purchaseResult.Value);
+            var purchasesResult = await purchaseService.GetPurchasesForReportAsync(request.ToSieveModel());
+            var htmlContent = ReportBuilderPurchaseService.BuildPurchaseReportHtml(purchasesResult.Value);
             var pdfBytes = pdfGeneratorService.GeneratePdfFromHtml(htmlContent);
 
             return File(await pdfBytes, "application/pdf",

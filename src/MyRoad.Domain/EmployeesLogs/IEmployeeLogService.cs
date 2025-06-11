@@ -19,6 +19,7 @@ namespace MyRoad.Domain.EmployeesLogs
         
         Task<ErrorOr<PaginatedResponse<EmployeeLog>>> GetAsync(SieveModel sieveModel);
 
-        Task<ErrorOr<List<EmployeeLog>>> GetEmployeesLogForReportAsync(ReportFilter filter);
+        Task<ErrorOr<List<EmployeeLog>>> GetEmployeesLogForReportAsync(SieveModel sieveModel);
+
     }
 }

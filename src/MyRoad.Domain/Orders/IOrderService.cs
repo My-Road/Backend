@@ -20,5 +20,5 @@ public interface IOrderService
    
     Task<ErrorOr<PaginatedResponse<Order>>> GetAsync(SieveModel sieveModel);
 
-    Task<ErrorOr<List<Order>>> GetOrdersForReportAsync(ReportFilter filter);
+    Task<ErrorOr<List<Order>>> GetOrdersForReportAsync(SieveModel sieveModel);
 }
