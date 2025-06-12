@@ -68,4 +68,12 @@ public class CustomerRepository(
         return await dbContext.Customers
             .FirstOrDefaultAsync(c => c.Email != null && c.Email.ToLower() == customerEmail.ToLower());
     }
+
+    public async Task<long> CountAsync()
+    {
+        var result = await dbContext.Customers
+            .Where(c => !c.IsDeleted)
+            .CountAsync();
+        return result;
+    }
 }

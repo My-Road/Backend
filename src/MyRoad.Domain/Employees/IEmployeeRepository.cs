@@ -11,4 +11,6 @@ public interface IEmployeeRepository
     Task<ErrorOr<PaginatedResponse<Employee>>> GetAsync(SieveModel sieveModel);
 
     Task<Employee?> FindByPhoneNumberAsync(string? employeePhoneNumber);
+    
+    Task<long> CountAsync();
 }

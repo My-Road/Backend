@@ -80,4 +80,15 @@ public class EmployeePaymentRepository(
             PageSize = sieveModel.PageSize ?? 10,
         };
     }
+
+    public async Task<decimal> GetTotalPaymentAsync(DateOnly? from = null)
+    {
+        from ??= DateOnly.FromDateTime(DateTime.Now.AddDays(-30));
+
+        var result = await dbContext.EmployeePayments
+            .Where(p => !p.IsDeleted && p.PaymentDate >= from)
+            .SumAsync(p => p.Amount);
+
+        return result;
+    }
 }
