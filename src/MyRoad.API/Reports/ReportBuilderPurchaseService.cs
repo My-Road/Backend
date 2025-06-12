@@ -5,7 +5,7 @@ namespace MyRoad.API.Reports
 {
     public class ReportBuilderPurchaseService
     {
-        public static string BuildPurchaseReportHtml(List<Purchase> purchases)
+        public async static Task<string> BuildPurchaseReportHtml(List<Purchase> purchases)
         {
             var sb = new StringBuilder();
 
@@ -40,12 +40,12 @@ namespace MyRoad.API.Reports
                 </thead>
                 <tbody>");
 
-            for (int i = 0; i < purchases.Count; i++)
+            int index = 1;
+            foreach (var purchase in purchases)
             {
-                var purchase = purchases[i];
                 sb.Append($@"
                     <tr>
-                        <td>{i + 1}</td>
+                        <td>{index}</td>
                         <td>{purchase.PurchasesDate:yyyy-MM-dd}</td>
                         <td>{purchase.Supplier.FullName}</td>
                         <td>{purchase.Supplier.Address}</td>
@@ -53,6 +53,7 @@ namespace MyRoad.API.Reports
                         <td>{purchase.Price} شيكل</td>
                         <td>{purchase.Price * purchase.Quantity} شيكل</td>
                     </tr>");
+                index++;
             }
 
             sb.Append(@"
@@ -61,7 +62,7 @@ namespace MyRoad.API.Reports
         </body>
         </html>");
 
-            return sb.ToString();
+            return await Task.FromResult(sb.ToString());
         }
     }
 }

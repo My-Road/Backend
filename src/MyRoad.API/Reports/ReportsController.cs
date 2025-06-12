@@ -23,10 +23,10 @@ namespace MyRoad.API.Reports
         public async Task<IActionResult> GenerateOrderReport([FromBody] RetrievalRequest request)
         {
             var orderResult = await orderService.GetOrdersForReportAsync(request.ToSieveModel());
-            var htmlContent = ReportBuilderOrderService.BuildOrdersReportHtml(orderResult.Value);
-            var pdfBytes = pdfGeneratorService.GeneratePdfFromHtml(htmlContent);
+            var htmlContent = await ReportBuilderOrderService.BuildOrdersReportHtml(orderResult.Value);
+            var pdfBytes = await pdfGeneratorService.GeneratePdfFromHtml(htmlContent);
 
-            return File(await pdfBytes, "application/pdf",
+            return File(pdfBytes, "application/pdf",
                 $"OrderReport.pdf");
         }
 
@@ -35,10 +35,10 @@ namespace MyRoad.API.Reports
         public async Task<IActionResult> GenerateEmployeeLogReport([FromBody] RetrievalRequest request)
         {
             var empLogResult = await employeeLogService.GetEmployeesLogForReportAsync(request.ToSieveModel());
-            var htmlContent = ReportBuilderEmployeeLogService.BuildEmployeesLogReportHtml(empLogResult.Value);
-            var pdfBytes = pdfGeneratorService.GeneratePdfFromHtml(htmlContent);
+            var htmlContent = await ReportBuilderEmployeeLogService.BuildEmployeesLogReportHtml(empLogResult.Value);
+            var pdfBytes = await pdfGeneratorService.GeneratePdfFromHtml(htmlContent);
 
-            return File(await pdfBytes, "application/pdf",
+            return File(pdfBytes, "application/pdf",
                 $"EmployeeLogReport.pdf");
         }
 
@@ -47,10 +47,10 @@ namespace MyRoad.API.Reports
         public async Task<IActionResult> GeneratePurchaseReport([FromBody] RetrievalRequest request)
         {
             var purchasesResult = await purchaseService.GetPurchasesForReportAsync(request.ToSieveModel());
-            var htmlContent = ReportBuilderPurchaseService.BuildPurchaseReportHtml(purchasesResult.Value);
-            var pdfBytes = pdfGeneratorService.GeneratePdfFromHtml(htmlContent);
+            var htmlContent = await ReportBuilderPurchaseService.BuildPurchaseReportHtml(purchasesResult.Value);
+            var pdfBytes = await pdfGeneratorService.GeneratePdfFromHtml(htmlContent);
 
-            return File(await pdfBytes, "application/pdf",
+            return File(pdfBytes, "application/pdf",
                 $"PurchaseReport.pdf");
         }
     }

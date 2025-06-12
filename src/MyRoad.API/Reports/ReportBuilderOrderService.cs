@@ -6,7 +6,7 @@ namespace MyRoad.API.Reports
 {
     public class ReportBuilderOrderService 
     {
-        public static string BuildOrdersReportHtml(List<Order> orders)
+        public async static Task<string> BuildOrdersReportHtml(List<Order> orders)
         {
             var sb = new StringBuilder();
 
@@ -41,12 +41,12 @@ namespace MyRoad.API.Reports
                 </thead>
                 <tbody>");
 
-            for (int i = 0; i < orders.Count; i++)
+            int index = 1;
+            foreach (var order in orders)
             {
-                var order = orders[i];
                 sb.Append($@"
                     <tr>
-                        <td>{i + 1}</td>
+                        <td>{index}</td>
                         <td>{order.OrderDate:yyyy-MM-dd}</td>
                         <td>{order.Customer.FullName}</td>
                         <td>{order.Customer.Address}</td>
@@ -54,6 +54,7 @@ namespace MyRoad.API.Reports
                         <td>{order.Price} شيكل</td>
                         <td>{order.Price * order.Quantity} شيكل</td>
                     </tr>");
+                index++;
             }
 
             sb.Append(@"
@@ -62,7 +63,7 @@ namespace MyRoad.API.Reports
         </body>
         </html>");
 
-            return sb.ToString();
+            return await Task.FromResult(sb.ToString());
         }
     }
 }

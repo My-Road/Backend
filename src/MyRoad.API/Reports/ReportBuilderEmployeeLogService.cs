@@ -6,7 +6,7 @@ namespace MyRoad.API.Reports
 {
     public static class ReportBuilderEmployeeLogService 
     {
-        public static string BuildEmployeesLogReportHtml(List<EmployeeLog> employeeLogs)
+        public async static Task<string> BuildEmployeesLogReportHtml(List<EmployeeLog> employeeLogs)
         {
             var sb = new StringBuilder();
 
@@ -43,21 +43,22 @@ namespace MyRoad.API.Reports
                 </thead>
                 <tbody>");
 
-            for (int i = 0; i < employeeLogs.Count; i++)
+            int index = 1;
+            foreach (var empLog in employeeLogs)
             {
-                var empLog = employeeLogs[i];
                 sb.Append($@"
                     <tr>
-                        <td>{i + 1}</td>
+                        <td>{index}</td>
                         <td>{empLog.Date:yyyy-MM-dd}</td>
                         <td>{empLog.Employee.FullName}</td>
                         <td>{empLog.Employee.Address}</td>
                         <td>{empLog.HourlyWage} شيكل</td>
-                        <td>{empLog.CheckIn} </td>
-                        <td>{empLog.CheckOut} </td>
+                        <td>{empLog.CheckIn}</td>
+                        <td>{empLog.CheckOut}</td>
                         <td>{empLog.TotalHours}</td>
                         <td>{empLog.DailyWage}</td>
                     </tr>");
+                index++;
             }
 
             sb.Append(@"
@@ -66,8 +67,7 @@ namespace MyRoad.API.Reports
         </body>
         </html>");
 
-            return sb.ToString();
+            return await Task.FromResult(sb.ToString());
         }
-
     }
 }
