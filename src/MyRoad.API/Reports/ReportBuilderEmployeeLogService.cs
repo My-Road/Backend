@@ -6,7 +6,7 @@ namespace MyRoad.API.Reports
 {
     public static class ReportBuilderEmployeeLogService 
     {
-        public async static Task<string> BuildEmployeesLogReportHtml(List<EmployeeLog> employeeLogs)
+        public static async Task<string> BuildEmployeesLogReportHtml(List<EmployeeLog> employeeLogs)
         {
             var sb = new StringBuilder();
 

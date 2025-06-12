@@ -4,9 +4,9 @@ using MyRoad.Domain.Reports;
 
 namespace MyRoad.API.Reports
 {
-    public class ReportBuilderOrderService 
+    public static class ReportBuilderOrderService 
     {
-        public async static Task<string> BuildOrdersReportHtml(List<Order> orders)
+        public static async Task<string> BuildOrdersReportHtml(List<Order> orders)
         {
             var sb = new StringBuilder();
 

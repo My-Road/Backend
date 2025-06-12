@@ -3,9 +3,9 @@ using MyRoad.Domain.Purchases;
 
 namespace MyRoad.API.Reports
 {
-    public class ReportBuilderPurchaseService
+    public static class ReportBuilderPurchaseService
     {
-        public async static Task<string> BuildPurchaseReportHtml(List<Purchase> purchases)
+        public static async Task<string> BuildPurchaseReportHtml(List<Purchase> purchases)
         {
             var sb = new StringBuilder();
 
