@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Orders;
-using MyRoad.Domain.Reports;
 using MyRoad.Infrastructure.Persistence;
 using Sieve.Models;
 using Sieve.Services;
@@ -94,6 +93,7 @@ public class OrderRepository(
             .OrderByDescending(o => o.OrderDate)
             .AsNoTracking()
             .ToListAsync();
+    }
 
     public async Task<decimal> GetTotalIncomeAsync(DateOnly? from = null)
     {
@@ -104,7 +104,5 @@ public class OrderRepository(
             .ToListAsync();
 
         return orders.Sum(o => o.TotalDueAmount);
-
     }
-
 }
