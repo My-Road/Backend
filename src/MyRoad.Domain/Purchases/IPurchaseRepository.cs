@@ -1,4 +1,5 @@
 ﻿using MyRoad.Domain.Common.Entities;
+using MyRoad.Domain.Reports;
 using Sieve.Models;
 
 namespace MyRoad.Domain.Purchases
@@ -15,6 +16,10 @@ namespace MyRoad.Domain.Purchases
 
         Task<PaginatedResponse<Purchase>> GetBySupplierAsync(long supplierId, SieveModel sieveModel);
 
+      
+        Task<List<Purchase>> GetPurchaseForReportAsync(SieveModel sieveModel);
+
         Task<decimal> GetTotalExpensesAsync(DateOnly? from = null);
+
     }
 }

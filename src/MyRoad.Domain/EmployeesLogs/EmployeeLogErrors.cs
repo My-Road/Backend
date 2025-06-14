@@ -32,4 +32,9 @@ public static class EmployeeLogErrors
         code: "EmployeeLog.TimeOverlapError",
         description: "The employee has overlapping this day."
     );
+
+    public static Error InvalidDateRange => Error.Validation(
+      code: "EmployeeLog.InvalidDateRange",
+      description: "Start date must be earlier than end date"
+    );
 }

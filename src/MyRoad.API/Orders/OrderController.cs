@@ -12,7 +12,7 @@ namespace MyRoad.API.Orders;
 [ApiController]
 public class OrderController(
     IOrderService orderService
-) : ControllerBase
+    ) : ControllerBase
 {
     [HttpPost]
     [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]

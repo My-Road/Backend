@@ -17,5 +17,7 @@ namespace MyRoad.Domain.Purchases
         Task<ErrorOr<PaginatedResponse<Purchase>>> GetBySupplierIdAsync(long supplierId, SieveModel sieveModel);
 
         Task<ErrorOr<PaginatedResponse<Purchase>>> GetAsync(SieveModel sieveModel);
+
+        Task<ErrorOr<List<Purchase>>> GetPurchasesForReportAsync(SieveModel sieveModel);
     }
 }

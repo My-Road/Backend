@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Purchases;
+using MyRoad.Domain.Reports;
 using MyRoad.Infrastructure.Persistence;
 using Sieve.Models;
 using Sieve.Services;
@@ -88,6 +89,20 @@ namespace MyRoad.Infrastructure.Purchases
         {
             dbContext.Purchases.Update(purchase);
             return await dbContext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<List<Purchase>> GetPurchaseForReportAsync(SieveModel sieveModel)
+        {
+            var query = dbContext.Purchases
+                .Include(o => o.Supplier)
+                .AsQueryable();
+
+            query = sieveProcessor.Apply(sieveModel, query, applyPagination: false);
+
+            return await query
+                .OrderByDescending(o => o.PurchasesDate)
+                .AsNoTracking()
+                .ToListAsync();
         }
     }
 }

@@ -34,4 +34,8 @@ public static class OrderErrors
             code: "Order.CannotUpdateOrder",
             description:
             "Cannot update the order because the customer's paid amount would exceed their total due amount.");
+
+    public static Error InvalidDateRange => Error.Validation(
+      code: "Order.InvalidDateRange",
+      description: "Start date must be earlier than end date");
 }

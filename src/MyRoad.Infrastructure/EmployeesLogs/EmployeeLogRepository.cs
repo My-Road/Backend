@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.EmployeesLogs;
+using MyRoad.Domain.Reports;
 using MyRoad.Infrastructure.Persistence;
 using Sieve.Models;
 using Sieve.Services;
@@ -96,5 +97,19 @@ namespace MyRoad.Infrastructure.EmployeesLogs
             dbContext.EmployeeLogs.Update(employeelog);
             return await dbContext.SaveChangesAsync() > 0;
         }
+
+        public async Task<List<EmployeeLog>> GetEmployeesLogForReportAsync(SieveModel sieveModel)
+        {
+            var query = dbContext.EmployeeLogs
+                .Include(o => o.Employee)
+                .AsQueryable();
+
+            query = sieveProcessor.Apply(sieveModel, query, applyPagination: false);
+
+            query = query.OrderByDescending(o => o.Date);
+
+            return await query.AsNoTracking().ToListAsync();
+        }
+
     }
 }

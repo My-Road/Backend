@@ -10,8 +10,9 @@ namespace MyRoad.API.Purchases
     [Route("api/v{version:apiVersion}/purchases")]
     [ApiVersion("1.0")]
     [ApiController]
-    public class PurchaseController(IPurchaseService purchaseService)
-        : ControllerBase
+    public class PurchaseController(
+        IPurchaseService purchaseService
+        ): ControllerBase
     {
         [HttpPost]
         [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdminOrManager)]

@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using MyRoad.Domain.Common.Entities;
+using MyRoad.Domain.Reports;
 using Sieve.Models;
 
 namespace MyRoad.Domain.EmployeesLogs
@@ -17,5 +18,8 @@ namespace MyRoad.Domain.EmployeesLogs
         Task<ErrorOr<PaginatedResponse<EmployeeLog>>> GetByEmployeeIdAsync(long employeeId, SieveModel sieveModel);
         
         Task<ErrorOr<PaginatedResponse<EmployeeLog>>> GetAsync(SieveModel sieveModel);
+
+        Task<ErrorOr<List<EmployeeLog>>> GetEmployeesLogForReportAsync(SieveModel sieveModel);
+
     }
 }

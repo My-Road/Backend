@@ -81,6 +81,20 @@ public class OrderRepository(
         };
     }
 
+    public async Task<List<Order>> GetOrdersForReportAsync(SieveModel sieveModel)
+    {
+        var query = dbContext.Orders
+            .Include(o => o.Customer)
+            .AsQueryable();
+
+        query = sieveProcessor.Apply(sieveModel, query, applyPagination: false);
+
+        return await query
+            .OrderByDescending(o => o.OrderDate)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
     public async Task<decimal> GetTotalIncomeAsync(DateOnly? from = null)
     {
         from ??= DateOnly.FromDateTime(DateTime.Now.AddDays(-30));
@@ -91,5 +105,4 @@ public class OrderRepository(
 
         return orders.Sum(o => o.TotalDueAmount);
     }
-
 }

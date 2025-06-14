@@ -5,6 +5,7 @@ using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Employees;
 using MyRoad.Domain.Identity.Enums;
 using MyRoad.Domain.Identity.Interfaces;
+using MyRoad.Domain.Reports;
 using MyRoad.Domain.Users;
 using Sieve.Models;
 
@@ -16,7 +17,8 @@ namespace MyRoad.Domain.EmployeesLogs
         IEmployeeRepository employeeRepository,
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
-        ITimeOverlapValidator timeOverlapValidator
+        ITimeOverlapValidator timeOverlapValidator,
+        IPdfGeneratorService pdfGeneratorService
     ) : IEmployeeLogService
     {
         private readonly EmployeeLogValidator _employeeLogValidator = new();
@@ -204,6 +206,13 @@ namespace MyRoad.Domain.EmployeesLogs
             }
 
             return employeeLog;
+        }
+
+        public async Task<ErrorOr<List<EmployeeLog>>> GetEmployeesLogForReportAsync(SieveModel sieveModel)
+        {
+            var empLog = await employeeLogRepository.GetEmployeesLogForReportAsync(sieveModel);
+
+            return empLog;
         }
     }
 }
