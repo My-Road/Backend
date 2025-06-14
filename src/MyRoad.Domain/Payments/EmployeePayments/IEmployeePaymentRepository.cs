@@ -16,4 +16,5 @@ public interface IEmployeePaymentRepository
 
     Task<PaginatedResponse<EmployeePayment>> GetByEmployeeIdAsync(long employeeId, SieveModel sieveModel);
 
+    Task<decimal> GetTotalPaymentAsync(DateOnly? from = null);
 }

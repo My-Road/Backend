@@ -11,12 +11,12 @@ namespace MyRoad.Infrastructure.Suppliers
     public class SupplierRepository(
         AppDbContext dbContext,
         ISieveProcessor sieveProcessor
-        ) : ISupplierRepository
+    ) : ISupplierRepository
     {
         public async Task<bool> CreateAsync(Supplier supplier)
         {
             await dbContext.Suppliers.AddAsync(supplier);
-            return await dbContext.SaveChangesAsync()>0;
+            return await dbContext.SaveChangesAsync() > 0;
         }
 
         public async Task<Supplier?> FindByEmail(string? supplierEmail)
@@ -26,6 +26,15 @@ namespace MyRoad.Infrastructure.Suppliers
 
             return await dbContext.Suppliers
                 .FirstOrDefaultAsync(c => c.Email != null && c.Email.ToLower() == supplierEmail.ToLower());
+        }
+
+        public async Task<long> CountAsync()
+        {
+            var result = await dbContext.Suppliers
+                .Where(s => !s.IsDeleted)
+                .CountAsync();
+            
+            return result;
         }
 
         public async Task<Supplier?> FindByPhoneNumber(string? supplierPhoneNumber)

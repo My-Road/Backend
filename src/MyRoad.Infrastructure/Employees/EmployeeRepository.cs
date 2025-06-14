@@ -46,6 +46,15 @@ public class EmployeeRepository(
         return employee;
     }
 
+    public async Task<long> CountAsync()
+    {
+        var result = await dbContext.Employees
+            .Where(e => e.IsActive) 
+            .CountAsync();
+        return result;
+    }
+
+
     public async Task<Employee?> GetByIdAsync(long id)
     {
         var employee = await dbContext.Employees.FindAsync(id);

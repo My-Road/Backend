@@ -94,6 +94,17 @@ public class OrderRepository(
             .OrderByDescending(o => o.OrderDate)
             .AsNoTracking()
             .ToListAsync();
+
+    public async Task<decimal> GetTotalIncomeAsync(DateOnly? from = null)
+    {
+        from ??= DateOnly.FromDateTime(DateTime.Now.AddDays(-30));
+
+        var orders = await dbContext.Orders
+            .Where(o => !o.IsDeleted && o.OrderDate >= from)
+            .ToListAsync();
+
+        return orders.Sum(o => o.TotalDueAmount);
+
     }
 
 }

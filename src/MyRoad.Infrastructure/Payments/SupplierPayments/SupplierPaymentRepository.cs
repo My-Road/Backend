@@ -10,7 +10,7 @@ namespace MyRoad.Infrastructure.Payments.SupplierPayments
     internal class SupplierPaymentRepository(
         AppDbContext dbContext,
         ISieveProcessor sieveProcessor
-        ) : ISupplierPaymentRepository
+    ) : ISupplierPaymentRepository
     {
         public async Task<bool> CreateAsync(SupplierPayment supplierPayment)
         {
@@ -49,7 +49,8 @@ namespace MyRoad.Infrastructure.Payments.SupplierPayments
             return payment;
         }
 
-        public async Task<PaginatedResponse<SupplierPayment>> GetBySupplierIdAsync(long supplierId, SieveModel sieveModel)
+        public async Task<PaginatedResponse<SupplierPayment>> GetBySupplierIdAsync(long supplierId,
+            SieveModel sieveModel)
         {
             var query = dbContext.SupplierPayments
                 .Where(p => p.SupplierId == supplierId && !p.IsDeleted)
@@ -70,6 +71,17 @@ namespace MyRoad.Infrastructure.Payments.SupplierPayments
                 Page = sieveModel.Page ?? 1,
                 PageSize = sieveModel.PageSize ?? 10,
             };
+        }
+
+        public async Task<decimal> GetTotalPaymentAsync(DateOnly? from = null)
+        {
+            from ??= DateOnly.FromDateTime(DateTime.Now.AddDays(-30));
+
+            var result = await dbContext.SupplierPayments
+                .Where(p => !p.IsDeleted && p.PaymentDate >= from)
+                .SumAsync(p => p.Amount);
+
+            return result;
         }
 
         public async Task<bool> UpdateAsync(SupplierPayment supplierPayment)

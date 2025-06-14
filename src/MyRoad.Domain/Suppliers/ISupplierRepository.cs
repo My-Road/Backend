@@ -17,5 +17,7 @@ namespace MyRoad.Domain.Suppliers
         Task<Supplier?> FindByPhoneNumber(string? supplierPhoneNumber);
         
         Task<Supplier?> FindByEmail(string? supplierEmail);
+        
+        Task<long> CountAsync();
     }
 }

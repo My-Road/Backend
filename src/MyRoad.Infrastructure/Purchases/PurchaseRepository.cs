@@ -74,6 +74,17 @@ namespace MyRoad.Infrastructure.Purchases
             };
         }
 
+        public async Task<decimal> GetTotalExpensesAsync(DateOnly? from = null)
+        {
+            from ??= DateOnly.FromDateTime(DateTime.Now.AddDays(-30));
+
+            var purchases = await dbContext.Purchases
+                .Where(p => !p.IsDeleted && p.PurchasesDate >= from)
+                .ToListAsync();
+
+            return purchases.Sum(p => p.TotalDueAmount);
+        }
+
         public async Task<bool> UpdateAsync(Purchase purchase)
         {
             dbContext.Purchases.Update(purchase);

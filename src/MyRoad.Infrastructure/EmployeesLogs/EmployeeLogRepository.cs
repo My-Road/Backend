@@ -22,7 +22,7 @@ namespace MyRoad.Infrastructure.EmployeesLogs
         public async Task<PaginatedResponse<EmployeeLog>> GetAsync(SieveModel sieveModel)
         {
             var query = dbContext.EmployeeLogs
-                .Include(log => log.Employee) 
+                .Include(log => log.Employee)
                 .Where(x => !x.IsDeleted && x.Employee.IsActive)
                 .AsQueryable();
 
@@ -51,6 +51,17 @@ namespace MyRoad.Infrastructure.EmployeesLogs
                 .ToListAsync();
         }
 
+        public async Task<decimal> GetTotalExpensesAsync(DateOnly? from = null)
+        {
+            from ??= DateOnly.FromDateTime(DateTime.Now.AddDays(-30));
+
+            var employeeLogs = await dbContext.EmployeeLogs
+                .Where(logs => !logs.IsDeleted && logs.Date >= from)
+                .ToListAsync();
+
+            return employeeLogs.Sum(l => l.DailyWage);
+        }
+
         public async Task<PaginatedResponse<EmployeeLog>> GetByEmployeeAsync(long employeeId, SieveModel sieveModel)
         {
             var query = dbContext.EmployeeLogs
@@ -73,14 +84,14 @@ namespace MyRoad.Infrastructure.EmployeesLogs
                 PageSize = sieveModel.PageSize ?? 10,
             };
         }
-        
+
         public async Task<EmployeeLog?> GetByIdAsync(long id)
         {
             return await dbContext.EmployeeLogs
                 .Include(x => x.Employee)
                 .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
         }
-        
+
         public async Task<bool> UpdateAsync(EmployeeLog employeelog)
         {
             dbContext.EmployeeLogs.Update(employeelog);
