@@ -102,6 +102,7 @@ namespace MyRoad.Infrastructure.EmployeesLogs
         {
             var query = dbContext.EmployeeLogs
                 .Include(o => o.Employee)
+                .Where(o => !o.IsDeleted)
                 .AsQueryable();
 
             query = sieveProcessor.Apply(sieveModel, query, applyPagination: false);
