@@ -85,7 +85,7 @@ public class OrderRepository(
     {
         var query = dbContext.Orders
             .Include(o => o.Customer)
-            .Where(o => !o.IsDeleted)
+            .Where(o => !o.IsDeleted && !o.Customer.IsDeleted)
             .AsQueryable();
 
         query = sieveProcessor.Apply(sieveModel, query, applyPagination: false);

@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.EmployeesLogs;
-using MyRoad.Domain.Reports;
 using MyRoad.Infrastructure.Persistence;
 using Sieve.Models;
 using Sieve.Services;
@@ -102,7 +101,7 @@ namespace MyRoad.Infrastructure.EmployeesLogs
         {
             var query = dbContext.EmployeeLogs
                 .Include(o => o.Employee)
-                .Where(o => !o.IsDeleted)
+                .Where(o => !o.IsDeleted && o.Employee.IsActive)
                 .AsQueryable();
 
             query = sieveProcessor.Apply(sieveModel, query, applyPagination: false);
