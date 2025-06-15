@@ -95,6 +95,7 @@ namespace MyRoad.Infrastructure.Purchases
         {
             var query = dbContext.Purchases
                 .Include(o => o.Supplier)
+                .Where(o => !o.IsDeleted)
                 .AsQueryable();
 
             query = sieveProcessor.Apply(sieveModel, query, applyPagination: false);
