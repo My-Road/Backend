@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Purchases;
-using MyRoad.Domain.Reports;
 using MyRoad.Infrastructure.Persistence;
 using Sieve.Models;
 using Sieve.Services;
@@ -95,7 +94,7 @@ namespace MyRoad.Infrastructure.Purchases
         {
             var query = dbContext.Purchases
                 .Include(o => o.Supplier)
-                .Where(o => !o.IsDeleted)
+                .Where(o => !o.IsDeleted && !o.Supplier.IsDeleted)
                 .AsQueryable();
 
             query = sieveProcessor.Apply(sieveModel, query, applyPagination: false);

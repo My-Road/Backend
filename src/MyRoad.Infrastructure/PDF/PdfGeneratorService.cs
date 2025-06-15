@@ -14,7 +14,7 @@ namespace MyRoad.Infrastructure.PDF
                     Orientation = PageOrientation.Portrait,
                     Size = PageSize.A4,
                     Margins = new PageMargins { Top = 10, Bottom = 20, Left = 10, Right = 10 },
-                    CustomWkHtmlArgs = "--encoding UTF-8 --footer-center \"صفحة [page] من [topage]\" --footer-font-size 10 --footer-font-name 'Arial'"
+                    CustomWkHtmlArgs = "--encoding UTF-8 --footer-center \"[page]\" --footer-font-size 10 --footer-font-name 'Arial'"
                 };
 
                 return htmlToPdf.GeneratePdf(htmlContent);
