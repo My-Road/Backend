@@ -1,3 +1,4 @@
+using AspNetCoreRateLimit;
 using MyRoad.API;
 using MyRoad.API.Middlewares;
 using MyRoad.Domain;
@@ -14,6 +15,9 @@ builder.Services.AddDomain()
 
 
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(nameof(JwtConfig)));
+builder.Services.Configure<IpRateLimitOptions>(builder.Configuration.GetSection("IpRateLimiting"));
+builder.Services.Configure<IpRateLimitPolicies>(builder.Configuration.GetSection("IpRateLimitPolicies"));
+
 builder.Host.UseSerilog((context, loggerConfig)
     => loggerConfig.ReadFrom.Configuration(context.Configuration));
 
@@ -25,7 +29,7 @@ app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseMiddleware<RateLimitingMiddleware>();
+app.UseIpRateLimiting();
 app.UseCors();
 app.UseRouting();
 app.UseAuthentication();
