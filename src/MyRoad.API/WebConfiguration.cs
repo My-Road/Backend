@@ -1,4 +1,5 @@
 using Asp.Versioning;
+using AspNetCoreRateLimit;
 using Microsoft.OpenApi.Models;
 using MyRoad.Domain.Identity.Enums;
 using MyRoad.API.Common;
@@ -63,6 +64,17 @@ public static class WebConfiguration
             });
         });
         services.AddAuthorizationPolicy();
+        
+        
+        services.AddMemoryCache();
+
+       
+
+        services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+        services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+        services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+        services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
+        
         return services;
     }
 
