@@ -7,5 +7,6 @@ namespace MyRoad.API.Dashboard;
 [Mapper]
 public static partial class DashboardMapper
 {
-    public static partial DashboardOverviewDto ToDashboardOverviewDto(DashboardOverview dto);
+    public static partial DashboardAdminOverviewDto ToDashboardAdminOverviewDto(DashboardAdminOverview dto);
+    public static partial DashboardManagerOverviewDto ToDashboardManagerOverviewDto(DashboardManagerOverview dto);
 }

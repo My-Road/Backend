@@ -4,5 +4,6 @@ namespace MyRoad.Domain.Dashboard;
 
 public interface IDashboardOverviewService
 {
-    Task<ErrorOr<DashboardOverview>> ExecuteAsync();
+    Task<ErrorOr<DashboardAdminOverview>> ExecuteAdminAsync();
+    Task<ErrorOr<DashboardManagerOverview>>  ExecuteManagerAsync();
 }
