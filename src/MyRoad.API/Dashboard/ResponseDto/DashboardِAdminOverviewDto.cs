@@ -1,6 +1,6 @@
 namespace MyRoad.API.Dashboard.ResponseDto;
 
-public class DashboardOverviewDto
+public class DashboardAdminOverviewDto
 {
     public long CustomerCount { get; set; }
     public long SupplierCount { get; set; }

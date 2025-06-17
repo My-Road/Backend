@@ -21,26 +21,34 @@ public class DashboardOverviewService(
     ICustomerPaymentRepository customerPaymentRepository,
     ISupplierPaymentRepository supplierPaymentRepository,
     IEmployeePaymentRepository employeePaymentRepository
-    ) : IDashboardOverviewService
+) : IDashboardOverviewService
 {
-    public async Task<ErrorOr<DashboardOverview>> ExecuteAsync()
+    public async Task<ErrorOr<DashboardAdminOverview>> ExecuteAdminAsync()
     {
-        
-        var result = new DashboardOverview  
+        var result = new DashboardAdminOverview
         {
             CustomerCount = await customerRepository.CountAsync(),
             EmployeeCount = await employeeRepository.CountAsync(),
             SupplierCount = await supplierRepository.CountAsync(),
             TotalIncome = await orderRepository.GetTotalIncomeAsync(),
-            TotalExpense = await employeeLogRepository.GetTotalExpensesAsync() + 
+            TotalExpense = await employeeLogRepository.GetTotalExpensesAsync() +
                            await purchaseRepository.GetTotalExpensesAsync(),
             TotalIncomePaid = await customerPaymentRepository.GetTotalPaymentAsync(),
-            TotalExpensePaid = await employeePaymentRepository.GetTotalPaymentAsync() + 
+            TotalExpensePaid = await employeePaymentRepository.GetTotalPaymentAsync() +
                                await supplierPaymentRepository.GetTotalPaymentAsync(),
-            
-
         };
-        
+
+        return result;
+    }
+
+    public async Task<ErrorOr<DashboardManagerOverview>> ExecuteManagerAsync()
+    {
+        var result = new DashboardManagerOverview
+        {
+            CustomerCount = await customerRepository.CountAsync(),
+            EmployeeCount = await employeeRepository.CountAsync(),
+            SupplierCount = await supplierRepository.CountAsync()
+        };
         return result;
     }
 }

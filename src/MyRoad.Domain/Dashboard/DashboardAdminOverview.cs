@@ -1,6 +1,6 @@
 namespace MyRoad.Domain.Dashboard;
 
-public class DashboardOverview
+public class DashboardAdminOverview
 {
     public long CustomerCount { get; set; }
     public long SupplierCount { get; set; }
