@@ -18,6 +18,10 @@ public class EmployeeSieveConfiguration : ISieveConfiguration
             .CanFilter()
             .CanSort();
         
+        mapper.Property<Employee>(x => x.TotalDueAmount)
+            .CanFilter()
+            .CanSort();
+        
 
     }
 }

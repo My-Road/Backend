@@ -17,5 +17,9 @@ public class CustomerSieveConfiguration : ISieveConfiguration
         mapper.Property<Customer>(x => x.IsDeleted)
             .CanFilter()
             .CanSort();
+
+        mapper.Property<Customer>(x => x.TotalDueAmount)
+            .CanFilter()
+            .CanSort();
     }
 }
