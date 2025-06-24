@@ -6,241 +6,109 @@ public static class EmailUtils
     {
         return $@"
             <!DOCTYPE html>
-            <html>
+            <html lang='ar' dir='rtl'>
             <head>
                 <meta charset='UTF-8'>
                 <title>مرحبًا بك في MyRoad!</title>
-                <style>
-                    body {{
-                        font-family: Arial, sans-serif;
-                        background-color: #f4f4f4;
-                        padding: 20px;
-                        text-align: center;
-                    }}
-                    .container {{
-                        background-color: #fff;
-                        padding: 20px;
-                        border-radius: 10px;
-                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                        max-width: 500px;
-                        margin: auto;
-                    }}
-                    h2 {{
-                        color: #333;
-                    }}
-                    .info {{
-                        background-color: #e3f2fd;
-                        padding: 10px;
-                        border-radius: 5px;
-                        text-align: left;
-                        margin-top: 15px;
-                    }}
-                    .footer {{
-                        margin-top: 20px;
-                        font-size: 14px;
-                        color: #666;
-                    }}
-                    .button {{
-                        display: inline-block;
-                        padding: 10px 20px;
-                        margin-top: 15px;
-                        background-color: #007bff;
-                        color: white;
-                        text-decoration: none;
-                        border-radius: 5px;
-                    }}
-                    .button:hover {{
-                        background-color: #0056b3;
-                    }}
-                </style>
             </head>
-            <body>
-                <div class='container'>
-                    <h2>🎉 مرحبًا بك في MyRoad!</h2>
-                    <p>مرحبًا <b>{name}</b>, شكرًا لانضمامك إلينا!</p>
-
-                    <div class='info'>
-                        <p><strong>📧 Email:</strong> {email}</p>
-                        <p><strong>🔑 Password:</strong> {System.Net.WebUtility.HtmlEncode(password)}</p>
+            <body style='font-family: Tahoma, Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; text-align: center;'>
+                <div style='background-color: #ffffff; max-width: 500px; margin: auto; padding: 30px 20px; border: 1px solid #ddd; border-radius: 8px;'>
+                    <h2 style='color: #2c3e50; font-size: 22px;'>🎉 مرحبًا بك في <b>MyRoad!</b></h2>
+                    <p style='color: #333; font-size: 16px;'>مرحبًا <b>{name}</b></p>
+                    <p style='color: #333; font-size: 16px;'>شكرًا لانضمامك إلينا! </p>
+                
+                    <div style='background-color: #e3f2fd; padding: 10px; text-align: right; direction: rtl; border-radius: 5px;'>
+                        <p style='margin: 5px 0; font-size: 15px;'><b>📧 البريد الإلكتروني:</b> {email}</p>
+                        <p style='margin: 5px 0; font-size: 15px;'><b>🔑 كلمة المرور:</b> {System.Net.WebUtility.HtmlEncode(password)}</p>
                     </div>
 
-                    <a href='{loginLink}' class='button'>تسجيل الدخول الآن</a>
+                    <a href='{loginLink}' style='display: inline-block; background-color: #007bff; color: white; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; margin-top: 20px;'>تسجيل الدخول الآن</a>
+
+
                 </div>
             </body>
             </html>";
     }
 
+
     public static string GetPasswordChangeSuccessEmailBody(string email, string name)
     {
         return $@"
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset='UTF-8'>
-            <title>تم تغيير كلمة السر - MyRoad</title>
-            <style>
-                body {{
-                    font-family: Arial, sans-serif;
-                    background-color: #f4f4f4;
-                    padding: 20px;
-                    text-align: center;
-                }}
-                .container {{
-                    background-color: #fff;
-                    padding: 20px;
-                    border-radius: 10px;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                    max-width: 500px;
-                    margin: auto;
-                }}
-                h2 {{
-                    color: #333;
-                }}
-                .info {{
-                    background-color: #d4edda;
-                    padding: 10px;
-                    border-radius: 5px;
-                    text-align: left;
-                    margin-top: 15px;
-                }}
-                .footer {{
-                    margin-top: 20px;
-                    font-size: 14px;
-                    color: #666;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <h2>✅ تم تغيير كلمة السر بنجاح</h2>
-                <p>مرحبًا <b>{name}</b>, تم تغيير كلمة السر الخاصة بحسابك بنجاح.</p>
-                <div class='info'>
-                    <p><strong>📧 Email:</strong> {email}</p>
+            <!DOCTYPE html>
+            <html lang='ar' dir='rtl'>
+            <head>
+                <meta charset='UTF-8'>
+                <title>تم تغيير كلمة السر - MyRoad</title>
+            </head>
+            <body style='font-family: Tahoma, Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; text-align: center;'>
+                <div style='background-color: #ffffff; max-width: 500px; margin: auto; padding: 30px 20px; border: 1px solid #ddd; border-radius: 8px;'>
+                    <h2 style='color: #2c3e50; font-size: 22px;'>✅ تم تغيير كلمة السر بنجاح</h2>
+                    <p style='color: #333; font-size: 16px;'>مرحبًا <strong>{name}</strong>.</p>
+                    <p style='color: #333; font-size: 16px;'>تم تغيير كلمة السر الخاصة بحسابك بنجاح </p>
+
+                    <div style='background-color: #d4edda; padding: 15px; text-align: right; direction: rtl; border-radius: 5px; margin-top: 20px;'>
+                        <p style='margin: 8px 0; font-size: 15px;'><strong>📧 البريد الإلكتروني:</strong> {email}</p>
+                    </div>
+
+                    <p style='font-size: 13px; color: #666; margin-top: 20px;'>إذا لم تقم بتغيير كلمة السر، يرجى التواصل مع فريق الدعم على الفور.</p>
                 </div>
-                <p class='footer'>إذا لم تقم بتغيير كلمة السر، يرجى التواصل مع فريق الدعم على الفور.</p>
-            </div>
-        </body>
-        </html>";
+            </body>
+            </html>";
     }
+
 
     public static string GetPasswordResetEmailBody(string email, string name, string token, string userId)
     {
+        string resetLink = $"https://frontend-emuj.onrender.com/reset-password?token={token}&userId={userId}";
+
         return $@"
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset='UTF-8'>
-        <title>إعادة تعيين كلمة السر - MyRoad</title>
-        <style>
-            body {{
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-                padding: 20px;
-                text-align: center;
-            }}
-            .container {{
-                background-color: #fff;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                max-width: 500px;
-                margin: auto;
-            }}
-            h2 {{
-                color: #333;
-            }}
-            .info {{
-                background-color: #fff3cd;
-                padding: 10px;
-                border-radius: 5px;
-                text-align: left;
-                margin-top: 15px;
-            }}
-            .footer {{
-                margin-top: 20px;
-                font-size: 14px;
-                color: #666;
-            }}
-            .btn {{
-                display: inline-block;
-                background-color: #007bff;
-                color: white;
-                padding: 10px 20px;
-                border-radius: 5px;
-                text-decoration: none;
-                font-weight: bold;
-                margin-top: 15px;
-            }}
-            .btn:hover {{
-                background-color: #0056b3;
-            }}
-        </style>
-    </head>
-    <body>
-        <div class='container'>
-            <h2>🔑 طلب إعادة تعيين كلمة السر</h2>
-            <p>مرحبًا <b>{name}</b>, لقد طلبت إعادة تعيين كلمة السر لحسابك.</p>
-            <p>إذا كنت قد قمت بهذا الطلب، يرجى الضغط على الزر أدناه لإعادة تعيين كلمة السر الخاصة بك:</p>
-            <a href='https://frontend-emuj.onrender.com/reset-password?token={token}&userId={userId}' class='btn'>إعادة تعيين كلمة السر</a>
-            <div class='info'>
-                <p><strong>📧 البريد الإلكتروني:</strong> {email}</p>
-            </div>
-            <p class='footer'>إذا لم تقم بطلب إعادة تعيين كلمة السر، يرجى تجاهل هذا البريد.</p>
-        </div>
-    </body>
-    </html>";
+            <!DOCTYPE html>
+            <html lang='ar' dir='rtl'>
+            <head>
+                <meta charset='UTF-8'>
+                <title>إعادة تعيين كلمة السر - MyRoad</title>
+            </head>
+            <body style='font-family: Tahoma, Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; text-align: center;'>
+                <div style='background-color: #ffffff; max-width: 500px; margin: auto; padding: 30px 20px; border: 1px solid #ddd; border-radius: 8px;'>
+                    <h2 style='color: #2c3e50; font-size: 22px;'>🔑 طلب إعادة تعيين كلمة السر</h2>
+                    <p style='color: #333; font-size: 16px;'>مرحبًا <strong>{name}</strong>.</p>
+                    <p style='color: #333; font-size: 16px;'>لقد طلبت إعادة تعيين كلمة السر لحسابك </p>
+                    <p style='color: #333; font-size: 16px;'>إذا كنت قد قمت بهذا الطلب، يرجى الضغط على الزر أدناه لإعادة تعيين كلمة السر الخاصة بك:</p>
+
+                    <a href='{resetLink}' style='display: inline-block; background-color: #007bff; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 16px; margin-top: 20px;'>إعادة تعيين كلمة السر</a>
+
+                    <div style='background-color: #fff3cd; padding: 15px; text-align: right; direction: rtl; border-radius: 5px; margin-top: 20px;'>
+                        <p style='margin: 8px 0; font-size: 15px;'><strong>📧 البريد الإلكتروني:</strong> {email}</p>
+                    </div>
+
+                    <p style='font-size: 13px; color: #888; margin-top: 25px;'>إذا لم تقم بطلب إعادة تعيين كلمة السر، يرجى تجاهل هذا البريد.</p>
+                </div>
+            </body>
+            </html>";
     }
+
 
     public static string GetPasswordChangedEmailBody(string fullName)
     {
         return $@"
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset='UTF-8'>
-        <title>تم تغيير كلمة السر - MyRoad</title>
-        <style>
-            body {{
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
-                padding: 20px;
-                text-align: center;
-            }}
-            .container {{
-                background-color: #fff;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                max-width: 500px;
-                margin: auto;
-            }}
-            h2 {{
-                color: #333;
-            }}
-            .info {{
-                background-color: #d4edda;
-                padding: 10px;
-                border-radius: 5px;
-                text-align: left;
-                margin-top: 15px;
-            }}
-            .footer {{
-                margin-top: 20px;
-                font-size: 14px;
-                color: #666;
-            }}
-        </style>
-    </head>
-    <body>
-        <div class='container'>
-            <h2>✅ تم تغيير كلمة السر بنجاح</h2>
-            <p>مرحبًا <b>{fullName}</b>, تم تغيير كلمة السر الخاصة بحسابك بنجاح.</p>
-            <div class='info'>
-                <p>لقد قمت بتغيير كلمة المرور الخاصة بك بنجاح. إذا لم تكن قد قمت بهذه العملية، يرجى التواصل مع فريق الدعم فورًا.</p>
-            </div>
-            <p class='footer'>إذا كان لديك أي أسئلة، لا تتردد في التواصل معنا.</p>
-        </div>
-    </body>
-    </html>";
+            <!DOCTYPE html>
+            <html lang='ar' dir='rtl'>
+            <head>
+                <meta charset='UTF-8'>
+                <title>تم تغيير كلمة السر - MyRoad</title>
+            </head>
+            <body style='font-family: Tahoma, Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; text-align: center;'>
+                <div style='background-color: #ffffff; max-width: 500px; margin: auto; padding: 30px 20px; border: 1px solid #ddd; border-radius: 8px;'>
+                    <h2 style='color: #2c3e50; font-size: 22px;'>✅ تم تغيير كلمة السر بنجاح</h2>
+                    <p style='color: #333; font-size: 16px;'>مرحبًا <strong>{fullName}</strong>.</p>
+                    <p style='color: #333; font-size: 16px;'>تم تغيير كلمة السر الخاصة بحسابك بنجاح.</p>
+
+                    <div style='background-color: #d4edda; padding: 15px; text-align: right; direction: rtl; border-radius: 5px; margin-top: 20px;'>
+                        <p style='margin: 8px 0; font-size: 15px;'>لقد قمت بتغيير كلمة المرور الخاصة بك بنجاح. إذا لم تكن قد قمت بهذه العملية، يرجى التواصل مع فريق الدعم فورًا.</p>
+                    </div>
+
+                </div>
+            </body>
+            </html>";
     }
 }
