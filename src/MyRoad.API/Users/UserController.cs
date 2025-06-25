@@ -12,8 +12,9 @@ namespace MyRoad.API.Users;
 [Route("api/v{version:apiVersion}/Users")]
 [ApiVersion("1.0")]
 [ApiController]
-public class UserController(IUserService userService,
-     IUserContext userContext)
+public class UserController(
+    IUserService userService,
+    IUserContext userContext)
 {
     [HttpPost("search")]
     [Authorize(Policy = AuthorizationPolicies.FactoryOwner)]
@@ -55,7 +56,7 @@ public class UserController(IUserService userService,
     public async Task<IActionResult> GetUser()
     {
         var userId = userContext.Id;
-        var userResult = await userService.GetByIdAsync(userId);
-        return ResponseHandler.HandleResult(userResult);
+        var response = await userService.GetByIdAsync(userId);
+        return ResponseHandler.HandleResult(response.ToContract(UserMapper.ToDomainUser));
     }
 }
