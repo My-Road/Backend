@@ -7,4 +7,5 @@ public interface IUserContext
     public long Id { get; }
     public UserRole Role { get; }
     public string Email { get; }
+    public long? TokenVersion { get; }
 }

@@ -12,4 +12,5 @@ public class User : BaseEntity<long>
     public UserRole Role { get; set; }
     public bool IsActive { get; set; }
     public string? PhoneNumber { get; set; }
+    public long TokenVersion { get; set; } = 1;
 }

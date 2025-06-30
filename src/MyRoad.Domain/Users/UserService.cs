@@ -51,7 +51,7 @@ public class UserService(
         {
             return UserErrors.CannotToggleOwnStatus;
         }
-        
+
         var user = await userRepository.GetByIdAsync(id);
 
         if (user is null)
@@ -70,7 +70,7 @@ public class UserService(
         {
             return UserErrors.CannotChangeOwnRole;
         }
-        
+
         var user = await userRepository.GetByIdAsync(id);
         if (user is null)
         {
@@ -78,6 +78,7 @@ public class UserService(
         }
 
         user.Role = role;
+        user.TokenVersion++;
         var validator = await _registerValidator.ValidateAsync(user);
         if (!validator.IsValid)
         {

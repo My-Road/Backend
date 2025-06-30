@@ -12,16 +12,18 @@ public class AuthService(UserManager<ApplicationUser> userManager, SignInManager
     : IAuthService
 {
     public async Task<ErrorOr<User>> AuthenticateAsync(string email, string password)
-{
-    var userApplication = await userManager.FindByEmailAsync(email);
-    if (userApplication is null || !userApplication.IsActive)
-        return UserErrors.InvalidCredentials;
-
-    var result = await signInManager.PasswordSignInAsync(
-        userApplication, password, isPersistent: false, lockoutOnFailure: true);
-
-    if (result.Succeeded)
     {
+        var userApplication = await userManager.FindByEmailAsync(email);
+        if (userApplication is null || !userApplication.IsActive)
+            return UserErrors.InvalidCredentials;
+
+        var result = await signInManager.PasswordSignInAsync(
+            userApplication, password, isPersistent: false, lockoutOnFailure: true);
+
+        if (!result.Succeeded) return result.IsLockedOut ? UserErrors.UserLocked : UserErrors.InvalidCredentials;
+        
+        userApplication.TokenVersion++;
+        await userManager.UpdateAsync(userApplication);
         return new User
         {
             Id = userApplication.Id,
@@ -29,20 +31,18 @@ public class AuthService(UserManager<ApplicationUser> userManager, SignInManager
             Username = userApplication.UserName,
             FirstName = userApplication.FirstName,
             LastName = userApplication.LastName,
-            Role = userApplication.Role
+            Role = userApplication.Role,
+            TokenVersion = userApplication.TokenVersion
         };
-    }
 
-    return result.IsLockedOut ? UserErrors.UserLocked : UserErrors.InvalidCredentials;
-}
+    }
 
 
     public async Task<ErrorOr<bool>> RegisterUser(User user, string password)
     {
-        
         if (await userManager.FindByEmailAsync(user.Email) is not null)
             return UserErrors.EmailExists;
-        
+
         if (await userManager.Users.AnyAsync(u => u.PhoneNumber == user.PhoneNumber))
             return UserErrors.PhoneNumberExists;
 

@@ -33,6 +33,7 @@ app.UseIpRateLimiting();
 app.UseCors();
 app.UseRouting();
 app.UseAuthentication();
+app.UseMiddleware<TokenVersionMiddleware>();
 app.UseAuthorization();
 
 app.MapControllers();
