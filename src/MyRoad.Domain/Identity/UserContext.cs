@@ -10,7 +10,7 @@ public class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContex
     public long Id =>
         long.TryParse(httpContextAccessor.HttpContext?.User.FindFirst("uid")?.Value, out var userId)
             ? userId
-            : throw new Exception("User ID claim is missing or invalid."); 
+            : throw new Exception("User ID claim is missing or invalid.");
 
     public UserRole Role =>
         Enum.TryParse(httpContextAccessor.HttpContext?.User.FindFirst("userRole")?.Value, out UserRole role)
@@ -19,5 +19,10 @@ public class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContex
 
     public string Email =>
         httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.Email)?.Value
-            ?? throw new Exception("Email claim is missing.");
+        ?? throw new Exception("Email claim is missing.");
+
+    public long? TokenVersion =>
+        long.TryParse(httpContextAccessor.HttpContext?.User.FindFirst("token_version")?.Value, out var tokenVersion)
+            ? tokenVersion
+            : throw new Exception("User tokenVersion claim is missing or invalid.");
 }

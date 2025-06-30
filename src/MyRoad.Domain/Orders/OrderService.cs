@@ -4,7 +4,6 @@ using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Customers;
 using MyRoad.Domain.Identity.Enums;
 using MyRoad.Domain.Identity.Interfaces;
-using MyRoad.Domain.Reports;
 using MyRoad.Domain.Users;
 using Sieve.Models;
 

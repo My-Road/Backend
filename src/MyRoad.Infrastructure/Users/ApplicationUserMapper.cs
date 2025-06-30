@@ -16,5 +16,6 @@ public static class ApplicationUserMapper
         applicationUser.IsActive = user.IsActive;
         applicationUser.PhoneNumber = user.PhoneNumber;
         applicationUser.UserName = user.Email;
+        applicationUser.TokenVersion = user.TokenVersion;
     }
 }
