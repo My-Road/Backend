@@ -21,6 +21,7 @@ public class EmployeeLogsConfiguration : IEntityTypeConfiguration<EmployeeLog>
         builder.Ignore(x => x.DailyWage);
         builder.Ignore(x => x.TotalHours);
 
+
         builder.HasOne(x => x.Employee)
             .WithMany(e => e.Logs)
             .HasForeignKey(x => x.EmployeeId);

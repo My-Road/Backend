@@ -10,6 +10,7 @@ namespace MyRoad.API.EmployeesLogs
         public static partial EmployeeLog ToDomainEmployeeLog(this CreateEmployeeLogDto dto);
         public static partial EmployeeLog ToDomainEmployeeLog(this UpdateEmployeeLogDto dto);
 
+        public static partial EmployeeLog ToDomainEmployeeLog(this CreateEmployeeLogByDay dto);
         public static partial EmployeeLogResponseDto ToDomainEmployeeLogResponseDto(this EmployeeLog dto);
         public static partial SearchResponseDto ToSearchResponseDto(this EmployeeLog dto);
 

@@ -3,11 +3,12 @@ using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Employees;
 
 namespace MyRoad.Domain.EmployeesLogs;
-public class EmployeeLog :BaseEntity<long>
+
+public class EmployeeLog : BaseEntity<long>
 {
     public long EmployeeId { get; set; }
-    public Employee Employee { get; set; } 
-    public DateOnly Date {  get; set; }
+    public Employee Employee { get; set; }
+    public DateOnly Date { get; set; }
     public TimeOnly CheckIn { get; set; }
     public TimeOnly CheckOut { get; set; }
     public bool IsDeleted { get; set; }
@@ -16,7 +17,10 @@ public class EmployeeLog :BaseEntity<long>
     public string? Notes { get; set; }
     public long CreatedByUserId { get; set; }
     public decimal TotalHours => Math.Round((decimal)(CheckOut - CheckIn).TotalHours, 2);
-    public decimal DailyWage => Math.Round(TotalHours * HourlyWage, 2);
+    public decimal DailyPrice { get; set; }
+
+    public decimal DailyWage => (DailyPrice == 0) ? Math.Round(TotalHours * HourlyWage, 2) : DailyPrice;
+
     public ErrorOr<Success> Delete()
     {
         if (IsDeleted)
