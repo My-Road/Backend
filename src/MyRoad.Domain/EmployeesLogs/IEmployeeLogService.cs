@@ -9,6 +9,8 @@ namespace MyRoad.Domain.EmployeesLogs
     {
         Task<ErrorOr<Success>> CreateAsync(EmployeeLog employeeLog);
         
+        Task<ErrorOr<Success>> CreateByDayAsync(EmployeeLog employeeLog);
+        
         Task<ErrorOr<Success>> UpdateAsync(EmployeeLog employeeLog);
         
         Task<ErrorOr<Success>> DeleteAsync(long id);

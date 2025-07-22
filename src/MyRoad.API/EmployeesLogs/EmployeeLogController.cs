@@ -23,6 +23,16 @@ namespace MyRoad.API.EmployeesLogs
             return ResponseHandler.HandleResult(response);
         }
 
+        [HttpPost("By-Day")]
+        [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
+        public async Task<IActionResult> CreateByDayAsync([FromBody] CreateEmployeeLogByDay dto)
+        {
+            var response = await employeeLogService.CreateByDayAsync(dto.ToDomainEmployeeLog());
+            return ResponseHandler.HandleResult(response);
+        }
+        
+        
+
         [HttpDelete("{id:long}")]
         [Authorize(Policy = AuthorizationPolicies.FactoryOwnerOrAdmin)]
         public async Task<IActionResult> DeleteAsync(long id)
