@@ -1,6 +1,5 @@
 using System.Data;
 using ErrorOr;
-using Microsoft.Extensions.Logging;
 using MyRoad.Domain.Common;
 using MyRoad.Domain.Common.Entities;
 using MyRoad.Domain.Employees;
@@ -17,8 +16,7 @@ namespace MyRoad.Domain.EmployeesLogs
         IEmployeeRepository employeeRepository,
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
-        ITimeOverlapValidator timeOverlapValidator,
-        ILogger<EmployeeLogService> logger) : IEmployeeLogService
+        ITimeOverlapValidator timeOverlapValidator) : IEmployeeLogService
     {
         private readonly EmployeeLogValidator _employeeLogValidator = new();
 
@@ -109,8 +107,6 @@ namespace MyRoad.Domain.EmployeesLogs
 
                 employee.TotalDueAmount += employeeLog.DailyPrice;
                 employeeLog.IsCompleted = true;
-                logger.LogInformation($"vttttttttttt {employeeLog.DailyPrice}");
-                logger.LogInformation($"vttttttttttt {employeeLog.DailyWage}");
                 await employeeLogRepository.CreateAsync(employeeLog);
                 await employeeRepository.UpdateAsync(employee);
                 await unitOfWork.CommitTransactionAsync();
